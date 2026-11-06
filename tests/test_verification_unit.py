@@ -290,3 +290,32 @@ def test_historical_order_scope_without_capture_is_inconclusive(monkeypatch):
     result = adapters.probe("orders", uuid4(), uuid4(), policy()["targets"]["orders"])
     assert result.outcome == O.INCONCLUSIVE
     assert result.summary["manifest_captured"] is False
+
+
+def test_probe_spanning_grace_cutoff_is_pending_using_start_window():
+    from datetime import timedelta
+    from eraseproof.verification_models import Probe, consistency_result
+
+    anchor = datetime(2026, 11, 6, tzinfo=timezone.utc)
+    observation = Probe(
+        started_at=anchor + timedelta(seconds=1),
+        observed_at=anchor + timedelta(seconds=4),
+        outcome=O.RESIDUAL,
+        adapter="independent.search",
+        category="indexed_profile",
+        summary={"eligible_rows": 1},
+        query_count=2,
+        duration_ms=3000,
+    )
+    result, _, eligible = consistency_result(
+        observation.outcome,
+        reported_state="COMPLETED_REPORTED",
+        anchor=anchor,
+        observed_at=observation.started_at,
+        created_at=anchor,
+        grace_seconds=3,
+        prior_streak=0,
+        prior_anchor=None,
+        minimum_samples=2,
+    )
+    assert result == O.PENDING and not eligible

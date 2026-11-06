@@ -2,6 +2,7 @@
 
 from contextlib import contextmanager
 from contextvars import ContextVar
+from datetime import datetime, timezone
 from uuid import UUID
 import os
 import time
@@ -229,11 +230,13 @@ def search_probe(subject: UUID, scope: dict) -> tuple[dict, int, bool]:
 
 def probe(target: str, subject: UUID, request_id: UUID, scope: dict) -> Probe:
     started = time.monotonic()
+    started_at = datetime.now(timezone.utc)
     queries.set(0)
     adapter = "independent." + target
 
     def result(state, summary, calls=0, complete=True, error=None):
         return Probe(
+            started_at=started_at,
             outcome=state,
             adapter=adapter,
             category=scope.get("category", "unknown"),

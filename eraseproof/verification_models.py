@@ -30,6 +30,7 @@ class VerificationCommand(BaseModel):
 
 
 class Probe(BaseModel):
+    started_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     observed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     outcome: Outcome
     adapter: str
