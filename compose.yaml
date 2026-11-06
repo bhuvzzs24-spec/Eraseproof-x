@@ -24,12 +24,25 @@ x-api: &api
     retries: 12
 x-worker: &worker
   <<: *api
-  healthcheck:
+  healthcheck: &worker-health
     test: [CMD, python, -c, "import time; from pathlib import Path; assert time.time()-float(Path('/tmp/worker-heartbeat').read_text()) < 60"]
     interval: 10s
     timeout: 5s
     retries: 3
     start_period: 20s
+x-verification-env: &verification-env
+  DATABASE_URL: postgresql://verification_coordinator:${VERIFIER_CONTROL_PASSWORD:?configure verification coordinator credential}@postgres:5432/eraseproof
+  VERIFIER_READ_DATABASE_URL: postgresql://verification_probe:${VERIFIER_DB_PASSWORD:?configure probe credential}@postgres:5432/eraseproof
+  VERIFIER_REDIS_URL: redis://verification:${VERIFIER_REDIS_PASSWORD:?configure read-only Redis credential}@redis:6379/0
+  VERIFIER_SEARCH_URL: http://opensearch:9200
+  BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+  APP_ENV: demo
+  VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure separate verification API credential}
+x-verification-service: &verification-service
+  <<: *api
+  environment: *verification-env
+  depends_on:
+    provision-verification: {condition: service_completed_successfully}
 services:
   postgres:
     image: postgres:16.8-alpine
@@ -79,6 +92,33 @@ services:
     command: [python, -m, eraseproof.db]
     depends_on:
       postgres: {condition: service_healthy}
+  provision-verification:
+    build: .
+    environment:
+      <<: *env
+      VERIFIER_DB_PASSWORD: ${VERIFIER_DB_PASSWORD:?set probe password}
+      VERIFIER_CONTROL_PASSWORD: ${VERIFIER_CONTROL_PASSWORD:?set coordinator password}
+      VERIFIER_REDIS_PASSWORD: ${VERIFIER_REDIS_PASSWORD:?set Redis verifier password}
+    command: [python, -m, eraseproof.provision_verification]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+      opensearch: {condition: service_healthy}
+      rabbitmq: {condition: service_healthy}
+  verification:
+    <<: *verification-service
+    environment: {<<: *verification-env, SERVICE: verification}
+    ports: ["127.0.0.1:8006:8000"]
+  verification-scheduler:
+    <<: *verification-service
+    environment: {<<: *verification-env, WORKER: verification-scheduler}
+    command: [python, -m, eraseproof.verification_worker]
+    healthcheck: *worker-health
+  verification-worker:
+    <<: *verification-service
+    environment: {<<: *verification-env, WORKER: verification-worker}
+    command: [python, -m, eraseproof.verification_worker]
+    healthcheck: *worker-health
   customer:
     <<: *api
     environment: {<<: *env, SERVICE: customer}

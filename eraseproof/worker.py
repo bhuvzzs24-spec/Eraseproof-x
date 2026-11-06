@@ -29,7 +29,7 @@ def publish_once() -> bool:
             row = db.execute(
                 "SELECT * FROM delivery.outbox WHERE published_at IS NULL "
                 "AND cancelled_at IS NULL AND next_attempt_at <= now() "
-                "AND (event_type='deletion.command' OR NOT EXISTS (SELECT 1 FROM deletion.tombstones t "
+                "AND (event_type IN ('deletion.command','verification.command') OR NOT EXISTS (SELECT 1 FROM deletion.tombstones t "
                 "WHERE t.customer_id=delivery.outbox.aggregate_id)) ORDER BY created_at "
                 "FOR UPDATE SKIP LOCKED LIMIT 1"
             ).fetchone()

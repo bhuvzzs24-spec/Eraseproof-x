@@ -174,6 +174,15 @@ def submit(body: SubmitDeletion, correlation_id: UUID) -> dict:
                 "INSERT INTO deletion.tombstones(customer_id,request_id) VALUES (%s,%s)",
                 (body.customer_id, request_id),
             )
+            # Capture opaque order IDs before de-identification destroys the association.
+            db.execute(
+                "INSERT INTO deletion.order_manifest(request_id,order_id) SELECT %s,id FROM orders.orders WHERE customer_id=%s",
+                (request_id, body.customer_id),
+            )
+            db.execute(
+                "INSERT INTO deletion.scope_captures(request_id,version) VALUES (%s,'scope-v1')",
+                (request_id,),
+            )
             for target in TARGETS:
                 db.execute(
                     "INSERT INTO deletion.tasks(id,request_id,target,state,max_attempts) VALUES (%s,%s,%s,'PENDING',%s)",

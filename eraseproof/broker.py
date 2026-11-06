@@ -34,4 +34,12 @@ def topology(channel: pika.adapters.blocking_connection.BlockingChannel) -> None
         arguments={"x-dead-letter-exchange": "dead", "x-dead-letter-routing-key": "deletion"},
     )
     channel.queue_bind(queue="deletion", exchange="events", routing_key="deletion.command")
+    channel.queue_declare(queue="verification.dead", durable=True)
+    channel.queue_bind(queue="verification.dead", exchange="dead", routing_key="verification")
+    channel.queue_declare(
+        queue="verification",
+        durable=True,
+        arguments={"x-dead-letter-exchange": "dead", "x-dead-letter-routing-key": "verification"},
+    )
+    channel.queue_bind(queue="verification", exchange="events", routing_key="verification.command")
     channel.confirm_delivery()

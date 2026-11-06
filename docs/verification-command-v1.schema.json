@@ -1,0 +1,40 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "event_type": {
+      "const": "verification.command",
+      "default": "verification.command",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "version": {
+      "const": 1,
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "run_id": {
+      "format": "uuid",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "round_no": {
+      "maximum": 8,
+      "minimum": 1,
+      "title": "Round No",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "event_id",
+    "run_id",
+    "round_no"
+  ],
+  "title": "VerificationCommand",
+  "type": "object"
+}

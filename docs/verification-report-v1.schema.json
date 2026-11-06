@@ -1,0 +1,277 @@
+{
+  "$defs": {
+    "EvidenceRecord": {
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "run_id": {
+          "format": "uuid",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "sequence": {
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "round_no": {
+          "title": "Round No",
+          "type": "integer"
+        },
+        "body": {
+          "additionalProperties": true,
+          "title": "Body",
+          "type": "object"
+        },
+        "digest": {
+          "title": "Digest",
+          "type": "string"
+        },
+        "previous_digest": {
+          "title": "Previous Digest",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "run_id",
+        "sequence",
+        "target",
+        "round_no",
+        "body",
+        "digest",
+        "previous_digest",
+        "created_at"
+      ],
+      "title": "EvidenceRecord",
+      "type": "object"
+    },
+    "Outcome": {
+      "enum": [
+        "VERIFIED_ABSENT",
+        "RESIDUAL_DATA_DETECTED",
+        "PENDING_CONSISTENCY",
+        "INCONCLUSIVE",
+        "UNSUPPORTED",
+        "FALSE_SUCCESS_DETECTED"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "TargetView": {
+      "properties": {
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/$defs/Outcome"
+        },
+        "absent_streak": {
+          "title": "Absent Streak",
+          "type": "integer"
+        },
+        "probe_failures": {
+          "title": "Probe Failures",
+          "type": "integer"
+        },
+        "last_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Last Observed At"
+        }
+      },
+      "required": [
+        "target",
+        "result",
+        "absent_streak",
+        "probe_failures",
+        "last_observed_at"
+      ],
+      "title": "TargetView",
+      "type": "object"
+    },
+    "VerificationView": {
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "deletion_request_id": {
+          "format": "uuid",
+          "title": "Deletion Request Id",
+          "type": "string"
+        },
+        "customer_id": {
+          "format": "uuid",
+          "title": "Customer Id",
+          "type": "string"
+        },
+        "correlation_id": {
+          "format": "uuid",
+          "title": "Correlation Id",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "QUEUED",
+            "RUNNING",
+            "WAITING",
+            "FINISHED"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/$defs/Outcome"
+        },
+        "policy_digest": {
+          "title": "Policy Digest",
+          "type": "string"
+        },
+        "policy": {
+          "additionalProperties": true,
+          "title": "Policy",
+          "type": "object"
+        },
+        "round_no": {
+          "title": "Round No",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "deadline_at": {
+          "format": "date-time",
+          "title": "Deadline At",
+          "type": "string"
+        },
+        "finished_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Finished At"
+        },
+        "targets": {
+          "items": {
+            "$ref": "#/$defs/TargetView"
+          },
+          "title": "Targets",
+          "type": "array"
+        },
+        "claim": {
+          "title": "Claim",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "deletion_request_id",
+        "customer_id",
+        "correlation_id",
+        "state",
+        "result",
+        "policy_digest",
+        "policy",
+        "round_no",
+        "created_at",
+        "deadline_at",
+        "finished_at",
+        "targets",
+        "claim"
+      ],
+      "title": "VerificationView",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "verification": {
+      "$ref": "#/$defs/VerificationView"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceRecord"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "evidence_integrity": {
+      "additionalProperties": true,
+      "title": "Evidence Integrity",
+      "type": "object"
+    },
+    "findings": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "excluded_targets": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Excluded Targets",
+      "type": "array"
+    },
+    "incomplete_targets": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Incomplete Targets",
+      "type": "array"
+    },
+    "timeline": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Timeline",
+      "type": "array"
+    },
+    "freshness": {
+      "title": "Freshness",
+      "type": "string"
+    }
+  },
+  "required": [
+    "verification",
+    "evidence",
+    "evidence_integrity",
+    "findings",
+    "excluded_targets",
+    "incomplete_targets",
+    "timeline",
+    "freshness"
+  ],
+  "title": "VerificationReport",
+  "type": "object"
+}

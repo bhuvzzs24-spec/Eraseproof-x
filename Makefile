@@ -17,3 +17,9 @@ reset:
 
 delete-demo:
 	python scripts/deletion_demo.py
+
+verify-demo:
+	python scripts/verification_demo.py
+
+verify-evaluate:
+	ERASEPROOF_TEST_FAULTS=1 python scripts/evaluate_phase3.py

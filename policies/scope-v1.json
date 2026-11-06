@@ -1,0 +1,184 @@
+{
+  "version": "scope-v1",
+  "policy_schema_version": 1,
+  "grace_seconds": 3,
+  "interval_seconds": 2,
+  "absence_samples": 2,
+  "deadline_seconds": 90,
+  "max_rounds": 8,
+  "max_probe_retries": 3,
+  "lease_seconds": 30,
+  "targets": {
+    "customer": {
+      "required": true,
+      "required_status": "VERIFIED_ABSENT",
+      "identifier_types": [
+        "customer_uuid"
+      ],
+      "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+      "limitations": [
+        "fixed lab namespace only",
+        "no backup or physical media inspection"
+      ],
+      "category": "customer_profile",
+      "location": "customer.customers",
+      "eligible_fields": [
+        "id",
+        "name",
+        "email"
+      ],
+      "retention": "profile row absent; deletion.tombstones excluded",
+      "permitted_metadata": [
+        "deletion tombstone UUIDs outside profile table"
+      ],
+      "strategy": "parameterized primary-key SELECT count"
+    },
+    "orders": {
+      "required": true,
+      "required_status": "VERIFIED_ABSENT",
+      "identifier_types": [
+        "customer_uuid"
+      ],
+      "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+      "limitations": [
+        "fixed lab namespace only",
+        "no backup or physical media inspection"
+      ],
+      "category": "customer_link_and_personal_order_fields",
+      "location": "orders.orders + deletion.order_manifest",
+      "eligible_fields": [
+        "non-null customer_id",
+        "all non-null fields outside the permitted fact whitelist"
+      ],
+      "retention": "facts permitted only under explicit schema policy; not anonymous",
+      "permitted_metadata": [
+        "order UUID",
+        "amount_cents",
+        "currency",
+        "created_at",
+        "manifest UUID linkage"
+      ],
+      "strategy": "direct customer linkage OR captured order UUIDs; inspect complete JSON row",
+      "allowed_fact_fields": [
+        "id",
+        "customer_id",
+        "amount_cents",
+        "currency",
+        "created_at"
+      ]
+    },
+    "cache": {
+      "required": true,
+      "required_status": "VERIFIED_ABSENT",
+      "identifier_types": [
+        "customer_uuid"
+      ],
+      "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+      "limitations": [
+        "fixed lab namespace only",
+        "no backup or physical media inspection"
+      ],
+      "category": "cached_profile",
+      "location": "Redis database 0",
+      "eligible_fields": [
+        "all customer profile/derived key values"
+      ],
+      "retention": "profile/derived values absent; exact erasure marker permitted",
+      "permitted_metadata": [
+        "deletion:customer:{uuid}=1"
+      ],
+      "strategy": "bounded SCAN customer:{uuid}* and deletion:customer:{uuid}*; TYPE/GET",
+      "patterns": [
+        "customer:{uuid}*",
+        "deletion:customer:{uuid}*"
+      ]
+    },
+    "search": {
+      "required": true,
+      "required_status": "VERIFIED_ABSENT",
+      "identifier_types": [
+        "customer_uuid"
+      ],
+      "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+      "limitations": [
+        "fixed lab namespace only",
+        "no backup or physical media inspection"
+      ],
+      "category": "indexed_profile",
+      "location": "OpenSearch customers index",
+      "eligible_fields": [
+        "customer-linked documents except exact permitted erasure sentinel"
+      ],
+      "retention": "only exact erased=true sentinel at subject document ID, version >=2 permitted",
+      "permitted_metadata": [
+        "document ID UUID",
+        "erased=true",
+        "external version >=2"
+      ],
+      "strategy": "direct real-time GET plus _search over IDs and id/customer_id/data.id/data.customer_id",
+      "identifier_fields": [
+        "id",
+        "customer_id",
+        "data.id",
+        "data.customer_id"
+      ]
+    },
+    "analytics": {
+      "required": true,
+      "required_status": "VERIFIED_ABSENT",
+      "identifier_types": [
+        "customer_uuid"
+      ],
+      "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+      "limitations": [
+        "fixed lab namespace only",
+        "no backup or physical media inspection"
+      ],
+      "category": "customer_linked_analytics",
+      "location": "analytics.events",
+      "eligible_fields": [
+        "customer_id",
+        "any nested payload value equal to customer UUID"
+      ],
+      "retention": "matching rows absent; no aggregate table exists in current schema",
+      "permitted_metadata": [],
+      "strategy": "direct UUID linkage OR exact recursive JSON UUID match"
+    },
+    "event_history": {
+      "required": true,
+      "required_status": "VERIFIED_ABSENT",
+      "identifier_types": [
+        "customer_uuid"
+      ],
+      "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+      "limitations": [
+        "fixed lab namespace only",
+        "no backup or physical media inspection"
+      ],
+      "category": "source_event_payload",
+      "location": "delivery.outbox + delivery.processed",
+      "eligible_fields": [
+        "source creation payloads",
+        "unexpected payload/receipt fields"
+      ],
+      "retention": "source payload absent; typed identifier-only control messages and receipt metadata permitted",
+      "permitted_metadata": [
+        "deletion.command fields",
+        "verification.command fields",
+        "consumer/event/customer UUID receipt metadata"
+      ],
+      "strategy": "UUID/aggregate linkage and strict envelope/receipt key classification"
+    }
+  },
+  "excluded": [
+    "legacy RabbitMQ payloads and dead letters",
+    "backups",
+    "snapshots",
+    "replicas not configured here",
+    "arbitrary indices or key namespaces",
+    "external exports",
+    "physical media",
+    "privacy/legal compliance"
+  ],
+  "claim": "observable logical absence within the declared checked scope; no irreversible or universal erasure claim"
+}

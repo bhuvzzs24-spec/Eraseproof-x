@@ -1,6 +1,6 @@
-# EraseProof X — Phases 1–2
+# EraseProof X — Phases 1–3
 
-A synthetic distributed e-commerce lab for studying false deletion success. Phase 1 creates and propagates records. Phase 2 performs durable deletion orchestration across six configured targets. Independent verification is **not implemented**. Operational presence observations are not deletion proofs.
+A synthetic distributed e-commerce lab for studying false deletion success. Phase 1 creates and propagates records. Phase 2 performs durable deletion orchestration across six configured targets. Phase 3 independently probes all six supported targets and exports scoped evidence; it does not claim universal or irreversible erasure. Operational presence observations are not deletion proofs.
 
 ## Start
 Requires Docker Engine/Desktop with Compose v2, approximately 6–8 GB available RAM, and Python 3.12+ for host tests. OpenSearch uses a 512 MB Java heap; total container memory exceeds that. On Linux set `sudo sysctl -w vm.max_map_count=262144` if OpenSearch reports a bootstrap failure. On macOS allocate sufficient Docker Desktop memory.
@@ -63,3 +63,16 @@ RUN_INTEGRATION=1 pytest tests/test_deletion_integration.py -v
 ```
 
 Upgrading an existing Phase 1 `.env`: add an independent `DELETION_TOKEN` of at least 24 random characters (for example `python3 -c 'import secrets; print(secrets.token_urlsafe(32))'`). Keep existing DB and broker passwords. The configuration helper never overwrites `.env`. Drain legacy Phase 1 broker queues and resolve payload-bearing dead letters before upgrading; Phase 2 publishes identifier-only references. See the migration/transport retention limitations in the guide.
+
+## Phase 3 independent verification
+
+The independent API runs at `http://localhost:8006/docs` with a separate `X-Verification-Token`. See the [Phase 3 guide](docs/phase3.md), [machine-readable scope](policies/scope-v1.json), and [validation record](docs/phase3-verification.md). It directly queries actual stores using read-only PostgreSQL/Redis identities, retains append-only evidence, distinguishes pending/unknown/unsupported outcomes, and detects contradictions with reported completion. Verification never remediates while collecting evidence.
+
+```sh
+set -a; . ./.env; set +a
+python scripts/verification_demo.py
+ERASEPROOF_TEST_FAULTS=1 python scripts/verification_demo.py --inject-synthetic-fault
+RUN_INTEGRATION=1 ERASEPROOF_TEST_FAULTS=1 pytest -m integration -v
+```
+
+Upgrade existing `.env` files with fresh VERIFICATION_TOKEN, VERIFIER_DB_PASSWORD, VERIFIER_CONTROL_PASSWORD and VERIFIER_REDIS_PASSWORD values; the helper preserves existing files. Deletion admission now captures order UUID inventory before de-identification. Historical requests without that capture are inconclusive for complete order-field coverage. OpenSearch/Redis erasure markers and operational UUID metadata are explicitly permitted and remain visible. OpenSearch server-side read-only authentication is not provided by the existing private-network lab configuration; fixed read-only probe operations and this limitation are documented.
