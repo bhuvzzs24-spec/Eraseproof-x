@@ -14,6 +14,7 @@ from eraseproof import config
 from eraseproof.db import connection
 from eraseproof.events import CustomerData, OrderData, Event
 from eraseproof.logging import configure
+from eraseproof.lifecycle import subject_lock, is_deleted
 
 configure()
 app = FastAPI(title=f"EraseProof X {config.SERVICE}", version="0.1.0")
@@ -36,6 +37,7 @@ class CustomerResponse(CustomerData):
 
 
 class OrderResponse(OrderData):
+    customer_id: UUID | None
     event_id: UUID | None = None
 
 
@@ -92,7 +94,7 @@ def cache_client() -> redis.Redis:
 def ready() -> dict[str, str]:
     with connection() as db:
         migration = db.execute(
-            "SELECT 1 FROM schema_migrations WHERE version='001_foundation.sql'"
+            "SELECT 1 FROM schema_migrations WHERE version='002_deletion.sql'"
         ).fetchone()
         if migration is None:
             raise RuntimeError("migration missing")
@@ -193,6 +195,9 @@ if config.SERVICE == "order":
             correlation_id=request.state.correlation_id,
         )
         with connection() as db:
+            subject_lock(db, data.customer_id)
+            if is_deleted(db, data.customer_id):
+                raise HTTPException(409, "customer deletion barrier rejects new orders")
             db.execute(
                 "INSERT INTO orders.orders(id,customer_id,amount_cents,currency) "
                 "VALUES (%s,%s,%s,%s)",
@@ -226,6 +231,14 @@ if config.SERVICE in ("cache", "search", "analytics"):
             if response.status_code != 404:
                 response.raise_for_status()
             data = response.json().get("_source")
+            if data == {"erased": True}:
+                return {
+                    "state": "absent",
+                    "data": None,
+                    "document_present": True,
+                    "erasure_marker": True,
+                    "scope": "profile_fields",
+                }
         else:
             with connection() as db:
                 data = db.execute(
@@ -233,3 +246,9 @@ if config.SERVICE in ("cache", "search", "analytics"):
                     (customer_id,),
                 ).fetchall()
         return {"state": "present" if data else "absent", "data": data}
+
+
+if config.SERVICE == "deletion":
+    from eraseproof.deletion_api import router
+
+    app.include_router(router)

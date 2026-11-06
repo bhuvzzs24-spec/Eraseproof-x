@@ -14,3 +14,6 @@ migrate:
 	docker compose run --rm migrate
 reset:
 	docker compose down -v --remove-orphans
+
+delete-demo:
+	python scripts/deletion_demo.py

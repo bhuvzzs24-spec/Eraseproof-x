@@ -8,7 +8,12 @@ from eraseproof.config import DATABASE_URL
 
 @contextmanager
 def connection() -> Iterator[psycopg.Connection]:
-    with psycopg.connect(DATABASE_URL, row_factory=dict_row, connect_timeout=3) as conn:
+    with psycopg.connect(
+        DATABASE_URL,
+        row_factory=dict_row,
+        connect_timeout=3,
+        options="-c statement_timeout=15000 -c lock_timeout=10000",
+    ) as conn:
         yield conn
 
 

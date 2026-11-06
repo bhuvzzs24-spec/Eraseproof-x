@@ -1,0 +1,64 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1,
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "event_type": {
+      "const": "deletion.command",
+      "default": "deletion.command",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "request_id": {
+      "format": "uuid",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "task_id": {
+      "format": "uuid",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "customer_id": {
+      "format": "uuid",
+      "title": "Customer Id",
+      "type": "string"
+    },
+    "correlation_id": {
+      "format": "uuid",
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "target": {
+      "enum": [
+        "customer",
+        "orders",
+        "cache",
+        "search",
+        "analytics",
+        "event_history"
+      ],
+      "title": "Target",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "request_id",
+    "task_id",
+    "customer_id",
+    "correlation_id",
+    "target"
+  ],
+  "title": "DeletionCommand",
+  "type": "object"
+}

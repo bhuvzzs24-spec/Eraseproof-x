@@ -1,4 +1,6 @@
-# Requirements and boundaries
+# Phase 1 requirements and boundaries
+
+Historical baseline; [Phase 2 requirements and current behavior](phase2.md) extend deletion, authorization and lifecycle coordination below.
 
 ## Functional acceptance
 | ID | User story | Acceptance criterion |

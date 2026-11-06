@@ -26,4 +26,12 @@ def topology(channel: pika.adapters.blocking_connection.BlockingChannel) -> None
         channel.queue_bind(queue=target, exchange="events", routing_key="customer.created")
         if target == "analytics":
             channel.queue_bind(queue=target, exchange="events", routing_key="order.created")
+    channel.queue_declare(queue="deletion.dead", durable=True)
+    channel.queue_bind(queue="deletion.dead", exchange="dead", routing_key="deletion")
+    channel.queue_declare(
+        queue="deletion",
+        durable=True,
+        arguments={"x-dead-letter-exchange": "dead", "x-dead-letter-routing-key": "deletion"},
+    )
+    channel.queue_bind(queue="deletion", exchange="events", routing_key="deletion.command")
     channel.confirm_delivery()

@@ -5,7 +5,15 @@ import logging
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         result = {"level": record.levelname, "logger": record.name, "message": record.getMessage()}
-        for key in ("correlation_id", "event_id", "status", "path"):
+        for key in (
+            "correlation_id",
+            "event_id",
+            "status",
+            "path",
+            "target",
+            "request_id",
+            "failure_code",
+        ):
             if hasattr(record, key):
                 result[key] = getattr(record, key)
         # Payloads and exception strings are deliberately excluded.

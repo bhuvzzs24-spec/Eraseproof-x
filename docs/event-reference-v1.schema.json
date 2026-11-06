@@ -1,0 +1,49 @@
+{
+  "additionalProperties": false,
+  "description": "Phase 2 transport carries identifiers; source payload remains in the SQL outbox.",
+  "properties": {
+    "version": {
+      "const": 1,
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "event_type": {
+      "const": "event.reference",
+      "default": "event.reference",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "customer_id": {
+      "format": "uuid",
+      "title": "Customer Id",
+      "type": "string"
+    },
+    "correlation_id": {
+      "format": "uuid",
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "source_type": {
+      "enum": [
+        "customer.created",
+        "order.created"
+      ],
+      "title": "Source Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "customer_id",
+    "correlation_id",
+    "source_type"
+  ],
+  "title": "EventReference",
+  "type": "object"
+}

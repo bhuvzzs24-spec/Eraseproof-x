@@ -1,4 +1,6 @@
-# Verification record — 2026-11-06
+# Phase 1 verification record — 2026-11-06
+
+Phase 1 Docker CI subsequently passed: https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42263309506. Phase 2 has a separate [verification record](phase2-verification.md).
 
 ## Implemented
 Customer and order APIs; Redis cache projection; OpenSearch profile projection; analytics event projection; durable RabbitMQ routing; transactional SQL outbox; stable versioned event envelopes; consumer receipts; operational presence inspection; SQL migrations; JSON logging/correlation; liveness/readiness; local Compose infrastructure and CI.

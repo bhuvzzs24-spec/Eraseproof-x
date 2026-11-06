@@ -4,6 +4,10 @@ x-env: &env
   REDIS_URL: redis://redis:6379/0
   SEARCH_URL: http://opensearch:9200
   INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+  APP_ENV: demo
+  DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24 characters}
+  DELETION_RETRY_BASE_SECONDS: "1"
+  DELETION_LEASE_SECONDS: "30"
 x-api: &api
   build: .
   restart: unless-stopped
@@ -98,6 +102,18 @@ services:
     environment: {<<: *env, SERVICE: analytics, PORT: "8004"}
     command: [uvicorn, eraseproof.api:app, --host, 0.0.0.0, --port, "8004", --no-access-log]
     ports: ["127.0.0.1:8004:8004"]
+  deletion:
+    <<: *api
+    environment: {<<: *env, SERVICE: deletion}
+    ports: ["127.0.0.1:8005:8000"]
+  deletion-scheduler:
+    <<: *worker
+    environment: {<<: *env, WORKER: deletion-scheduler}
+    command: [python, -m, eraseproof.deletion_worker]
+  deletion-consumer:
+    <<: *worker
+    environment: {<<: *env, WORKER: deletion-consumer}
+    command: [python, -m, eraseproof.deletion_worker]
   publisher:
     <<: *worker
     environment: {<<: *env, WORKER: publisher}

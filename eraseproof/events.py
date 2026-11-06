@@ -38,3 +38,15 @@ class Event(BaseModel):
         if subject != self.customer_id:
             raise ValueError("customer identity mismatch")
         return self
+
+
+class EventReference(BaseModel):
+    """Phase 2 transport carries identifiers; source payload remains in the SQL outbox."""
+
+    model_config = ConfigDict(extra="forbid")
+    version: Literal[1] = 1
+    event_type: Literal["event.reference"] = "event.reference"
+    event_id: UUID
+    customer_id: UUID
+    correlation_id: UUID
+    source_type: Literal["customer.created", "order.created"]
