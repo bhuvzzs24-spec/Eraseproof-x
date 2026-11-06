@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "CustomerData": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "email": {
+          "pattern": "^[a-zA-Z0-9._+-]+@example\\.invalid$",
+          "title": "Email",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email"
+      ],
+      "title": "CustomerData",
+      "type": "object"
+    },
+    "OrderData": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "title": "Id",
+          "type": "string"
+        },
+        "customer_id": {
+          "format": "uuid",
+          "title": "Customer Id",
+          "type": "string"
+        },
+        "amount_cents": {
+          "exclusiveMinimum": 0,
+          "title": "Amount Cents",
+          "type": "integer"
+        },
+        "currency": {
+          "enum": [
+            "USD",
+            "INR",
+            "EUR"
+          ],
+          "title": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "customer_id",
+        "amount_cents",
+        "currency"
+      ],
+      "title": "OrderData",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "version": {
+      "const": 1,
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "event_type": {
+      "enum": [
+        "customer.created",
+        "order.created"
+      ],
+      "title": "Event Type",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "correlation_id": {
+      "format": "uuid",
+      "title": "Correlation Id",
+      "type": "string"
+    },
+    "customer_id": {
+      "format": "uuid",
+      "title": "Customer Id",
+      "type": "string"
+    },
+    "data": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CustomerData"
+        },
+        {
+          "$ref": "#/$defs/OrderData"
+        }
+      ],
+      "title": "Data"
+    }
+  },
+  "required": [
+    "event_type",
+    "correlation_id",
+    "customer_id",
+    "data"
+  ],
+  "title": "Event",
+  "type": "object"
+}

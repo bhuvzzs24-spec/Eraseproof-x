@@ -1,0 +1,117 @@
+x-env: &env
+  DATABASE_URL: postgresql://lab:${POSTGRES_PASSWORD:?copy .env.example to .env}@postgres:5432/eraseproof
+  BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+  REDIS_URL: redis://redis:6379/0
+  SEARCH_URL: http://opensearch:9200
+  INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+x-api: &api
+  build: .
+  restart: unless-stopped
+  environment: *env
+  depends_on:
+    migrate: {condition: service_completed_successfully}
+    redis: {condition: service_healthy}
+    opensearch: {condition: service_healthy}
+    rabbitmq: {condition: service_healthy}
+  healthcheck:
+    test: [CMD, python, -c, "import urllib.request,os; urllib.request.urlopen('http://localhost:'+os.getenv('PORT','8000')+'/health/ready',timeout=5)"]
+    interval: 10s
+    timeout: 8s
+    retries: 12
+services:
+  postgres:
+    image: postgres:16.8-alpine
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set password}
+      POSTGRES_DB: eraseproof
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U lab -d eraseproof"]
+      interval: 5s
+      retries: 20
+  redis:
+    image: redis:7.4.3-alpine
+    command: [redis-server, --appendonly, "yes"]
+    volumes: [redis-data:/data]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      retries: 20
+  rabbitmq:
+    image: rabbitmq:4.1.0-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: lab
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?set password}
+    volumes: [rabbit-data:/var/lib/rabbitmq]
+    healthcheck:
+      test: [CMD, rabbitmq-diagnostics, -q, ping]
+      interval: 10s
+      retries: 20
+  opensearch:
+    image: opensearchproject/opensearch:2.19.1
+    environment:
+      discovery.type: single-node
+      DISABLE_SECURITY_PLUGIN: "true"
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    volumes: [search-data:/usr/share/opensearch/data]
+    healthcheck:
+      test: [CMD-SHELL, "curl -fsS 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=3s'"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+  migrate:
+    build: .
+    environment: *env
+    command: [python, -m, eraseproof.db]
+    depends_on:
+      postgres: {condition: service_healthy}
+  customer:
+    <<: *api
+    environment: {<<: *env, SERVICE: customer}
+    ports: ["127.0.0.1:8000:8000"]
+  order:
+    <<: *api
+    environment: {<<: *env, SERVICE: order}
+    ports: ["127.0.0.1:8001:8000"]
+  cache:
+    <<: *api
+    environment: {<<: *env, SERVICE: cache, PORT: "8002"}
+    command: [uvicorn, eraseproof.api:app, --host, 0.0.0.0, --port, "8002", --no-access-log]
+    ports: ["127.0.0.1:8002:8002"]
+  search:
+    <<: *api
+    environment: {<<: *env, SERVICE: search, PORT: "8003"}
+    command: [uvicorn, eraseproof.api:app, --host, 0.0.0.0, --port, "8003", --no-access-log]
+    ports: ["127.0.0.1:8003:8003"]
+  analytics:
+    <<: *api
+    environment: {<<: *env, SERVICE: analytics, PORT: "8004"}
+    command: [uvicorn, eraseproof.api:app, --host, 0.0.0.0, --port, "8004", --no-access-log]
+    ports: ["127.0.0.1:8004:8004"]
+  publisher:
+    <<: *api
+    environment: {<<: *env, WORKER: publisher}
+    command: [python, -m, eraseproof.worker]
+    healthcheck: {disable: true}
+  cache-consumer:
+    <<: *api
+    environment: {<<: *env, WORKER: cache}
+    command: [python, -m, eraseproof.worker]
+    healthcheck: {disable: true}
+  search-consumer:
+    <<: *api
+    environment: {<<: *env, WORKER: search}
+    command: [python, -m, eraseproof.worker]
+    healthcheck: {disable: true}
+  analytics-consumer:
+    <<: *api
+    environment: {<<: *env, WORKER: analytics}
+    command: [python, -m, eraseproof.worker]
+    healthcheck: {disable: true}
+volumes:
+  postgres-data:
+  redis-data:
+  rabbit-data:
+  search-data:
