@@ -252,3 +252,41 @@ def test_consistency_samples_and_anchor_changes():
     assert consistency_result(
         O.ABSENT, **{**args, "prior_streak": 5, "prior_anchor": anchor - timedelta(seconds=1)}
     ) == (O.PENDING, 1, True)
+
+
+def test_receipt_metadata_cannot_hide_personal_text():
+    from eraseproof.verification_adapters import safe_receipt
+
+    value = {
+        "consumer": "cache",
+        "event_id": str(uuid4()),
+        "customer_id": str(uuid4()),
+        "processed_at": "2026-11-06T00:00:00Z",
+    }
+    assert safe_receipt(value)
+    assert not safe_receipt({**value, "consumer": "personal@example.invalid"})
+    assert not safe_receipt({**value, "email": "personal@example.invalid"})
+
+
+def test_historical_order_scope_without_capture_is_inconclusive(monkeypatch):
+    from contextlib import contextmanager
+
+    class Result:
+        def fetchone(self):
+            return None
+
+        def fetchall(self):
+            return []
+
+    class Database:
+        def execute(self, *args):
+            return Result()
+
+    @contextmanager
+    def read():
+        yield Database()
+
+    monkeypatch.setattr(adapters, "read_db", read)
+    result = adapters.probe("orders", uuid4(), uuid4(), policy()["targets"]["orders"])
+    assert result.outcome == O.INCONCLUSIVE
+    assert result.summary["manifest_captured"] is False

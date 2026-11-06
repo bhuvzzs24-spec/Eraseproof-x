@@ -84,6 +84,8 @@ wait_for(
     lambda r: r["state"] in ("COMPLETED_REPORTED", "PARTIALLY_FAILED", "FAILED"),
 )
 initial = verify(request)
+if initial["verification"]["result"] != "VERIFIED_ABSENT":
+    raise RuntimeError("normal verification did not establish scoped absence")
 reports = {"normal": initial}
 if args.inject_synthetic_fault:
     # No fault endpoint or production bypass: the explicitly opted-in local driver uses admin access.
@@ -107,6 +109,8 @@ with redis.Redis.from_url(REDIS_URL) as c:
     finally:
         fault(False)
     reports["after_separate_remediation"] = verify(request)
+    if reports["after_separate_remediation"]["verification"]["result"] != "VERIFIED_ABSENT":
+        raise RuntimeError("post-remediation verification did not establish scoped absence")
 output = Path(args.output)
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_text(json.dumps(reports, indent=2) + "\n")

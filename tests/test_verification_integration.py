@@ -251,6 +251,29 @@ else:
         )
         # Probe-only execution leaves the actual fault in place (repeat run still detects it).
         assert deletion_status(request)["state"] == "COMPLETED_REPORTED"
+        assert (
+            inside(f"""
+from eraseproof.db import connection
+from eraseproof.config import REDIS_URL,SEARCH_URL
+from uuid import UUID
+import redis,httpx
+subject=UUID('{subject}');fault=UUID('{fault_id}');target={target!r}
+if target=='search':
+    response=httpx.get(SEARCH_URL+'/customers/_doc/fault-'+str(fault),timeout=5)
+    assert response.status_code==200 and 'email' in response.json()['_source']
+elif target=='cache':
+    with redis.Redis.from_url(REDIS_URL) as client:assert client.exists('customer:'+str(subject)+':summary')==1
+else:
+    with connection() as db:
+        if target=='analytics':row=db.execute('SELECT 1 FROM analytics.events WHERE event_id=%s',(fault,)).fetchone()
+        elif target=='orders':row=db.execute('SELECT 1 FROM orders.orders WHERE id=%s AND customer_email IS NOT NULL',(UUID('{order["id"] if order else uuid4()}'),)).fetchone()
+        elif target=='customer':row=db.execute('SELECT 1 FROM customer.customers WHERE id=%s',(subject,)).fetchone()
+        else:row=db.execute('SELECT 1 FROM delivery.outbox WHERE id=%s',(fault,)).fetchone()
+        assert row is not None
+print('residual-preserved')
+""")
+            == "residual-preserved"
+        )
     finally:
         inside(f"""
 from eraseproof.db import connection
@@ -409,6 +432,17 @@ with psycopg.connect(DATABASE_URL,application_name='verification-crash-fixture')
     time.sleep(20)
 """,
     )
+    lock_deadline = time.monotonic() + 10
+    while time.monotonic() < lock_deadline:
+        held = inside("""
+from eraseproof.db import connection
+with connection() as db:
+    print(db.execute("SELECT EXISTS(SELECT 1 FROM pg_locks l JOIN pg_stat_activity a ON a.pid=l.pid WHERE a.application_name='verification-crash-fixture' AND l.relation='customer.customers'::regclass AND l.mode='AccessExclusiveLock' AND l.granted) AS held").fetchone()['held'])
+""")
+        if held == "True":
+            break
+        time.sleep(0.1)
+    assert held == "True"
     run = start(request)
     try:
         deadline = time.monotonic() + 15

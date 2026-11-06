@@ -58,6 +58,13 @@ def safe_control(event_type: str, payload: object) -> bool:
     return True
 
 
+def safe_receipt(data: dict) -> bool:
+    allowed = {"consumer", "event_id", "customer_id", "processed_at"}
+    return data.get("consumer") in ("cache", "search", "analytics") and not any(
+        value is not None for key, value in data.items() if key not in allowed
+    )
+
+
 def sql_probe(target: str, subject: UUID, request_id: UUID, scope: dict) -> tuple[dict, int, bool]:
     with read_db() as db:
         if target == "customer":
@@ -109,12 +116,7 @@ def sql_probe(target: str, subject: UUID, request_id: UUID, scope: dict) -> tupl
                 "SELECT to_jsonb(p) AS data FROM delivery.processed p WHERE customer_id=%s LIMIT 1001",
                 (subject,),
             ).fetchall()
-            allowed = {"consumer", "event_id", "customer_id", "processed_at"}
-            bad += sum(
-                1
-                for r in receipts
-                if any(v is not None for k, v in r["data"].items() if k not in allowed)
-            )
+            bad += sum(1 for row in receipts if not safe_receipt(row["data"]))
             return (
                 {"eligible_rows": bad, "permitted_metadata_rows": len(rows) + len(receipts) - bad},
                 2,
@@ -214,7 +216,9 @@ def search_probe(subject: UUID, scope: dict) -> tuple[dict, int, bool]:
     for identifier, doc in documents.items():
         if (
             identifier == str(subject)
-            and doc.get("_source") == {"erased": True}
+            and isinstance(doc.get("_source"), dict)
+            and set(doc["_source"]) == {"erased"}
+            and doc["_source"]["erased"] is True
             and doc.get("_version", 0) >= 2
         ):
             markers += 1
