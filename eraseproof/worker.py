@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import time
+from pathlib import Path
 import httpx
 import pika
 import redis
@@ -12,6 +13,10 @@ from eraseproof.db import connection
 from eraseproof.events import Event
 
 log = logging.getLogger("worker")
+
+
+def heartbeat() -> None:
+    Path("/tmp/worker-heartbeat").write_text(str(time.time()))
 
 
 def publish_once() -> bool:
@@ -110,6 +115,12 @@ def consume(target: str) -> None:
         topology(channel)
         channel.basic_qos(prefetch_count=1)
 
+        def tick():
+            heartbeat()
+            broker.call_later(10, tick)
+
+        tick()
+
         def callback(ch, method, properties, body):
             try:
                 event = Event.model_validate_json(body)
@@ -154,6 +165,7 @@ def main() -> None:
     configure()
     target = os.environ.get("WORKER", "publisher")
     while True:
+        heartbeat()
         try:
             if target == "publisher":
                 if not publish_once():

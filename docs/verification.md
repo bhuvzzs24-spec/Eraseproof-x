@@ -22,6 +22,9 @@ Unit tests cover envelope round trips/rejections, customer API transaction inten
 
 The two integration tests require actual running Compose services. They cover idempotent migration reruns, source APIs, relational constraints, publication, all three projection stores, real duplicate event publication, repeat application, consumer restart and intentionally delayed search propagation. They are skipped by default; `RUN_INTEGRATION=1 pytest -m integration -v` requires Docker and a running stack. Docker integration CI is configured separately. No local real-infrastructure result is claimed.
 
+## CI follow-up
+The initial GitHub Actions run built images, applied migrations and reached healthy infrastructure/APIs, but `docker compose up --wait` rejected worker containers without health checks. Worker heartbeat checks were added rather than bypassing startup validation. The heartbeat tracks the publisher loop and consumer broker event loop; it is liveness instrumentation, not proof of useful delivery progress. CI is rerun on the fix.
+
 ## Limitations and future risks
 - Local database migration execution and multi-service smoke are blocked by absent Docker/PostgreSQL. See GitHub Actions for remote execution status.
 - Current observations are operational instrumentation, not independent deletion verification or atomic snapshots.

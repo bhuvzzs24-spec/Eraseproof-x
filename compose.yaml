@@ -18,6 +18,14 @@ x-api: &api
     interval: 10s
     timeout: 8s
     retries: 12
+x-worker: &worker
+  <<: *api
+  healthcheck:
+    test: [CMD, python, -c, "import time; from pathlib import Path; assert time.time()-float(Path('/tmp/worker-heartbeat').read_text()) < 60"]
+    interval: 10s
+    timeout: 5s
+    retries: 3
+    start_period: 20s
 services:
   postgres:
     image: postgres:16.8-alpine
@@ -91,25 +99,21 @@ services:
     command: [uvicorn, eraseproof.api:app, --host, 0.0.0.0, --port, "8004", --no-access-log]
     ports: ["127.0.0.1:8004:8004"]
   publisher:
-    <<: *api
+    <<: *worker
     environment: {<<: *env, WORKER: publisher}
     command: [python, -m, eraseproof.worker]
-    healthcheck: {disable: true}
   cache-consumer:
-    <<: *api
+    <<: *worker
     environment: {<<: *env, WORKER: cache}
     command: [python, -m, eraseproof.worker]
-    healthcheck: {disable: true}
   search-consumer:
-    <<: *api
+    <<: *worker
     environment: {<<: *env, WORKER: search}
     command: [python, -m, eraseproof.worker]
-    healthcheck: {disable: true}
   analytics-consumer:
-    <<: *api
+    <<: *worker
     environment: {<<: *env, WORKER: analytics}
     command: [python, -m, eraseproof.worker]
-    healthcheck: {disable: true}
 volumes:
   postgres-data:
   redis-data:
