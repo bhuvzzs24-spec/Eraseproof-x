@@ -1,14 +1,17 @@
-# Preserve the PostgreSQL 16 engine; replace the vulnerable privilege-drop helper.
+# Build the upstream privilege-drop helper with a patched, pinned Go toolchain.
+FROM golang:1.26-alpine@sha256:87c65a688975c0b1d4585d204874c45ca78354670e3a5f11368c5a492303d696 AS gosu-build
+WORKDIR /src
+ENV CGO_ENABLED=0 GOTOOLCHAIN=local
+RUN wget -O /tmp/gosu.tar.gz https://codeload.github.com/tianon/gosu/tar.gz/29b939aa5bd4dc588af765b8248f6e39150d2565 \
+    && echo "2b70da8a5480fafedc16bb1fc91b572f064d03df736cbd91a616af2f1b66ab51  /tmp/gosu.tar.gz" | sha256sum -c - \
+    && tar -xzf /tmp/gosu.tar.gz --strip-components=1 -C /src \
+    && go mod download && go mod verify \
+    && go build -trimpath -buildvcs=false -ldflags '-d -w' -o /out/gosu . \
+    && go version -m /out/gosu
+
+# PostgreSQL engine and data format remain pinned to the existing 16 image.
 FROM postgres:16-alpine@sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139
-ARG TARGETARCH
 ENV GOSU_VERSION=1.20
-RUN set -eux; \
-    case "$TARGETARCH" in \
-      amd64) checksum=b1892636c281590f34bc63c1118f058cd9de66c4ea463772e3909672d8b302ac ;; \
-      arm64) checksum=c216cb762520edb5ab0acb21cb9bc4bcc5f1544d365e8952a21514f04ea233ee ;; \
-      *) exit 1 ;; \
-    esac; \
-    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.20/gosu-${TARGETARCH}"; \
-    echo "$checksum  /usr/local/bin/gosu" | sha256sum -c -; \
-    chmod 0755 /usr/local/bin/gosu; \
-    gosu nobody true
+COPY --from=gosu-build /out/gosu /usr/local/bin/gosu
+COPY --from=gosu-build /src/LICENSE /usr/local/share/licenses/gosu/LICENSE
+RUN chmod 0755 /usr/local/bin/gosu && gosu --version && gosu nobody true

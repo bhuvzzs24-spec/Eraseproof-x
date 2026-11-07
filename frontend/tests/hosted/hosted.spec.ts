@@ -80,6 +80,7 @@ test("per-account operator performs real hosted deletion and sanitized export", 
   await page
     .getByRole("button", { name: "Confirm request deletion", exact: true })
     .click();
+  await page.waitForURL((url) => !!url.searchParams.get("request"));
   const requestId = new URL(page.url()).searchParams.get("request")!;
   const detail = page.locator(".panel").filter({
     has: page.getByRole("heading", {

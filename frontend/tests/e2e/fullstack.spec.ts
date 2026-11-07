@@ -46,6 +46,7 @@ test("real customer propagation, deletion, independent verification and evidence
     .getByRole("button", { name: "Confirm request deletion", exact: true })
     .click();
   await expect(page).toHaveURL(/workspace=deletions&request=/);
+  await page.waitForURL((url) => !!url.searchParams.get("request"));
   const requestId = new URL(page.url()).searchParams.get("request");
   expect(requestId).toBeTruthy();
   const details = page.locator(".panel").filter({

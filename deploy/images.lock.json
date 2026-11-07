@@ -13,6 +13,9 @@
   "derived_postgres": {
     "dockerfile": "deploy/Dockerfile.postgres",
     "gosu": "1.20",
-    "reason": "Replace vulnerable Go privilege-drop helper; retain pinned PostgreSQL engine"
+    "reason": "Rebuild pinned upstream gosu source with patched Go; upstream 1.20 binary still embeds vulnerable Go 1.24.6",
+    "gosu_source_commit": "29b939aa5bd4dc588af765b8248f6e39150d2565",
+    "gosu_source_sha256": "2b70da8a5480fafedc16bb1fc91b572f064d03df736cbd91a616af2f1b66ab51",
+    "builder": "golang:1.26-alpine@sha256:87c65a688975c0b1d4585d204874c45ca78354670e3a5f11368c5a492303d696"
   }
 }

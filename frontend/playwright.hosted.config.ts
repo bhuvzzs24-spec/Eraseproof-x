@@ -6,6 +6,7 @@ const credentials = JSON.parse(
 process.env.HOSTED_TEST_PASSWORD = credentials.password;
 export default defineConfig({
   testDir: "./tests/hosted",
+  outputDir: "test-results-hosted",
   timeout: 180000,
   workers: 1,
   retries: 0,
