@@ -65,7 +65,7 @@ def current(request: Request):
             "SELECT * FROM sessions WHERE digest=? AND expires>?",
             (hashlib.sha256(token.encode()).hexdigest(), time.time()),
         ).fetchone()
-    if not token or not row:
+    if not token or not row or row["role"] not in ROLES:
         raise HTTPException(401, "Session expired. Sign in again.")
     return dict(row)
 
@@ -242,7 +242,7 @@ class OrderInput(BaseModel):
 
 @app.post("/api/live/{service}/{path:path}")
 async def write_proxy(service: str, path: str, request: Request, session=Depends(write)):
-    if session["role"] == "readonly":
+    if session["role"] not in ("operator", "research"):
         raise HTTPException(403, "Read-only users cannot mutate data")
     if len(await request.body()) > 4096:
         raise HTTPException(413, "Request too large")

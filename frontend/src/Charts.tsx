@@ -1,5 +1,5 @@
 import { percentage } from "./api";
-import { Panel, Table } from "./ui";
+import { Empty, Panel, Table } from "./ui";
 import type { Dataset, Ratio } from "./types";
 const colors = ["var(--muted)", "var(--blue)", "var(--green)"];
 export function latencyPoints(data: Dataset) {
@@ -27,6 +27,15 @@ export default function ComparisonCharts({
   data: Dataset;
   partial: boolean;
 }) {
+  if (Object.keys(data.summary.methods).length === 0)
+    return (
+      <Panel title="No method observations">
+        <Empty
+          title="No measured method outcomes"
+          description="The retained trial may have failed before evaluation. Missing measurements are not successful negatives."
+        />
+      </Panel>
+    );
   const points = latencyPoints(data);
   const all = points.flatMap((p) => p.values);
   const min = all.length ? Math.floor(Math.log10(Math.min(...all))) : -2;

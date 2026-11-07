@@ -253,3 +253,11 @@ def test_upstream_timeout_remains_an_explicit_unknown_error(client, monkeypatch)
     response = client.get("/api/live/customer/v1/dashboard/snapshot")
     assert response.status_code == 504
     assert "outcome is unknown" in response.json()["detail"]
+
+
+def test_unknown_persisted_role_is_denied_by_default(client):
+    sign_in(client)
+    with sqlite3.connect(gateway.STATE / "sessions.db") as db:
+        db.execute("UPDATE sessions SET role='unknown-role'")
+    assert client.get("/api/session").status_code == 401
+    assert client.get("/api/history").status_code == 401

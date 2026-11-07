@@ -6,7 +6,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { Badge, Pager, ErrorNotice, Confirm, Json } from "../src/ui";
 import { api, ApiError, outcome, percentage } from "../src/api";
 import { latencyPoints, intervalText } from "../src/Charts";
-import { filterEvidence, FaultStudio } from "../src/research";
+import { filterEvidence, FaultStudio, Research } from "../src/research";
 import { Customers } from "../src/operations";
 import type { Dataset, Report, Session } from "../src/types";
 const measured = JSON.parse(
@@ -266,4 +266,56 @@ it("aborts a stalled API request and preserves an unknown outcome", async () => 
   });
   await vi.advanceTimersByTimeAsync(20001);
   await assertion;
+});
+
+it("shows a failed research admission without an endless dataset loader", async () => {
+  const identifier = "11111111-1111-4111-8111-111111111111";
+  const failed = {
+    id: identifier,
+    state: "FAILED",
+    scenario: "false_ack_cache",
+    seed: 101,
+    created_at_unix: 1,
+    error_code: "AdmissionError",
+  };
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url: string) =>
+      Response.json(
+        url.endsWith(`/research/jobs/${identifier}`) ? failed : { items: [] },
+      ),
+    ),
+  );
+  wrapper(
+    <Research
+      session={{ role: "readonly", csrf: "test", research_enabled: false }}
+      navigate={vi.fn()}
+      params={new URLSearchParams({ source: `job:${identifier}` })}
+    />,
+  );
+  await waitFor(() =>
+    expect(
+      screen.getByText("Execution ended without a trial dataset"),
+    ).toBeInTheDocument(),
+  );
+  expect(
+    screen.getByText(/No verification outcome is available/),
+  ).toBeInTheDocument();
+});
+
+it("rejects an unknown dataset source without inventing a result", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async () => Response.json({ items: [] })),
+  );
+  wrapper(
+    <Research
+      session={{ role: "readonly", csrf: "test", research_enabled: false }}
+      navigate={vi.fn()}
+      params={new URLSearchParams({ source: "unknown-source" })}
+    />,
+  );
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Unknown evidence source",
+  );
 });

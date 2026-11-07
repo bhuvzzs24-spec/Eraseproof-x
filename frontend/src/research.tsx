@@ -82,6 +82,11 @@ export function useDataset(source: string, page = 0) {
           }
         : undefined),
     error:
+      (!historical && !jobId && !experimentId && source !== "live"
+        ? new Error(
+            "Unknown evidence source. Choose a recorded dataset, job or live experiment.",
+          )
+        : null) ||
       saved.error ||
       job.error ||
       experiment.error ||
@@ -110,6 +115,11 @@ function SourceSelect({
         value={source}
         onChange={(e) => setSource(e.target.value)}
       >
+        {!["phase4-final", "phase4-initial", "live"].includes(source) &&
+        !experiments.data?.items.some((e) => `experiment:${e.id}` === source) &&
+        !jobs.data?.items.some((j) => `job:${j.id}` === source) ? (
+          <option value={source}>Selected source · {source}</option>
+        ) : null}
         <optgroup label="Saved actual CI measurements">
           <option value="phase4-final">Historical Phase 4 · final batch</option>
           <option value="phase4-initial">
@@ -652,8 +662,9 @@ export function FaultStudio({ session, navigate, params }: WorkspaceProps) {
                   </div>
                 ) : (
                   <p className="subtle">
-                    Waiting for the runner's first durable journal. Acceptance
-                    is not completion.
+                    {["FAILED", "INTERRUPTED"].includes(job.data.state)
+                      ? "No trial journal was produced. Execution ended before a durable trial started."
+                      : "Waiting for the runner's first durable journal. Acceptance is not completion."}
                   </p>
                 )}
                 {job.data.state === "FAILED" ||
@@ -815,7 +826,22 @@ export function Research({ params, navigate }: WorkspaceProps) {
       ) : dataset.error ? (
         <ErrorNotice error={dataset.error} />
       ) : !data || !s ? (
-        <Loading />
+        dataset.job && ["FAILED", "INTERRUPTED"].includes(dataset.job.state) ? (
+          <Panel title="Execution ended without a trial dataset">
+            <Badge value={dataset.job.state} />
+            <p>
+              No verification outcome is available. The runner did not produce a
+              durable trial journal; this is not a successful deletion.
+            </p>
+            <button
+              onClick={() => navigate("faults", { job: dataset.job!.id })}
+            >
+              Inspect execution record
+            </button>
+          </Panel>
+        ) : (
+          <Loading />
+        )
       ) : (
         <>
           <div className="metrics-grid">

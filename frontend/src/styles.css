@@ -109,14 +109,14 @@ button svg {
   flex-shrink: 0;
 }
 button.button {
-  background: #537be1;
+  background: #3f63c4;
   border-color: #6b92f7;
   color: #fff;
   padding: 10px 14px;
   box-shadow: 0 2px 6px #0002;
 }
 button.button:hover:not(:disabled) {
-  background: #648bf0;
+  background: #365ab4;
 }
 .danger-button.button {
   background: #9c3e48;
@@ -2267,4 +2267,16 @@ td summary {
 .sidebar > nav,
 .sidebar-bottom {
   flex-shrink: 0;
+}
+
+button.button.danger-button:hover:not(:disabled) {
+  background: #88323d;
+}
+@media (max-width: 760px) {
+  .sidebar:not(.open) {
+    visibility: hidden;
+  }
+  .sidebar.open {
+    visibility: visible;
+  }
 }
