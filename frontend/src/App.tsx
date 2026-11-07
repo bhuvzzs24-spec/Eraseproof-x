@@ -54,11 +54,19 @@ const navigation = [
 function Login({ onSuccess }: { onSuccess: (session: Session) => void }) {
   const [role, setRole] = useState<Session["role"]>("readonly");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const access = useApi<{ account_login: boolean; public_demo: boolean }>(
+    "/access",
+  );
+  const guest = useMutation({
+    mutationFn: () => api<Session>("/session/guest", { method: "POST" }),
+    onSuccess,
+  });
   const login = useMutation({
     mutationFn: () =>
       api<Session>("/session", {
         method: "POST",
-        body: JSON.stringify({ role, password }),
+        body: JSON.stringify({ role, password, username }),
       }),
     onSuccess,
   });
@@ -107,8 +115,33 @@ function Login({ onSuccess }: { onSuccess: (session: Session) => void }) {
       <section className="login-card">
         <p className="eyebrow">Engineering workspace</p>
         <h2>Sign in to EraseProof X</h2>
-        <p>Choose your authorized role to access the local workspace.</p>
+        <p>
+          Use your authorized account, or explore the read-only demonstration
+          when enabled.
+        </p>
+        {access.data?.public_demo ? (
+          <button
+            className="button wide"
+            disabled={guest.isPending}
+            onClick={() => guest.mutate()}
+          >
+            Explore read-only demonstration
+          </button>
+        ) : null}
+        {guest.error ? <ErrorNotice error={guest.error} /> : null}
         <form onSubmit={submit}>
+          {access.data?.account_login ? (
+            <label>
+              Account username
+              <input
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                maxLength={64}
+              />
+            </label>
+          ) : null}
           <label>
             Access role
             <select
@@ -121,7 +154,7 @@ function Login({ onSuccess }: { onSuccess: (session: Session) => void }) {
             </select>
           </label>
           <label>
-            Role password
+            {access.data?.account_login ? "Account password" : "Role password"}
             <input
               type="password"
               autoComplete="current-password"
@@ -145,8 +178,14 @@ function Login({ onSuccess }: { onSuccess: (session: Session) => void }) {
           </p>
         </div>
         <p className="subtle">
-          Local setup: use the role password generated in{" "}
-          <code>.dashboard.env</code> on the trusted host.
+          {access.data?.account_login ? (
+            "Your account role is enforced by the server. Contact the owner for access."
+          ) : (
+            <>
+              Local setup: use the role password generated in{" "}
+              <code>.dashboard.env</code> on the trusted host.
+            </>
+          )}
         </p>
       </section>
     </main>

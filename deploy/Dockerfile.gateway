@@ -1,0 +1,18 @@
+FROM node:24-alpine@sha256:a34ab6d7f6f4813f4d0c5469d74685604b962fbdbf5793a7bc7b4998ecb867c8 AS frontend
+WORKDIR /build
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+FROM python:3.12-slim@sha256:4840d514c583a4d3d8cad3940e68dee6f0f6f3635c12fcd0a3d74c21a5b93a54
+WORKDIR /app
+COPY pyproject.toml requirements.lock ./
+COPY eraseproof ./eraseproof
+COPY migrations ./migrations
+COPY policies ./policies
+COPY research/phase-4/config ./research/phase-4/config
+COPY research/phase-4/results ./research/phase-4/results
+RUN pip install --no-cache-dir -c requirements.lock . && useradd --uid 10001 --create-home app && mkdir -p /app/work/dashboard && chown -R app:app /app/work
+COPY --from=frontend /build/dist ./frontend/dist
+USER app
+CMD ["uvicorn", "eraseproof.dashboard_gateway:app", "--host", "0.0.0.0", "--port", "8010", "--no-access-log"]

@@ -274,3 +274,15 @@ export type Navigate = (
   workspace: string,
   params?: Record<string, string>,
 ) => void;
+
+export type RunSummary = Pick<
+  Run,
+  | "id"
+  | "customer_id"
+  | "deletion_request_id"
+  | "state"
+  | "result"
+  | "round_no"
+  | "created_at"
+  | "finished_at"
+>;

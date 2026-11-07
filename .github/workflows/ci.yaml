@@ -1,4 +1,6 @@
 name: distributed-backend
+permissions:
+  contents: read
 on: [push, pull_request]
 jobs:
   changes:
@@ -48,6 +50,8 @@ jobs:
       - name: Real browser historical, role, failure-state and visual checks
         run: npm run test:e2e
         working-directory: frontend
+      - if: always()
+        run: python scripts/sanitize_test_artifacts.py
       - if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -111,6 +115,8 @@ jobs:
         run: RUN_FULLSTACK=1 npm run test:e2e
         working-directory: frontend
       - if: always()
+        run: python scripts/sanitize_test_artifacts.py
+      - if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dashboard-browser-fullstack
@@ -134,3 +140,104 @@ jobs:
           if-no-files-found: warn
       - if: always()
         run: docker compose down -v
+  security:
+    needs: changes
+    if: needs.changes.outputs.runtime == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24', cache: npm, cache-dependency-path: frontend/package-lock.json}
+      - run: pip install -c requirements.lock -e '.[dev]' && pip install pip-audit==2.10.1 bandit==1.8.6
+      - name: Dependency and source security checks
+        run: |
+          mkdir -p work/security
+          pip-audit -r requirements.lock --no-deps --disable-pip --format json --output work/security/python-audit.json
+          pip-audit -r requirements-benchmark.lock --no-deps --disable-pip --format json --output work/security/python-benchmark-audit.json
+          npm --prefix frontend ci
+          npm --prefix frontend audit --audit-level=high --json > work/security/npm-audit.json
+          bandit -r eraseproof scripts -f json -o work/security/bandit-all.json || test "$?" = 1
+          bandit -r eraseproof scripts -lll -iii
+      - name: Install pinned scanner and verify publisher checksum
+        env: {GH_TOKEN: '${{ github.token }}'}
+        run: |
+          mkdir -p /tmp/ep-trivy
+          gh release download v0.76.2 --repo aquasecurity/trivy --pattern 'trivy_0.76.2_Linux-64bit.tar.gz' --pattern 'trivy_0.76.2_checksums.txt' --dir /tmp/ep-trivy
+          cd /tmp/ep-trivy
+          rg 'trivy_0.76.2_Linux-64bit.tar.gz$' trivy_0.76.2_checksums.txt | sha256sum --check
+          tar -xzf trivy_0.76.2_Linux-64bit.tar.gz trivy
+          sudo install -m 0755 trivy /usr/local/bin/trivy
+      - run: docker build -t eraseproof-runtime:ci . && docker build -f deploy/Dockerfile.gateway -t eraseproof-gateway:ci .
+      - name: Actual container vulnerability inventory and fixed-critical gate
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          images=['eraseproof-runtime:ci','eraseproof-gateway:ci']+list(json.load(open('deploy/images.lock.json'))['images'].values())
+          failed=[]
+          for n,image in enumerate(images):
+              path=f'work/security/image-{n}.json'
+              subprocess.run(['trivy','image','--scanners','vuln','--format','json','--output',path,image],check=True,timeout=360)
+              report=json.load(open(path))
+              if any(v.get('Severity')=='CRITICAL' and v.get('FixedVersion') for r in report.get('Results',[]) for v in r.get('Vulnerabilities',[])):
+                  failed.append(image)
+          Path('work/security/image-index.json').write_text(json.dumps({'images':images,'gate':'fixed critical vulnerabilities; all other findings retained for review','failed':failed},indent=2))
+          if failed: raise SystemExit('Fixed critical container vulnerabilities require remediation; inspect image artifacts')
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: {name: phase6-security, path: 'work/security/**', if-no-files-found: warn}
+  hosted:
+    needs: changes
+    if: needs.changes.outputs.runtime == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24', cache: npm, cache-dependency-path: frontend/package-lock.json}
+      - run: pip install -c requirements.lock -c requirements-benchmark.lock -e '.[dev,benchmark]'
+      - name: Prepare isolated private credentials and local DNS
+        run: |
+          python scripts/validate_hosted.py --prepare
+          sudo chown 10001:10001 work/hosted-ci/users.json
+          echo '127.0.0.1 demo.example.invalid' | sudo tee -a /etc/hosts >/dev/null
+          sudo sysctl -w vm.max_map_count=262144
+          python scripts/hosted_ops.py validate --env-file work/hosted-ci/hosted.env --project eraseproof-hosted-ci --ci
+      - name: Build and pull the actual hosted images
+        run: |
+          docker compose --env-file work/hosted-ci/hosted.env --project-name eraseproof-hosted-ci -f deploy/compose.hosted.yaml -f deploy/compose.ci.yaml --profile publish build
+          docker compose --env-file work/hosted-ci/hosted.env --project-name eraseproof-hosted-ci -f deploy/compose.hosted.yaml -f deploy/compose.ci.yaml --profile publish pull --ignore-buildable
+      - name: Start real hosted stack with loopback-only local HTTPS
+        run: |
+          python scripts/validate_hosted.py --start
+          docker compose --env-file work/hosted-ci/hosted.env --project-name eraseproof-hosted-ci -f deploy/compose.hosted.yaml -f deploy/compose.ci.yaml cp caddy:/data/caddy/pki/authorities/local/root.crt work/hosted-ci/root.crt
+      - name: Actual TLS, authorization, deletion, six-target verification, backup and restart qualification
+        run: python scripts/validate_hosted.py --ca work/hosted-ci/root.crt
+      - name: Measure the real list-query optimization without changing verification checks
+        run: docker compose --env-file work/hosted-ci/hosted.env --project-name eraseproof-hosted-ci -f deploy/compose.hosted.yaml -f deploy/compose.ci.yaml exec -T customer python -m eraseproof.read_model_benchmark > work/phase6-read-model-performance.json
+      - run: npm ci && npx playwright install --with-deps chromium && npm run test:hosted
+        working-directory: frontend
+      - if: always()
+        run: python scripts/sanitize_test_artifacts.py
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase6-hosted-validation
+          path: |
+            work/phase6-hosted-validation.json
+            work/phase6-backup.json
+            work/phase6-restore.json
+            work/phase6-read-model-performance.json
+            work/hosted-ci/startup.json
+            frontend/test-results-hosted/**
+          if-no-files-found: warn
+      - if: always()
+        run: docker compose --env-file work/hosted-ci/hosted.env --project-name eraseproof-hosted-ci -f deploy/compose.hosted.yaml -f deploy/compose.ci.yaml --profile publish logs --no-color --tail 60
+      - if: always()
+        run: docker compose --env-file work/hosted-ci/hosted.env --project-name eraseproof-hosted-ci -f deploy/compose.hosted.yaml -f deploy/compose.ci.yaml --profile publish down -v

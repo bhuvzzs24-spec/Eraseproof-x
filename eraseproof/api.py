@@ -12,13 +12,23 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from psycopg.types.json import Jsonb
 from eraseproof import config
+from eraseproof.hosted_security import validate_hosted, hosted
+from contextlib import asynccontextmanager
 from eraseproof.db import connection
 from eraseproof.events import CustomerData, OrderData, Event
 from eraseproof.logging import configure
 from eraseproof.lifecycle import subject_lock, is_deleted
 
 configure()
-app = FastAPI(title=f"EraseProof X {config.SERVICE}", version="0.1.0")
+
+
+@asynccontextmanager
+async def lifespan(app):
+    validate_hosted()
+    yield
+
+
+app = FastAPI(lifespan=lifespan, title=f"EraseProof X {config.SERVICE}", version="0.1.0")
 log = logging.getLogger("api")
 
 
@@ -52,7 +62,9 @@ def authorized(x_inspection_token: str = Header(default="")):
 def authorize_operator(x_operator_token: str = Header(default="")):
     # Backward-compatible trusted-lab mode; the dashboard overlay always configures this token.
     expected = os.getenv("OPERATOR_TOKEN", "")
-    if expected and (len(expected) < 24 or not secrets.compare_digest(expected, x_operator_token)):
+    if (hosted() and len(expected) < 32) or (
+        expected and (len(expected) < 24 or not secrets.compare_digest(expected, x_operator_token))
+    ):
         raise HTTPException(403, "authorized operator credential required")
 
 

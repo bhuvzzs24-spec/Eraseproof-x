@@ -1,0 +1,9 @@
+{
+    admin off
+}
+https://demo.example.invalid {
+    tls internal
+    reverse_proxy gateway:8010 {
+        header_up X-Forwarded-For {remote_host}
+    }
+}

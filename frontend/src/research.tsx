@@ -33,7 +33,7 @@ import type {
   Page,
   Report,
   ResearchJob,
-  Run,
+  RunSummary,
   Scenario,
   Summary,
   Trial,
@@ -192,7 +192,10 @@ function useReport(source: string, run: string) {
         : false,
   );
 }
-function runChoices(data: Dataset | undefined, liveRuns: Run[] | undefined) {
+function runChoices(
+  data: Dataset | undefined,
+  liveRuns: RunSummary[] | undefined,
+) {
   return data
     ? data.trials.flatMap((t) =>
         t.phases
@@ -213,7 +216,7 @@ export function Investigator({ navigate, params }: WorkspaceProps) {
   const [source, setSource] = useState(params.get("source") || "phase4-final");
   const [chosen, setChosen] = useState(params.get("run") || "");
   const dataset = useDataset(source);
-  const liveRuns = useApi<Page<Run>>(
+  const liveRuns = useApi<Page<RunSummary>>(
     source === "live"
       ? "/live/customer/v1/dashboard/verifications?limit=100"
       : null,
@@ -267,6 +270,9 @@ export function Investigator({ navigate, params }: WorkspaceProps) {
             onChange={(e) => setChosen(e.target.value)}
             aria-label="Investigation run"
           >
+            {selected && !choices.some((c) => c.id === selected) ? (
+              <option value={selected}>Linked run · {selected}</option>
+            ) : null}
             {choices.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.label}
@@ -1215,7 +1221,7 @@ export function EvidenceExplorer({ params }: WorkspaceProps) {
   const [outcome, setOutcome] = useState("");
   const [search, setSearch] = useState("");
   const dataset = useDataset(source);
-  const runs = useApi<Page<Run>>(
+  const runs = useApi<Page<RunSummary>>(
     source === "live"
       ? "/live/customer/v1/dashboard/verifications?limit=100"
       : null,
@@ -1260,6 +1266,9 @@ export function EvidenceExplorer({ params }: WorkspaceProps) {
             value={selected}
             onChange={(e) => setChosen(e.target.value)}
           >
+            {selected && !choices.some((c) => c.id === selected) ? (
+              <option value={selected}>Linked run · {selected}</option>
+            ) : null}
             {choices.map((c) => (
               <option value={c.id} key={c.id}>
                 {c.label}

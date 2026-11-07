@@ -1,0 +1,1109 @@
+name: eraseproof-hosted
+services:
+  postgres:
+    image: postgres:16-alpine@sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set password}
+      POSTGRES_DB: eraseproof
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - pg_isready -U lab -d eraseproof
+      interval: 5s
+      retries: 20
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    restart: unless-stopped
+    mem_limit: 768m
+    command:
+    - postgres
+    - -c
+    - max_connections=100
+    - -c
+    - shared_buffers=128MB
+    - -c
+    - log_statement=none
+  redis:
+    image: redis:7.4-alpine@sha256:c5d34a98396a4775e223c74e929162c35c5a2182901ba26b50ade939941ce14b
+    volumes:
+    - redis-data:/data
+    - ./redis-entrypoint.sh:/run/redis-entrypoint.sh:ro
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - REDISCLI_AUTH="$$REDIS_PASSWORD" redis-cli ping | grep -q PONG
+      interval: 5s
+      retries: 20
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    restart: unless-stopped
+    mem_limit: 256m
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?configure Redis password}
+      VERIFIER_REDIS_PASSWORD: ${VERIFIER_REDIS_PASSWORD:?configure read identity}
+    entrypoint:
+    - /bin/sh
+    - /run/redis-entrypoint.sh
+  rabbitmq:
+    image: rabbitmq:4.1-alpine@sha256:425307007e5a54b20fe6b6da718c2e385999eddda28d44d329b7e7bfabe45610
+    environment:
+      RABBITMQ_DEFAULT_USER: lab
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?set password}
+    volumes:
+    - rabbit-data:/var/lib/rabbitmq
+    - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    healthcheck:
+      test:
+      - CMD
+      - rabbitmq-diagnostics
+      - -q
+      - ping
+      interval: 10s
+      retries: 20
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    restart: unless-stopped
+    mem_limit: 512m
+  opensearch:
+    image: opensearchproject/opensearch:2.19.7@sha256:3bfa1ec74d56928c2e018033d45c460ce2c0ea65a5cedd577de3102326c31b89
+    environment:
+      discovery.type: single-node
+      DISABLE_SECURITY_PLUGIN: 'true'
+      DISABLE_INSTALL_DEMO_CONFIG: 'true'
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+    volumes:
+    - search-data:/usr/share/opensearch/data
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=3s'
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+    - search-private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    restart: unless-stopped
+    mem_limit: 1536m
+  migrate:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: ${MIGRATOR_DATABASE_URL:?configure owner-only migration URL}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+    command:
+    - python
+    - -m
+    - eraseproof.db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  provision-verification:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: ${MIGRATOR_DATABASE_URL:?configure owner-only migration URL}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      VERIFIER_DB_PASSWORD: ${VERIFIER_DB_PASSWORD:?configure}
+      VERIFIER_CONTROL_PASSWORD: ${VERIFIER_CONTROL_PASSWORD:?configure}
+      VERIFIER_REDIS_PASSWORD: ${VERIFIER_REDIS_PASSWORD:?configure}
+      RUNTIME_DB_PASSWORD: ${RUNTIME_DB_PASSWORD:?configure non-owner password}
+    command:
+    - python
+    - -m
+    - eraseproof.provision_hosted
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  verification:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${VERIFIER_CONTROL_DATABASE_URL:?configure coordinator URL}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      SERVICE: verification
+      VERIFIER_READ_DATABASE_URL: ${VERIFIER_READ_DATABASE_URL:?configure probe URL}
+      VERIFIER_REDIS_URL: ${VERIFIER_REDIS_URL:?configure Redis read credential}
+      VERIFIER_SEARCH_URL: ${VERIFIER_SEARCH_URL:?configure authenticated read-only
+        search URL}
+      RESEARCH_TOKEN: ${RESEARCH_TOKEN:?configure read-only research credential}
+    depends_on: &id001
+      provision-verification:
+        condition: service_completed_successfully
+      search-reader:
+        condition: service_healthy
+    healthcheck: &id003
+      test:
+      - CMD
+      - python
+      - -c
+      - import urllib.request,os; urllib.request.urlopen('http://localhost:'+os.getenv('PORT','8000')+'/health/ready',timeout=5)
+      interval: 10s
+      timeout: 8s
+      retries: 12
+    networks:
+    - private
+    - api
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  verification-scheduler:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${VERIFIER_CONTROL_DATABASE_URL:?configure coordinator URL}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: verification-scheduler
+      VERIFIER_READ_DATABASE_URL: ${VERIFIER_READ_DATABASE_URL:?configure probe URL}
+      VERIFIER_REDIS_URL: ${VERIFIER_REDIS_URL:?configure Redis read credential}
+      VERIFIER_SEARCH_URL: ${VERIFIER_SEARCH_URL:?configure authenticated read-only
+        search URL}
+      RESEARCH_TOKEN: ${RESEARCH_TOKEN:?configure read-only research credential}
+    depends_on: *id001
+    healthcheck: &id002
+      test:
+      - CMD
+      - python
+      - -c
+      - import time; from pathlib import Path; assert time.time()-float(Path('/tmp/worker-heartbeat').read_text())
+        < 60
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    command:
+    - python
+    - -m
+    - eraseproof.verification_worker
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  verification-worker:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${VERIFIER_CONTROL_DATABASE_URL:?configure coordinator URL}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: verification-worker
+      VERIFIER_READ_DATABASE_URL: ${VERIFIER_READ_DATABASE_URL:?configure probe URL}
+      VERIFIER_REDIS_URL: ${VERIFIER_REDIS_URL:?configure Redis read credential}
+      VERIFIER_SEARCH_URL: ${VERIFIER_SEARCH_URL:?configure authenticated read-only
+        search URL}
+      RESEARCH_TOKEN: ${RESEARCH_TOKEN:?configure read-only research credential}
+    depends_on: *id001
+    healthcheck: *id002
+    command:
+    - python
+    - -m
+    - eraseproof.verification_worker
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  customer:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      SERVICE: customer
+    depends_on: &id004
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck: *id003
+    networks:
+    - private
+    - api
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  order:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      SERVICE: order
+    depends_on: *id004
+    healthcheck: *id003
+    networks:
+    - private
+    - api
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  cache:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      SERVICE: cache
+      PORT: '8002'
+    depends_on: *id004
+    healthcheck: *id003
+    command:
+    - uvicorn
+    - eraseproof.api:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8002'
+    - --no-access-log
+    networks:
+    - private
+    - api
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  search:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      SERVICE: search
+      PORT: '8003'
+    depends_on: *id004
+    healthcheck: *id003
+    command:
+    - uvicorn
+    - eraseproof.api:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8003'
+    - --no-access-log
+    networks:
+    - private
+    - api
+    - search-private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  analytics:
+    build: &id005
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      SERVICE: analytics
+      PORT: '8004'
+    depends_on: *id004
+    healthcheck: *id003
+    command:
+    - uvicorn
+    - eraseproof.api:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8004'
+    - --no-access-log
+    networks:
+    - private
+    - api
+    logging: &id006
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs: &id007
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop: &id008
+    - ALL
+    security_opt: &id009
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  deletion:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      SERVICE: deletion
+    depends_on: *id004
+    healthcheck: *id003
+    networks:
+    - private
+    - api
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  deletion-scheduler:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: deletion-scheduler
+    depends_on: *id004
+    healthcheck: *id002
+    command:
+    - python
+    - -m
+    - eraseproof.deletion_worker
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  deletion-consumer:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: deletion-consumer
+    depends_on: *id004
+    healthcheck: *id002
+    command:
+    - python
+    - -m
+    - eraseproof.deletion_worker
+    networks:
+    - private
+    - search-private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  publisher:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: publisher
+    depends_on: *id004
+    healthcheck: *id002
+    command:
+    - python
+    - -m
+    - eraseproof.worker
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  cache-consumer:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: cache
+    depends_on: *id004
+    healthcheck: *id002
+    command:
+    - python
+    - -m
+    - eraseproof.worker
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  search-consumer:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: search
+    depends_on: *id004
+    healthcheck: *id002
+    command:
+    - python
+    - -m
+    - eraseproof.worker
+    networks:
+    - private
+    - search-private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  analytics-consumer:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${RUNTIME_DATABASE_URL:?configure non-owner runtime role}
+      BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
+      REDIS_URL: ${REDIS_URL:?configure authenticated Redis URL}
+      SEARCH_URL: http://opensearch:9200
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DELETION_RETRY_BASE_SECONDS: '1'
+      DELETION_LEASE_SECONDS: '30'
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      WORKER: analytics
+    depends_on: *id004
+    healthcheck: *id002
+    command:
+    - python
+    - -m
+    - eraseproof.worker
+    networks:
+    - private
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    mem_limit: 160m
+    pids_limit: 128
+  gateway:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.gateway
+    environment:
+      INSPECTION_TOKEN: ${INSPECTION_TOKEN:?set inspection token}
+      APP_ENV: demo
+      DELETION_TOKEN: ${DELETION_TOKEN:?set separate deletion token of at least 24
+        characters}
+      DEPLOYMENT_MODE: hosted
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?configure operator credential}
+      VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure verification credential}
+      DASHBOARD_ENABLE_RESEARCH: '0'
+      ERASEPROOF_RESEARCH_FAULTS: '0'
+      ENABLE_TEST_FAULTS: '0'
+      DASHBOARD_ORIGIN: https://${DOMAIN:?configure owned domain}
+      DASHBOARD_SECURE_COOKIE: '1'
+      DASHBOARD_USERS_FILE: /run/config/users.json
+      DASHBOARD_STATE_DIR: /app/work/dashboard
+      DASHBOARD_PUBLIC_DEMO: ${DASHBOARD_PUBLIC_DEMO:-0}
+      DASHBOARD_CUSTOMER_ORIGIN: http://customer:8000
+      DASHBOARD_ORDER_ORIGIN: http://order:8000
+      DASHBOARD_CACHE_ORIGIN: http://cache:8002
+      DASHBOARD_SEARCH_ORIGIN: http://search:8003
+      DASHBOARD_ANALYTICS_ORIGIN: http://analytics:8004
+      DASHBOARD_DELETION_ORIGIN: http://deletion:8000
+      DASHBOARD_VERIFICATION_ORIGIN: http://verification:8000
+    command:
+    - uvicorn
+    - eraseproof.dashboard_gateway:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8010'
+    - --no-access-log
+    - --proxy-headers
+    - --forwarded-allow-ips
+    - 172.30.0.2
+    depends_on:
+      customer:
+        condition: service_healthy
+      order:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+      search:
+        condition: service_healthy
+      analytics:
+        condition: service_healthy
+      deletion:
+        condition: service_healthy
+      verification:
+        condition: service_healthy
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+    - /tmp:rw,noexec,nosuid,size=32m
+    volumes:
+    - gateway-state:/app/work/dashboard
+    - ${USERS_FILE:?configure account file}:/run/config/users.json:ro
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 256m
+    networks:
+    - api
+    - ingress
+    healthcheck:
+      test:
+      - CMD
+      - python
+      - -c
+      - import urllib.request; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8010/health/ready',headers={'Host':__import__('urllib.parse',fromlist=['urlsplit']).urlsplit(__import__('os').environ['DASHBOARD_ORIGIN']).hostname}),timeout=5)
+      interval: 10s
+      timeout: 6s
+      retries: 12
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  caddy:
+    image: caddy:2-alpine@sha256:78bd35025c7ba85961dd149ae670315129954e77abe2383ac47c89106b35ade9
+    profiles:
+    - publish
+    environment:
+      DOMAIN: ${DOMAIN:?configure domain}
+      ACME_EMAIL: ${ACME_EMAIL:?configure ACME contact}
+    ports:
+    - 80:80
+    - 443:443
+    volumes:
+    - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    - caddy-data:/data
+    - caddy-config:/config
+    networks:
+      ingress:
+        ipv4_address: 172.30.0.2
+      edge: {}
+    depends_on:
+      gateway:
+        condition: service_healthy
+    restart: unless-stopped
+    mem_limit: 128m
+    cap_drop:
+    - ALL
+    cap_add:
+    - NET_BIND_SERVICE
+    security_opt:
+    - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+  search-reader:
+    build: *id005
+    restart: unless-stopped
+    environment:
+      VERIFIER_SEARCH_PASSWORD: ${VERIFIER_SEARCH_PASSWORD:?configure independent
+        read credential}
+    depends_on:
+      opensearch:
+        condition: service_healthy
+    healthcheck:
+      test:
+      - CMD
+      - python
+      - -c
+      - import urllib.request; urllib.request.urlopen('http://127.0.0.1:9200/health/live',timeout=3)
+      interval: 10s
+      retries: 12
+    command:
+    - uvicorn
+    - eraseproof.search_reader:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '9200'
+    - --no-access-log
+    networks:
+    - private
+    - search-private
+    logging: *id006
+    read_only: true
+    tmpfs: *id007
+    cap_drop: *id008
+    security_opt: *id009
+    mem_limit: 128m
+    pids_limit: 128
+networks:
+  private:
+    internal: true
+  api:
+    internal: true
+  ingress:
+    internal: true
+    ipam:
+      config:
+      - subnet: 172.30.0.0/24
+  edge: {}
+  search-private:
+    internal: true
+volumes:
+  postgres-data: null
+  redis-data: null
+  rabbit-data: null
+  search-data: null
+  gateway-state: {}
+  caddy-data: {}
+  caddy-config: {}

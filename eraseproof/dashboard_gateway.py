@@ -1,9 +1,9 @@
 """Local-only dashboard gateway: opaque sessions, role enforcement and bounded real research jobs."""
 
 from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
+from contextlib import contextmanager, asynccontextmanager
 from pathlib import Path
-from threading import Lock
+from threading import Lock, BoundedSemaphore
 from typing import Literal
 from uuid import UUID, uuid4
 import hashlib
@@ -19,6 +19,9 @@ import zipfile
 import httpx
 from fastapi import FastAPI, HTTPException, Request, Response, Depends
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi.exceptions import RequestValidationError
+from urllib.parse import urlsplit
+from eraseproof import hosted_security as hs
 from pydantic import BaseModel, ConfigDict, Field
 from eraseproof.research_models import catalog
 from eraseproof.research_report import load
@@ -27,13 +30,38 @@ from eraseproof.deletion_models import SubmitDeletion
 from eraseproof.verification_models import StartVerification
 
 ROOT = Path(__file__).resolve().parent.parent
-STATE = ROOT / "work/dashboard"
+STATE = Path(os.getenv("DASHBOARD_STATE_DIR", str(ROOT / "work/dashboard")))
 ROLES = ("readonly", "operator", "research")
 SERVICES = ("customer", "order", "cache", "search", "analytics", "deletion", "verification")
-app = FastAPI(title="EraseProof X dashboard gateway", docs_url=None, redoc_url=None)
+
+
+@asynccontextmanager
+async def lifespan(app):
+    hs.validate_hosted(gateway=True)
+    yield
+
+
+app = FastAPI(
+    title="EraseProof X dashboard gateway", docs_url=None, redoc_url=None, lifespan=lifespan
+)
+
+
+@app.exception_handler(RequestValidationError)
+async def invalid_fields(request, exc):
+    return JSONResponse({"detail": "Invalid request fields"}, status_code=422)
+
+
+@app.exception_handler(Exception)
+async def unavailable(request, exc):
+    return JSONResponse(
+        {"detail": "Service unavailable; no successful outcome is assumed"}, status_code=503
+    )
+
+
 POOL = ThreadPoolExecutor(max_workers=2)
 JOB_LOCK = Lock()
 LOGIN_LOCK = Lock()
+LOGIN_HASH_SLOTS = BoundedSemaphore(2)
 LOGIN_ATTEMPTS: dict[str, list[float]] = {}
 
 
@@ -45,6 +73,17 @@ def sessions():
         db.execute(
             "CREATE TABLE IF NOT EXISTS sessions (digest text PRIMARY KEY, role text NOT NULL, csrf text NOT NULL, expires real NOT NULL)"
         )
+        columns = {r[1] for r in db.execute("PRAGMA table_info(sessions)")}
+        for column in ("principal", "credential_version"):
+            if column not in columns:
+                db.execute(f"ALTER TABLE sessions ADD COLUMN {column} TEXT NOT NULL DEFAULT ''")
+        db.execute(
+            "CREATE TABLE IF NOT EXISTS limits (bucket TEXT, identity TEXT, window INTEGER, count INTEGER NOT NULL, PRIMARY KEY(bucket,identity,window))"
+        )
+        db.execute(
+            "CREATE TABLE IF NOT EXISTS access_audit (created REAL, principal TEXT, method TEXT, path TEXT, status INTEGER)"
+        )
+        db.execute("DELETE FROM limits WHERE window < ?", (int(time.time() // 60) - 2,))
         db.execute("DELETE FROM sessions WHERE expires < ?", (time.time(),))
         yield db
 
@@ -58,8 +97,25 @@ def origin(request: Request):
         raise HTTPException(403, "Same-origin access required")
 
 
+def cookie_name():
+    return "__Host-eraseproof_session" if hs.hosted() else "eraseproof_session"
+
+
+def rate_limit(bucket, identity, maximum):
+    identity = hashlib.sha256(identity.encode()).hexdigest()
+    with sessions() as db:
+        value = db.execute(
+            "INSERT INTO limits VALUES(?,?,?,1) ON CONFLICT(bucket,identity,window) DO UPDATE SET count=count+1 RETURNING count",
+            (bucket, identity, int(time.time() // 60)),
+        ).fetchone()[0]
+    if value > maximum:
+        raise HTTPException(
+            429, "Request quota exceeded; retry after one minute", headers={"Retry-After": "60"}
+        )
+
+
 def current(request: Request):
-    token = request.cookies.get("eraseproof_session", "")
+    token = request.cookies.get(cookie_name(), "")
     with sessions() as db:
         row = db.execute(
             "SELECT * FROM sessions WHERE digest=? AND expires>?",
@@ -67,6 +123,18 @@ def current(request: Request):
         ).fetchone()
     if not token or not row or row["role"] not in ROLES:
         raise HTTPException(401, "Session expired. Sign in again.")
+    if hs.hosted():
+        if row["principal"] == "public-demo":
+            if row["role"] != "readonly" or os.getenv("DASHBOARD_PUBLIC_DEMO") != "1":
+                raise HTTPException(401, "Session expired. Sign in again.")
+        else:
+            user = hs.accounts().get(row["principal"])
+            if (
+                not user
+                or user["role"] != row["role"]
+                or not secrets.compare_digest(hs.version(user), row["credential_version"])
+            ):
+                raise HTTPException(401, "Session expired. Sign in again.")
     return dict(row)
 
 
@@ -74,12 +142,53 @@ def write(request: Request, session=Depends(current)):
     origin(request)
     if not secrets.compare_digest(request.headers.get("x-csrf-token", ""), session["csrf"]):
         raise HTTPException(403, "Request verification failed")
+    if hs.hosted() and request.url.path != "/api/session":
+        rate_limit("mutation", session["principal"], 12)
     return session
 
 
 @app.middleware("http")
 async def security(request, call_next):
+    if hs.hosted():
+        expected = urlsplit(os.environ["DASHBOARD_ORIGIN"]).hostname
+        if request.url.hostname != expected:
+            return JSONResponse({"detail": "Unrecognized host"}, status_code=400)
+        try:
+            rate_limit("http", request.client.host if request.client else "unknown", 240)
+        except HTTPException as exc:
+            return JSONResponse(
+                {"detail": exc.detail}, status_code=exc.status_code, headers=exc.headers
+            )
+    if request.method in ("POST", "PUT", "PATCH"):
+        chunks = []
+        size = 0
+        async for chunk in request.stream():
+            size += len(chunk)
+            if size > 8192:
+                return JSONResponse({"detail": "Request too large"}, status_code=413)
+            chunks.append(chunk)
+        request._body = b"".join(chunks)
     response = await call_next(request)
+    if hs.hosted():
+        response.headers["Strict-Transport-Security"] = "max-age=31536000"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        if request.method in ("POST", "DELETE") and request.url.path.startswith("/api/"):
+            token = request.cookies.get(cookie_name(), "")
+            with sessions() as db:
+                row = db.execute(
+                    "SELECT principal FROM sessions WHERE digest=?",
+                    (hashlib.sha256(token.encode()).hexdigest(),),
+                ).fetchone()
+                db.execute(
+                    "INSERT INTO access_audit VALUES(?,?,?,?,?)",
+                    (
+                        time.time(),
+                        row[0] if row else "anonymous",
+                        request.method,
+                        request.url.path[:200],
+                        response.status_code,
+                    ),
+                )
     response.headers["Cache-Control"] = "no-store"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "no-referrer"
@@ -94,6 +203,7 @@ class Login(BaseModel):
     model_config = ConfigDict(extra="forbid")
     role: Literal["readonly", "operator", "research"]
     password: str = Field(min_length=1, max_length=256)
+    username: str = Field(default="", max_length=64, pattern=r"^[a-zA-Z0-9_.-]*$")
 
 
 @app.post("/api/session")
@@ -107,35 +217,97 @@ def login(body: Login, request: Request, response: Response):
         if len(LOGIN_ATTEMPTS) > 1000:
             LOGIN_ATTEMPTS.clear()
         LOGIN_ATTEMPTS[host] = attempts + [time.time()]
-    expected = os.getenv(f"DASHBOARD_{body.role.upper()}_PASSWORD", "")
-    actual_hash = hashlib.scrypt(
-        body.password.encode(), salt=b"eraseproof-dashboard-auth-v1", n=16384, r=8, p=1
-    )
-    expected_hash = hashlib.scrypt(
-        (expected or "disabled").encode(), salt=b"eraseproof-dashboard-auth-v1", n=16384, r=8, p=1
-    )
-    if len(expected) < 24 or not secrets.compare_digest(actual_hash, expected_hash):
-        raise HTTPException(401, "Invalid credentials or role disabled")
+    if not LOGIN_HASH_SLOTS.acquire(blocking=False):
+        raise HTTPException(429, "Sign-in capacity reached; retry shortly")
+    try:
+        principal, credential_version = "", ""
+        if hs.hosted():
+            rate_limit("login", host, 10)
+            user = hs.verify_account(body.username, body.password, body.role)
+            if not user:
+                raise HTTPException(401, "Invalid credentials or role disabled")
+            principal, credential_version = body.username, hs.version(user)
+        else:
+            expected = os.getenv(f"DASHBOARD_{body.role.upper()}_PASSWORD", "")
+            actual_hash = hashlib.scrypt(
+                body.password.encode(), salt=b"eraseproof-dashboard-auth-v1", n=16384, r=8, p=1
+            )
+            expected_hash = hashlib.scrypt(
+                (expected or "disabled").encode(),
+                salt=b"eraseproof-dashboard-auth-v1",
+                n=16384,
+                r=8,
+                p=1,
+            )
+            if len(expected) < 24 or not secrets.compare_digest(actual_hash, expected_hash):
+                raise HTTPException(401, "Invalid credentials or role disabled")
+        return new_session(body.role, response, principal, credential_version)
+    finally:
+        LOGIN_HASH_SLOTS.release()
+
+
+def new_session(role, response, principal="", credential_version=""):
     token, csrf = secrets.token_urlsafe(32), secrets.token_urlsafe(32)
+    lifetime = 900 if principal == "public-demo" else 3600 if hs.hosted() else 28800
     with sessions() as db:
         db.execute(
-            "INSERT INTO sessions VALUES(?,?,?,?)",
-            (hashlib.sha256(token.encode()).hexdigest(), body.role, csrf, time.time() + 28800),
+            "INSERT INTO sessions(digest,role,csrf,expires,principal,credential_version) VALUES(?,?,?,?,?,?)",
+            (
+                hashlib.sha256(token.encode()).hexdigest(),
+                role,
+                csrf,
+                time.time() + lifetime,
+                principal,
+                credential_version,
+            ),
         )
     response.set_cookie(
-        "eraseproof_session",
+        cookie_name(),
         token,
         httponly=True,
         samesite="strict",
-        secure=os.getenv("DASHBOARD_SECURE_COOKIE") == "1",
-        max_age=28800,
+        secure=hs.hosted() or os.getenv("DASHBOARD_SECURE_COOKIE") == "1",
+        max_age=lifetime,
         path="/",
     )
     return {
-        "role": body.role,
+        "role": role,
         "csrf": csrf,
-        "research_enabled": os.getenv("DASHBOARD_ENABLE_RESEARCH") == "1",
+        "research_enabled": not hs.hosted() and os.getenv("DASHBOARD_ENABLE_RESEARCH") == "1",
     }
+
+
+@app.get("/api/access")
+def access():
+    return {
+        "account_login": hs.hosted(),
+        "public_demo": hs.hosted() and os.getenv("DASHBOARD_PUBLIC_DEMO") == "1",
+    }
+
+
+@app.post("/api/session/guest")
+def guest(request: Request, response: Response):
+    origin(request)
+    if not hs.hosted() or os.getenv("DASHBOARD_PUBLIC_DEMO") != "1":
+        raise HTTPException(403, "Public demonstration is disabled")
+    rate_limit("guest", request.client.host if request.client else "unknown", 10)
+    rate_limit("guest-global", "host", 60)
+    return new_session("readonly", response, "public-demo", "guest")
+
+
+@app.get("/health/live")
+def health_live():
+    return {"status": "alive"}
+
+
+@app.get("/health/ready")
+def gateway_ready():
+    hs.validate_hosted(gateway=True)
+    if not (ROOT / "frontend/dist/index.html").exists():
+        raise HTTPException(503, "Frontend not built")
+    with sessions() as db:
+        db.execute("SELECT 1")
+    return {"status": "ready", "basis": "gateway assets and session store; API health is separate"}
 
 
 @app.get("/api/session")
@@ -143,7 +315,7 @@ def identity(session=Depends(current)):
     return {
         "role": session["role"],
         "csrf": session["csrf"],
-        "research_enabled": os.getenv("DASHBOARD_ENABLE_RESEARCH") == "1",
+        "research_enabled": not hs.hosted() and os.getenv("DASHBOARD_ENABLE_RESEARCH") == "1",
     }
 
 
@@ -151,7 +323,9 @@ def identity(session=Depends(current)):
 def logout(response: Response, session=Depends(write)):
     with sessions() as db:
         db.execute("DELETE FROM sessions WHERE digest=?", (session["digest"],))
-    response.delete_cookie("eraseproof_session", path="/")
+    response.delete_cookie(
+        cookie_name(), path="/", secure=hs.hosted(), httponly=True, samesite="strict"
+    )
     return {"signed_out": True}
 
 
@@ -415,7 +589,7 @@ def run_job(folder, body, project):
 
 @app.post("/api/research/jobs", status_code=202)
 def launch(body: ResearchInput, session=Depends(write)):
-    if session["role"] != "research":
+    if hs.hosted() or session["role"] != "research":
         raise HTTPException(403, "Research administrator role required")
     if os.getenv("DASHBOARD_ENABLE_RESEARCH") != "1" or os.getenv("APP_ENV") != "demo":
         raise HTTPException(403, "Research controls are disabled on this host")
@@ -459,6 +633,8 @@ def scenarios(session=Depends(current)):
 
 @app.get("/api/research/jobs")
 def jobs(session=Depends(current)):
+    if hs.hosted():
+        return {"items": []}
     paths = sorted(
         (STATE / "jobs").glob("*/status.json"), key=lambda p: p.stat().st_mtime, reverse=True
     )[:50]
@@ -467,6 +643,8 @@ def jobs(session=Depends(current)):
 
 @app.get("/api/research/jobs/{job_id}")
 def job(job_id: UUID, session=Depends(current)):
+    if hs.hosted():
+        raise HTTPException(403, "Research executors are separate from the hosted demo")
     folder = STATE / "jobs" / str(job_id)
     if not (folder / "status.json").exists():
         raise HTTPException(404, "Job not found")
@@ -489,6 +667,8 @@ def job(job_id: UUID, session=Depends(current)):
 
 @app.get("/api/research/jobs/{job_id}/evidence/{run_id}")
 def job_evidence(job_id: UUID, run_id: UUID, session=Depends(current)):
+    if hs.hosted():
+        raise HTTPException(403, "Research executors are separate from the hosted demo")
     folder = STATE / "jobs" / str(job_id) / "results"
     if not (folder / "dataset.json").exists():
         raise HTTPException(404, "No trial evidence yet")

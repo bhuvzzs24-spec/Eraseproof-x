@@ -1,0 +1,11 @@
+{
+  "owner": "bhuvzzs24-spec",
+  "publication_authorized": false,
+  "spending_authorized": false,
+  "origin": "https://replace-with-owned-domain.invalid",
+  "provider": "Hetzner Cloud - proposal only",
+  "region": "owner must confirm availability",
+  "monthly_ceiling_eur": 0,
+  "scope": "synthetic demonstration, readonly public visitors, authenticated operators, no hosted faults",
+  "reviewed_at": "OWNER_MUST_RECORD_ACTUAL_APPROVAL_DATE"
+}

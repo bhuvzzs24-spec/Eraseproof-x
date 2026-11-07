@@ -13,3 +13,11 @@ frontend/test-results/
 frontend/playwright-report/
 frontend/*.tsbuildinfo
 .dashboard.env
+
+.hosted.env
+deploy/private/
+
+.ops-venv/
+.venv/
+
+frontend/test-results-hosted/

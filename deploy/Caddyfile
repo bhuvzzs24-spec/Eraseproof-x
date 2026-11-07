@@ -1,0 +1,13 @@
+{
+    email {$ACME_EMAIL}
+    admin off
+}
+{$DOMAIN} {
+    encode zstd gzip
+    request_body {
+        max_size 16KB
+    }
+    reverse_proxy gateway:8010 {
+        header_up X-Forwarded-For {remote_host}
+    }
+}

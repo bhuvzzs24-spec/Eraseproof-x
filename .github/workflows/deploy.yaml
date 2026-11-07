@@ -1,0 +1,57 @@
+name: approved-hosted-release
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Exact fully tested main commit (40 hex characters)
+        required: true
+        type: string
+  workflow_run:
+    workflows: [distributed-backend]
+    types: [completed]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hosted-production
+  cancel-in-progress: false
+jobs:
+  authorization:
+    if: github.event_name == 'workflow_dispatch' || (vars.AUTO_DEPLOY_AUTHORIZED == 'true' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    outputs:
+      revision: ${{ steps.revision.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - id: revision
+        env:
+          RELEASE_SHA: ${{ inputs.commit || github.event.workflow_run.head_sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/check_release_authorization.py
+          echo "sha=$RELEASE_SHA" >> "$GITHUB_OUTPUT"
+  deploy:
+    needs: authorization
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy only through the preinstalled approval-checking host release command
+        env:
+          RELEASE_SHA: ${{ needs.authorization.outputs.revision }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          python - <<'PY'
+          import os, pathlib, re, subprocess
+          sha=os.environ['RELEASE_SHA'];host=os.environ['DEPLOY_HOST'];user=os.environ['DEPLOY_USER']
+          assert re.fullmatch('[a-f0-9]{40}',sha)
+          assert re.fullmatch('[a-zA-Z0-9.-]+',host) and re.fullmatch('[a-z_][a-z0-9_-]*',user)
+          folder=pathlib.Path.home()/'.ssh';folder.mkdir(mode=0o700,exist_ok=True)
+          key=folder/'release';key.write_text(os.environ['SSH_PRIVATE_KEY']);key.chmod(0o600)
+          known=folder/'known_hosts';known.write_text(os.environ['SSH_KNOWN_HOSTS']);known.chmod(0o600)
+          assert key.stat().st_size>100 and known.stat().st_size>20
+          subprocess.run(['ssh','-i',str(key),'-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile='+str(known),user+'@'+host,'sudo -n /usr/local/sbin/eraseproof-release '+sha],check=True,timeout=900)
+          PY

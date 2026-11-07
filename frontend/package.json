@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "preview": "vite preview --host 127.0.0.1",
-    "format:check": "prettier --check src tests *.ts *.js *.json index.html public"
+    "format:check": "prettier --check src tests *.ts *.js *.json index.html public",
+    "test:hosted": "playwright test -c playwright.hosted.config.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "5.107.1",

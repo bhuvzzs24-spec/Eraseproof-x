@@ -38,6 +38,7 @@ import type {
   Page,
   Report,
   Run,
+  RunSummary,
   Session,
   Snapshot,
   TimelineEvent,
@@ -1193,7 +1194,7 @@ export function Verification({ session, navigate, params }: WorkspaceProps) {
     live("customer", "dashboard/deletions?limit=100"),
     5000,
   );
-  const runs = useApi<Page<Run>>(
+  const runs = useApi<Page<RunSummary>>(
     live("customer", "dashboard/verifications?limit=20"),
     5000,
   );

@@ -1,0 +1,17 @@
+[Unit]
+Description=Approved EraseProof X synthetic demonstration
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/eraseproof/current
+ExecStart=/opt/eraseproof/current/.ops-venv/bin/python scripts/hosted_ops.py publish --existing-images --env-file /etc/eraseproof/hosted.env --approval /etc/eraseproof/approval.json
+ExecStop=/usr/bin/docker compose --env-file /etc/eraseproof/hosted.env --project-name eraseproof-hosted -f deploy/compose.hosted.yaml --profile publish stop
+TimeoutStartSec=300
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target

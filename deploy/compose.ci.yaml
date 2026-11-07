@@ -1,0 +1,5 @@
+# Compose >=2.24.4. Both overrides replace lists, so CI never binds public interfaces.
+services:
+  caddy:
+    ports: !override ["127.0.0.1:443:443"]
+    volumes: !override ["./Caddyfile.ci:/etc/caddy/Caddyfile:ro", "caddy-data:/data", "caddy-config:/config"]

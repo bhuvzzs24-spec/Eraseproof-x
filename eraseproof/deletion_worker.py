@@ -68,4 +68,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    from eraseproof.hosted_security import validate_hosted
+
+    validate_hosted()
     main()

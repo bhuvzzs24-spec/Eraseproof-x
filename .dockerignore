@@ -9,3 +9,13 @@ frontend/dist/
 frontend/test-results/
 frontend/playwright-report/
 work/
+
+.hosted.env
+deploy/private/
+docs/
+outputs/
+
+.ops-venv/
+.venv/
+
+frontend/test-results-hosted/

@@ -5,7 +5,6 @@ import secrets
 from uuid import UUID
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from eraseproof.db import connection
-from eraseproof import verification
 
 
 def authorize(x_inspection_token: str = Header(default="")):
@@ -85,16 +84,11 @@ def runs(
             "SELECT count(*) AS n FROM verification.runs WHERE (%s::text IS NULL OR result=%s)",
             args,
         ).fetchone()["n"]
-        ids = db.execute(
-            "SELECT id FROM verification.runs WHERE (%s::text IS NULL OR result=%s) ORDER BY created_at DESC,id LIMIT %s OFFSET %s",
+        items = db.execute(
+            "SELECT id,customer_id,deletion_request_id,state,result,round_no,created_at,finished_at FROM verification.runs WHERE (%s::text IS NULL OR result=%s) ORDER BY created_at DESC,id LIMIT %s OFFSET %s",
             (*args, limit, offset),
         ).fetchall()
-        return {
-            "items": [verification.view(db, r["id"]) for r in ids],
-            "total": total,
-            "limit": limit,
-            "offset": offset,
-        }
+        return {"items": items, "total": total, "limit": limit, "offset": offset}
 
 
 @router.get("/deletions")
