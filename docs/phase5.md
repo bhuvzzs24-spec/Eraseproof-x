@@ -139,3 +139,6 @@ This is a sophisticated local engineering interface, not an authenticated public
 - Do not generalize the small selected Phase 4 benchmark to production accuracy. Extended/stress/WAN/backup/unknown-copy coverage remains unexecuted or unsupported. Sparse CPU/memory snapshots do not establish per-method resource cost. Dataset/evidence hashes do not establish physical erasure or protect against a malicious administrator.
 
 Public deployment, purchases, full failure minimization and production identity/tenant hardening are intentionally outside Phase 5.
+
+### Additional bounded inspection
+The live overview groups actual deletion states and verification outcomes and exposes recorded target probe-failure counters. Customer inspection reads fresh source/manifest order facts (first 100), lifecycle tombstones, event envelope counts, receipt metadata and deletion audit counts. Cleared order links alone do not prove anonymization; independent adapters evaluate the complete declared policy. Benchmark overhead separates all-outcome latency from residual-detection and verified-absence timing, with explicit sample sizes.

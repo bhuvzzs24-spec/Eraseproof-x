@@ -208,7 +208,7 @@ async def upstream(service, method, path, params=None, body=None):
 
 
 READ_PATHS = {
-    "customer": r"/v1/(dashboard/(snapshot|customers|deletions|verifications)|customers/[a-f0-9-]{36}(/propagation)?)",
+    "customer": r"/v1/(dashboard/(snapshot|customers(/[a-f0-9-]{36}/footprint)?|deletions|verifications)|customers/[a-f0-9-]{36}(/propagation)?)",
     "deletion": r"/v1/deletions(/metrics|/[a-f0-9-]{36}(/events)?)?",
     "verification": r"/v1/(deletions/[a-f0-9-]{36}/verifications|verifications/[a-f0-9-]{36}(/(report|evidence|timeline))?|research/(scenarios|experiments(/[a-f0-9-]{36}(/(trials|summary))?)?))",
     "cache": r"/v1/inspect/customers/[a-f0-9-]{36}",

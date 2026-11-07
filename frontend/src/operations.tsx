@@ -30,6 +30,7 @@ import {
 } from "./ui";
 import type {
   Customer,
+  Footprint,
   Deletion,
   Experiment,
   Health,
@@ -109,6 +110,53 @@ export function Overview({
           detail="Independent contradiction of completion"
           tone="amber"
         />
+      </div>
+      <div className="grid two">
+        <Panel
+          title="Deletion requests by state"
+          eyebrow="Live operational ledger"
+        >
+          <div className="state-counts">
+            {[
+              "REQUESTED",
+              "IN_PROGRESS",
+              "RETRYING",
+              "COMPLETED_REPORTED",
+              "PARTIALLY_FAILED",
+              "FAILED",
+            ].map((state) => (
+              <div key={state}>
+                <Badge value={state} />
+                <strong>{value("deletions", state)}</strong>
+              </div>
+            ))}
+          </div>
+        </Panel>
+        <Panel
+          title="Independent verification outcomes"
+          eyebrow="Recorded runs, not a paired deletion rate"
+        >
+          <div className="state-counts">
+            {[
+              "VERIFIED_ABSENT",
+              "FALSE_SUCCESS_DETECTED",
+              "RESIDUAL_DATA_DETECTED",
+              "PENDING_CONSISTENCY",
+              "INCONCLUSIVE",
+              "UNSUPPORTED",
+            ].map((state) => (
+              <div key={state}>
+                <Badge value={state} />
+                <strong>{value("verifications", state)}</strong>
+              </div>
+            ))}
+          </div>
+          <p className="panel-note">
+            Recorded target probe-failure counters: {s?.probe_failures ?? "—"} ·
+            Targets marked inconclusive: {s?.inconclusive_targets ?? "—"}. These
+            are observations, not a clean bill of health.
+          </p>
+        </Panel>
       </div>
       <div className="grid two">
         <Panel
@@ -555,6 +603,12 @@ export function Customers({ session, navigate, params }: WorkspaceProps) {
     selected ? live("customer", `customers/${selected}/propagation`) : null,
     3000,
   );
+  const footprint = useApi<Footprint>(
+    selected
+      ? live("customer", `dashboard/customers/${selected}/footprint`)
+      : null,
+    3000,
+  );
   const client = useQueryClient();
   const create = useMutation({
     mutationFn: () =>
@@ -748,7 +802,7 @@ export function Customers({ session, navigate, params }: WorkspaceProps) {
                           <span>{store} projection</span>
                           <strong>
                             {value.erasure_marker
-                              ? "Permitted erasure marker"
+                              ? "Erasure marker observed"
                               : value.state}
                           </strong>
                         </div>
@@ -761,6 +815,82 @@ export function Customers({ session, navigate, params }: WorkspaceProps) {
                     </p>
                   </div>
                 )}
+                {footprint.error ? (
+                  <ErrorNotice error={footprint.error} />
+                ) : footprint.isPending ? (
+                  <Loading />
+                ) : footprint.data ? (
+                  <>
+                    <div className="definition-grid">
+                      <div>
+                        <span>Known order rows</span>
+                        <strong>{footprint.data.orders.total}</strong>
+                      </div>
+                      <div>
+                        <span>Source event envelopes</span>
+                        <strong>
+                          {footprint.data.event_history.source_events}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Other event envelopes</span>
+                        <strong>
+                          {footprint.data.event_history.other_events}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Consumer receipt metadata</span>
+                        <strong>
+                          {footprint.data.event_history.consumer_receipts}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Deletion audit events</span>
+                        <strong>
+                          {footprint.data.event_history.audit_events}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Lifecycle tombstone</span>
+                        <strong>
+                          {footprint.data.tombstone?.lifecycle || "Not present"}
+                        </strong>
+                      </div>
+                    </div>
+                    {footprint.data.orders.items.length ? (
+                      <Table label="Known retained order facts">
+                        <thead>
+                          <tr>
+                            <th>Order</th>
+                            <th>Amount</th>
+                            <th>Customer link</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {footprint.data.orders.items.map((o) => (
+                            <tr key={o.id}>
+                              <td>
+                                <code>{o.id}</code>
+                              </td>
+                              <td>
+                                {o.amount_cents} cents · {o.currency}
+                              </td>
+                              <td>
+                                {o.has_customer_link ? "Present" : "Cleared"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    ) : null}
+                    <p className="panel-note">
+                      First 100 source/manifest order facts. A cleared link
+                      alone does not establish anonymization.{" "}
+                      {footprint.data.note} Observed{" "}
+                      {date(footprint.data.observed_at)}.
+                    </p>
+                  </>
+                ) : null}
                 <div className="actions">
                   <button
                     disabled={
@@ -823,7 +953,9 @@ export function Deletions({ session, navigate, params }: WorkspaceProps) {
         : 1500,
   );
   const events = useApi<TimelineEvent[]>(
-    selected ? live("deletion", `deletions/${selected}/events`) : null,
+    selected
+      ? live("deletion", `deletions/${selected}/events?limit=500`)
+      : null,
     selected &&
       detail.data &&
       !["COMPLETED_REPORTED", "PARTIALLY_FAILED", "FAILED"].includes(

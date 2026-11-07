@@ -1006,6 +1006,27 @@ export function Research({ params, navigate }: WorkspaceProps) {
                       p95 {m.latency_seconds.p95?.toFixed(3) ?? "undefined"} s ·
                       n={m.latency_seconds.n}
                     </small>
+                    <small>
+                      Residual detection: mean{" "}
+                      {m.time_to_detection_seconds.mean?.toFixed(3) ??
+                        "undefined"}{" "}
+                      s · median{" "}
+                      {m.time_to_detection_seconds.median?.toFixed(3) ??
+                        "undefined"}{" "}
+                      s · p95{" "}
+                      {m.time_to_detection_seconds.p95?.toFixed(3) ??
+                        "undefined"}{" "}
+                      s · n={m.time_to_detection_seconds.n}
+                    </small>
+                    <small>
+                      Verified absence: mean{" "}
+                      {m.time_to_verified_absence_seconds.mean?.toFixed(3) ??
+                        "undefined"}{" "}
+                      s · p95{" "}
+                      {m.time_to_verified_absence_seconds.p95?.toFixed(3) ??
+                        "undefined"}{" "}
+                      s · n={m.time_to_verified_absence_seconds.n}
+                    </small>
                   </div>
                 ))}
               </div>

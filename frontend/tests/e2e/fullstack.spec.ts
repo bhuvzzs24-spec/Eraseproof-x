@@ -33,6 +33,12 @@ test("real customer propagation, deletion, independent verification and evidence
   await expect(
     page.getByText("Order accepted by the real backend."),
   ).toBeVisible();
+  await expect(
+    page
+      .locator(".definition-grid > div")
+      .filter({ hasText: "Known order rows" })
+      .locator("strong"),
+  ).toHaveText("1");
   await page
     .getByRole("button", { name: "Request deletion", exact: true })
     .click();

@@ -102,7 +102,36 @@ export interface Health {
   items: { service: string; state: string; observed_at_unix: number }[];
   basis: string;
 }
+export interface Footprint {
+  customer_id: string;
+  source_present: boolean;
+  tombstone: {
+    lifecycle: string;
+    request_id: string;
+    created_at: string;
+  } | null;
+  orders: {
+    total: number;
+    items: {
+      id: string;
+      amount_cents: number;
+      currency: string;
+      created_at: string;
+      has_customer_link: boolean;
+    }[];
+  };
+  event_history: {
+    source_events: number;
+    other_events: number;
+    consumer_receipts: number;
+    audit_events: number;
+  };
+  observed_at: string;
+  note: string;
+}
 export interface Snapshot {
+  probe_failures: number;
+  inconclusive_targets: number;
   customer_count: number;
   deletions: { state: string; count: number }[];
   verifications: { result: string; count: number }[];

@@ -2,6 +2,7 @@
 
 import os
 import secrets
+from uuid import UUID
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from eraseproof.db import connection
 from eraseproof import verification
@@ -43,6 +44,12 @@ def snapshot():
                 "SELECT 'deletion' AS source,request_id AS entity_id,kind,to_state AS state,occurred_at FROM deletion.events UNION ALL SELECT 'verification',run_id,kind,code,occurred_at FROM verification.timeline ORDER BY occurred_at DESC LIMIT 30"
             ).fetchall(),
             "observed_at": db.execute("SELECT now() AS time").fetchone()["time"],
+            "probe_failures": db.execute(
+                "SELECT coalesce(sum(probe_failures),0)::int AS n FROM verification.targets"
+            ).fetchone()["n"],
+            "inconclusive_targets": db.execute(
+                "SELECT count(*)::int AS n FROM verification.targets WHERE result='INCONCLUSIVE'"
+            ).fetchone()["n"],
             "basis": "live database read model; operational completion is not independent proof",
         }
 
@@ -113,4 +120,48 @@ def deletions(
             "total": total,
             "limit": limit,
             "offset": offset,
+        }
+
+
+@router.get("/customers/{customer_id}/footprint")
+def footprint(customer_id: UUID):
+    """Operational inspection only; narrow fact fields never assert complete anonymization."""
+    with connection() as db:
+        db.execute("SET LOCAL statement_timeout='3000ms'")
+        scope = " WHERE o.customer_id=%s OR o.id IN (SELECT m.order_id FROM deletion.order_manifest m JOIN deletion.requests r ON r.id=m.request_id WHERE r.customer_id=%s)"
+        args = (customer_id, customer_id)
+        total = db.execute("SELECT count(*) AS n FROM orders.orders o" + scope, args).fetchone()[
+            "n"
+        ]
+        items = db.execute(
+            "SELECT o.id,o.amount_cents,o.currency,o.created_at,(o.customer_id IS NOT NULL) AS has_customer_link FROM orders.orders o"
+            + scope
+            + " ORDER BY o.created_at,o.id LIMIT 100",
+            args,
+        ).fetchall()
+        events = db.execute(
+            "SELECT count(*) FILTER (WHERE event_type IN ('customer.created','order.created')) AS source_events,count(*) FILTER (WHERE event_type NOT IN ('customer.created','order.created')) AS other_events FROM delivery.outbox WHERE aggregate_id=%s",
+            (customer_id,),
+        ).fetchone()
+        events["consumer_receipts"] = db.execute(
+            "SELECT count(*) AS n FROM delivery.processed WHERE customer_id=%s", (customer_id,)
+        ).fetchone()["n"]
+        events["audit_events"] = db.execute(
+            "SELECT count(*) AS n FROM deletion.events e JOIN deletion.requests r ON r.id=e.request_id WHERE r.customer_id=%s",
+            (customer_id,),
+        ).fetchone()["n"]
+        return {
+            "customer_id": customer_id,
+            "source_present": db.execute(
+                "SELECT EXISTS(SELECT 1 FROM customer.customers WHERE id=%s) AS found",
+                (customer_id,),
+            ).fetchone()["found"],
+            "tombstone": db.execute(
+                "SELECT customer_id,request_id,lifecycle,created_at FROM deletion.tombstones WHERE customer_id=%s",
+                (customer_id,),
+            ).fetchone(),
+            "orders": {"total": total, "items": items},
+            "event_history": events,
+            "observed_at": db.execute("SELECT now() AS observed").fetchone()["observed"],
+            "note": "Known source/manifest rows and metadata only; independent verification is required to evaluate extra personal fields, marker versions and complete declared scope.",
         }
