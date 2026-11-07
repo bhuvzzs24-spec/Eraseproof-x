@@ -92,3 +92,22 @@ Research APIs on port 8006 are read-only and require a separate RESEARCH_TOKEN. 
 The [measured Phase 4 evaluation](docs/phase-4-evaluation.md) records a successful 16-scenario, 21-trial Docker batch with 43 customer/phase observations. EraseProof X detected 18 residual cases (0 observed FP/FN); both internal baselines missed those 18 and raised one operational false alarm. The verifier retained two inconclusive, one unsupported and one pending outcome. Conclusive coverage was 39/40 known-truth cases; precision/recall Wilson intervals were 82.4–100%, not a population guarantee. Mean verifier call latency was 5.846s versus 0.017s for the metadata baselines.
 
 [Final raw trials and evidence](research/phase-4/results/61dd8e8-final/) · [Statistics and measured charts](research/phase-4/generated/61dd8e8-final/) · [Preserved initial failed batch](research/phase-4/results/4959be5-initial/) · [Phase 5 read-only contracts](docs/research-contracts.md). The final runtime [CI run](https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42345268206) passed 64 unit and 26 Docker integration tests, the existing demo and the full CI matrix. The earlier harness error and its partial measurements remain inspectable.
+
+## Phase 5 engineering dashboard
+
+The [dashboard guide](docs/phase5.md) covers all nine workspaces, design tokens, server-enforced observer/operator/research roles, same-origin API integration, real research controls and browser tests. A React/TypeScript static build is served by the existing Python stack through a local gateway; backend credentials never enter the browser. Historical measurements are labeled separately from live telemetry. Nothing is publicly deployed.
+
+```sh
+python scripts/configure_dashboard.py
+# Load both .env and .dashboard.env on the trusted host, then use the required source-write auth overlay:
+set -a; . ./.env; . ./.dashboard.env; set +a
+export COMPOSE_PROJECT_NAME=eraseproof-research-dashboard
+export DASHBOARD_RESEARCH_PROJECT="$COMPOSE_PROJECT_NAME"
+export COMPOSE_FILE=compose.yaml:compose.research.yaml:compose.dashboard.yaml
+docker compose up --build -d --wait --wait-timeout 240
+npm --prefix frontend ci
+npm --prefix frontend run build
+DASHBOARD_ORIGIN=http://127.0.0.1:8010 python scripts/start_dashboard.py
+```
+
+Open `http://127.0.0.1:8010` and sign in with a role password from the ignored, mode-0600 `.dashboard.env`. Research execution is disabled by default; the guide documents the additional explicit host gates. For development, run the gateway with Origin `http://127.0.0.1:3000` and `npm --prefix frontend run dev`. Do not expose ordinary trusted-lab backend ports or the Docker executor publicly.

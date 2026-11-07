@@ -399,6 +399,7 @@ class Runner:
         response = self.h.client.post(
             "http://127.0.0.1:8001/v1/orders",
             json={"customer_id": fixture["customer_id"], "amount_cents": 1234},
+            headers={"X-Operator-Token": os.getenv("OPERATOR_TOKEN", "")},
             timeout=10,
         )
         if response.status_code == 201:

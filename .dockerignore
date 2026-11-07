@@ -2,3 +2,10 @@
 .env
 __pycache__
 .pytest_cache
+
+.dashboard.env
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+work/

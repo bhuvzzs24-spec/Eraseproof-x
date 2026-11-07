@@ -6,3 +6,10 @@ __pycache__/
 *.egg-info/
 
 work/
+
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+frontend/*.tsbuildinfo
+.dashboard.env

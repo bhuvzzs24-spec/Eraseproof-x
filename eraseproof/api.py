@@ -1,4 +1,5 @@
 import json
+import os
 import logging
 import secrets
 from uuid import UUID, uuid4
@@ -46,6 +47,13 @@ def authorized(x_inspection_token: str = Header(default="")):
         x_inspection_token, config.INSPECTION_TOKEN
     ):
         raise HTTPException(403, "development inspection disabled or unauthorized")
+
+
+def authorize_operator(x_operator_token: str = Header(default="")):
+    # Backward-compatible trusted-lab mode; the dashboard overlay always configures this token.
+    expected = os.getenv("OPERATOR_TOKEN", "")
+    if expected and (len(expected) < 24 or not secrets.compare_digest(expected, x_operator_token)):
+        raise HTTPException(403, "authorized operator credential required")
 
 
 @app.middleware("http")
@@ -114,8 +122,16 @@ def record(db: psycopg.Connection, event: Event) -> None:
 
 
 if config.SERVICE == "customer":
+    from eraseproof.dashboard_backend import router as dashboard_router
 
-    @app.post("/v1/customers", response_model=CustomerResponse, status_code=201)
+    app.include_router(dashboard_router)
+
+    @app.post(
+        "/v1/customers",
+        response_model=CustomerResponse,
+        status_code=201,
+        dependencies=[Depends(authorize_operator)],
+    )
     def create_customer(body: CustomerCreate, request: Request):
         data = CustomerData(id=uuid4(), **body.model_dump())
         event = Event(
@@ -185,7 +201,12 @@ if config.SERVICE == "customer":
 
 if config.SERVICE == "order":
 
-    @app.post("/v1/orders", response_model=OrderResponse, status_code=201)
+    @app.post(
+        "/v1/orders",
+        response_model=OrderResponse,
+        status_code=201,
+        dependencies=[Depends(authorize_operator)],
+    )
     def create_order(body: OrderCreate, request: Request):
         data = OrderData(id=uuid4(), **body.model_dump())
         event = Event(

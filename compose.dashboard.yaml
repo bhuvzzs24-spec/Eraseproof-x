@@ -1,0 +1,8 @@
+# Required dashboard deployment overlay: legacy synthetic-write APIs also require a server-side token.
+services:
+  customer:
+    environment:
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?load .dashboard.env before starting this overlay}
+  order:
+    environment:
+      OPERATOR_TOKEN: ${OPERATOR_TOKEN:?load .dashboard.env before starting this overlay}

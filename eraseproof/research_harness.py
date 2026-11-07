@@ -195,6 +195,8 @@ class Harness:
 
     def request(self, method: str, port: int, path: str, kind: str | None = None, **kwargs):
         headers = {f"X-{kind.title()}-Token": self.tokens[f"{kind.upper()}_TOKEN"]} if kind else {}
+        if method == "POST" and os.getenv("OPERATOR_TOKEN"):
+            headers["X-Operator-Token"] = os.environ["OPERATOR_TOKEN"]
         response = self.client.request(
             method,
             f"http://127.0.0.1:{port}{path}",
