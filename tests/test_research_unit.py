@@ -310,3 +310,15 @@ def test_measured_export_integrity_and_statistical_summary(tmp_path):
     path.write_text(json.dumps(corrupted))
     with pytest.raises(ValueError):
         generate(path, tmp_path / "invalid", plots=False)
+
+
+def test_fault_journal_accepts_admin_action_metadata():
+    from eraseproof.research_faults import Faults
+
+    saved = []
+    trial = {}
+    faults = Faults(None, trial, lambda: saved.append(True))
+    faults.event("late_index", "ACTIVATED", **{"activated": 1, "action": "late_index"})
+    assert saved == [True]
+    assert trial["faults"][0]["action"] == "late_index"
+    assert trial["faults"][0]["activated"] == 1

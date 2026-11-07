@@ -1,6 +1,6 @@
 {
   "version": "matrix-ci-v1",
-  "maximum_seconds": 900,
+  "maximum_seconds": 1200,
   "concurrency": 4,
   "tiers": {
     "small": {

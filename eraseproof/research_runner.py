@@ -11,6 +11,7 @@ import os
 import random
 import subprocess
 import time
+import traceback
 
 from eraseproof.evidence import digest, validate_chain
 from eraseproof.research_models import catalog, matrix
@@ -367,6 +368,10 @@ class Runner:
             )
             trial["error"] = {
                 "code": type(exc).__name__,
+                "frames": [
+                    {"file": Path(f.filename).name, "line": f.lineno, "function": f.name}
+                    for f in traceback.extract_tb(exc.__traceback__)
+                ],
                 "message": "trial failed; partial measurements retained; inspect bounded timeline and CI diagnostics",
             }
         finally:

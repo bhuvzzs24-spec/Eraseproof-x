@@ -35,9 +35,9 @@ class Faults:
         trial.setdefault("stopped", [])
         trial.setdefault("oneoffs", [])
 
-    def event(self, action: str, state: str, **details):
+    def event(self, event_action: str, state: str, **details):
         self.trial["faults"].append(
-            {"action": action, "state": state, "at_unix": time.time(), **details}
+            {"action": event_action, "state": state, "at_unix": time.time(), **details}
         )
         self.save()
 
