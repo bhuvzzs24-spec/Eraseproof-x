@@ -16,7 +16,7 @@ def main():
     p.add_argument("--username", required=True)
     p.add_argument("--role", choices=("readonly", "operator", "research"), required=True)
     args = p.parse_args()
-    if not re.fullmatch(r"[a-zA-Z0-9_.-]{1,64}", args.username):
+    if args.username == "public-demo" or not re.fullmatch(r"[a-zA-Z0-9_.-]{1,64}", args.username):
         p.error("invalid username")
     password = getpass.getpass("New unique password (at least 16 characters): ")
     if (

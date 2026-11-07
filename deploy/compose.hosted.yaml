@@ -1,7 +1,10 @@
 name: eraseproof-hosted
 services:
   postgres:
-    image: postgres:16-alpine@sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139
+    image: eraseproof-postgres:hosted
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.postgres
     environment:
       POSTGRES_USER: lab
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set password}
@@ -83,7 +86,7 @@ services:
     restart: unless-stopped
     mem_limit: 512m
   opensearch:
-    image: opensearchproject/opensearch:2.19.7@sha256:3bfa1ec74d56928c2e018033d45c460ce2c0ea65a5cedd577de3102326c31b89
+    image: opensearchproject/opensearch:latest@sha256:3b55f6b6249cfdb92b52ee59adc8a266203ba9ef9f5d82544fad6f1af2f3609e
     environment:
       discovery.type: single-node
       DISABLE_SECURITY_PLUGIN: 'true'
@@ -406,6 +409,8 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      provision-verification:
+        condition: service_completed_successfully
     healthcheck: *id003
     networks:
     - private
