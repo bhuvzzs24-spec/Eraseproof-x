@@ -1,0 +1,170 @@
+{
+  "version": "matrix-ci-v1",
+  "maximum_seconds": 900,
+  "concurrency": 4,
+  "tiers": {
+    "small": {
+      "customers": 1,
+      "orders_per_customer": 2
+    },
+    "medium": {
+      "customers": 3,
+      "orders_per_customer": 4
+    },
+    "large": {
+      "customers": 6,
+      "orders_per_customer": 8
+    }
+  },
+  "entries": [
+    {
+      "scenario": "normal_retention",
+      "tier": "medium",
+      "seeds": [
+        101,
+        202
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "false_ack_cache",
+      "tier": "small",
+      "seeds": [
+        101,
+        202
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "false_ack_search",
+      "tier": "medium",
+      "seeds": [
+        101,
+        202
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "verification_outage",
+      "tier": "small",
+      "seeds": [
+        101,
+        202
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "resurrection",
+      "tier": "small",
+      "seeds": [
+        101,
+        202
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "crash_stale_combo",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "partial_order",
+      "tier": "large",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "analytics_residue",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "duplicate_reordered",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "pending_delivery",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "ambiguous_reply",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "capability_gap",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "verification_crash",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "database_transaction",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "concurrent_order_delete",
+      "tier": "medium",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    },
+    {
+      "scenario": "multiple_residuals",
+      "tier": "small",
+      "seeds": [
+        101
+      ],
+      "repeats": 1,
+      "consistency_profile": "default"
+    }
+  ]
+}

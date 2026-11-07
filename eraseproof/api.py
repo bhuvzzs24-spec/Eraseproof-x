@@ -94,7 +94,7 @@ def cache_client() -> redis.Redis:
 def ready() -> dict[str, str]:
     with connection() as db:
         migration = db.execute(
-            "SELECT 1 FROM schema_migrations WHERE version='003_verification.sql'"
+            "SELECT 1 FROM schema_migrations WHERE version='004_research.sql'"
         ).fetchone()
         if migration is None:
             raise RuntimeError("migration missing")
@@ -258,3 +258,9 @@ if config.SERVICE == "verification":
     from eraseproof.verification_api import router
 
     app.include_router(router)
+
+
+if config.SERVICE == "verification":
+    from eraseproof.research_api import router as research_router
+
+    app.include_router(research_router)

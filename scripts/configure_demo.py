@@ -18,6 +18,7 @@ with os.fdopen(descriptor, "w") as stream:
         "INSPECTION_TOKEN",
         "DELETION_TOKEN",
         "VERIFICATION_TOKEN",
+        "RESEARCH_TOKEN",
         "VERIFIER_DB_PASSWORD",
         "VERIFIER_CONTROL_PASSWORD",
         "VERIFIER_REDIS_PASSWORD",

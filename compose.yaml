@@ -38,6 +38,7 @@ x-verification-env: &verification-env
   BROKER_URL: amqp://lab:${RABBITMQ_PASSWORD:?set broker password}@rabbitmq:5672/%2F
   APP_ENV: demo
   VERIFICATION_TOKEN: ${VERIFICATION_TOKEN:?configure separate verification API credential}
+  RESEARCH_TOKEN: ${RESEARCH_TOKEN:-}
 x-verification-service: &verification-service
   <<: *api
   environment: *verification-env

@@ -76,3 +76,15 @@ RUN_INTEGRATION=1 ERASEPROOF_TEST_FAULTS=1 pytest -m integration -v
 ```
 
 Upgrade existing `.env` files with fresh VERIFICATION_TOKEN, VERIFIER_DB_PASSWORD, VERIFIER_CONTROL_PASSWORD and VERIFIER_REDIS_PASSWORD values; the helper preserves existing files. Deletion admission now captures order UUID inventory before de-identification. Historical requests without that capture are inconclusive for complete order-field coverage. OpenSearch/Redis erasure markers and operational UUID metadata are explicitly permitted and remain visible. OpenSearch server-side read-only authentication is not provided by the existing private-network lab configuration; fixed read-only probe operations and this limitation are documented.
+
+## Phase 4 reproducible fault research
+
+The [Phase 4 protocol](research/phase-4/README.md) defines isolated CLI-only fault injection, seeded scenario/workload matrices, an independently coded fixture oracle, faithful API/workflow baselines, retained failed trials, statistical analysis and measured plots. The ordinary stack never enables fault hooks. Use the explicitly labeled research Compose overlay and project, following the protocol's exact startup commands.
+
+```sh
+ERASEPROOF_RESEARCH_FAULTS=1 python -m eraseproof.research_runner --project eraseproof-research \
+ --scenario false_ack_cache --seed 101 --output work/phase4-one
+python -m eraseproof.research_report work/phase4-one/dataset.json --output work/phase4-one-report
+```
+
+Research APIs on port 8006 are read-only and require a separate RESEARCH_TOKEN. No HTTP endpoint triggers faults. The extended matrix is provided for manual execution and must be labeled unexecuted until actual result artifacts exist. These are internal architectural baselines, not commercial platform benchmarks or compliance guarantees.

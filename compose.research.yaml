@@ -1,0 +1,25 @@
+# Explicit opt-in overlay; normal Compose has no isolation marker or fault capability.
+x-research-labels: &research-labels
+  com.eraseproof.environment: synthetic-research
+services:
+  postgres: {labels: *research-labels}
+  redis: {labels: *research-labels}
+  rabbitmq: {labels: *research-labels}
+  opensearch: {labels: *research-labels}
+  migrate: {labels: *research-labels}
+  provision-verification: {labels: *research-labels}
+  customer: {labels: *research-labels}
+  order: {labels: *research-labels}
+  cache: {labels: *research-labels}
+  search: {labels: *research-labels}
+  analytics: {labels: *research-labels}
+  deletion: {labels: *research-labels}
+  deletion-scheduler: {labels: *research-labels}
+  deletion-consumer: {labels: *research-labels}
+  publisher: {labels: *research-labels}
+  cache-consumer: {labels: *research-labels}
+  search-consumer: {labels: *research-labels}
+  analytics-consumer: {labels: *research-labels}
+  verification: {labels: *research-labels}
+  verification-scheduler: {labels: *research-labels}
+  verification-worker: {labels: *research-labels}

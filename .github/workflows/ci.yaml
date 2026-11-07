@@ -1,23 +1,46 @@
 name: distributed-backend
 on: [push, pull_request]
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      runtime: ${{ steps.scope.outputs.runtime }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python scripts/ci_changes.py
   unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - run: pip install -c requirements.lock -e '.[dev]'
+      - run: pip install -c requirements.lock -c requirements-benchmark.lock -e '.[dev,benchmark]'
       - run: ruff check . && ruff format --check .
       - run: pytest -m 'not integration' -v
+      - name: Validate curated measured datasets
+        run: |
+          for file in research/phase-4/results/*/dataset.json; do
+            if test -f "$file"; then
+              python -m eraseproof.research_report "$file" --output /tmp/validated-research --no-plots
+            fi
+          done
   integration:
-    timeout-minutes: 25
+    needs: changes
+    if: needs.changes.outputs.runtime == 'true'
+    env:
+      COMPOSE_PROJECT_NAME: eraseproof-research-ci
+      COMPOSE_FILE: compose.yaml:compose.research.yaml
+    timeout-minutes: 35
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - run: pip install -c requirements.lock -e '.[dev]'
+      - run: pip install -c requirements.lock -c requirements-benchmark.lock -e '.[dev,benchmark]'
       - run: python scripts/configure_demo.py
       - run: sudo sysctl -w vm.max_map_count=262144
       - run: docker compose up --build -d --wait --wait-timeout 240
@@ -31,15 +54,29 @@ jobs:
           . ./.env
           set +a
           ERASEPROOF_TEST_FAULTS=1 python scripts/verification_demo.py --inject-synthetic-fault --output work/reports/executable-demo.json
+      - name: Run seeded CI benchmark
+        run: |
+          set -a
+          . ./.env
+          set +a
+          ERASEPROOF_RESEARCH_FAULTS=1 python -m eraseproof.research_runner --project eraseproof-research-ci --matrix research/phase-4/config/ci.v1.json --output work/phase4-ci
+      - name: Validate measured data and generate figures
+        if: always()
+        run: |
+          if test -f work/phase4-ci/dataset.json; then
+            python -m eraseproof.research_report work/phase4-ci/dataset.json --output work/phase4-generated
+          fi
       - if: always()
         run: docker compose logs --no-color --tail 100
       - if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: phase3-measurements
+          name: research-measurements
           path: |
             work/phase3-evaluation.json
             work/reports/*.json
+            work/phase4-ci/**
+            work/phase4-generated/**
           if-no-files-found: warn
       - if: always()
         run: docker compose down -v

@@ -1,0 +1,415 @@
+{
+  "version": "scenario-catalog-v1",
+  "scope": "scope-v1; all methods share each fixture and observation phase",
+  "scenarios": [
+    {
+      "id": "normal_retention",
+      "name": "Normal deletion with permitted facts and erasure markers",
+      "description": "Normal deletion with permitted facts and erasure markers",
+      "category": "retention",
+      "targets": [],
+      "actions": [],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "false_ack_cache",
+      "name": "Cache connector reports success without applying deletion",
+      "description": "Cache connector reports success without applying deletion",
+      "category": "false_success",
+      "targets": [
+        "cache"
+      ],
+      "actions": [
+        "skip_cache"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "RESIDUAL",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "FALSE_SUCCESS_DETECTED",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "false_ack_search",
+      "name": "Search connector reports success without scrubbing the profile",
+      "description": "Search connector reports success without scrubbing the profile",
+      "category": "false_success",
+      "targets": [
+        "search"
+      ],
+      "actions": [
+        "skip_search"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "RESIDUAL",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "FALSE_SUCCESS_DETECTED",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "analytics_residue",
+      "name": "A downstream analytics record survives nominal success",
+      "description": "A downstream analytics record survives nominal success",
+      "category": "storage",
+      "targets": [
+        "analytics"
+      ],
+      "actions": [
+        "analytics_residue"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "RESIDUAL",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "FALSE_SUCCESS_DETECTED",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "partial_order",
+      "name": "An order retains a prohibited personal field",
+      "description": "An order retains a prohibited personal field",
+      "category": "storage",
+      "targets": [
+        "orders"
+      ],
+      "actions": [
+        "order_field"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "RESIDUAL",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "FALSE_SUCCESS_DETECTED",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "verification_outage",
+      "name": "Redis cannot be read during verification",
+      "description": "Redis cannot be read during verification",
+      "category": "availability",
+      "targets": [
+        "cache"
+      ],
+      "actions": [
+        "pause_redis"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "UNAVAILABLE",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "INCONCLUSIVE",
+      "recovery": "unpause Redis and run fresh verification",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "resurrection",
+      "name": "A delayed legacy writer reindexes data after an observed absence",
+      "description": "A delayed legacy writer reindexes data after an observed absence",
+      "category": "reappearance",
+      "targets": [
+        "search"
+      ],
+      "actions": [
+        "late_index"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "RESIDUAL",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "FALSE_SUCCESS_DETECTED",
+      "recovery": "remove only the owned alternate document and reverify",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "duplicate_reordered",
+      "name": "Duplicate and reordered stale create deliveries are fenced",
+      "description": "Duplicate and reordered stale create deliveries are fenced",
+      "category": "message",
+      "targets": [
+        "cache",
+        "search",
+        "analytics"
+      ],
+      "actions": [
+        "duplicate_stale"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "crash_stale_combo",
+      "name": "Consumer crashes after Redis mutation while stale create events are queued",
+      "description": "Consumer crashes after Redis mutation while stale create events are queued",
+      "category": "multi_fault",
+      "targets": [
+        "cache",
+        "search",
+        "analytics"
+      ],
+      "actions": [
+        "crash_after_cache",
+        "duplicate_stale"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "pending_delivery",
+      "name": "Deletion queue delivery is interrupted then resumed",
+      "description": "Deletion queue delivery is interrupted then resumed",
+      "category": "consistency",
+      "targets": [
+        "customer",
+        "cache",
+        "search",
+        "analytics"
+      ],
+      "actions": [
+        "pause_deletion"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "PENDING",
+      "expected_orchestration": "IN_PROGRESS",
+      "expected_verification": "PENDING_CONSISTENCY",
+      "recovery": "resume delivery, wait for convergence and evaluate a new phase",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "ambiguous_reply",
+      "name": "Redis mutation succeeds but every attempt reports a retryable failure",
+      "description": "Redis mutation succeeds but every attempt reports a retryable failure",
+      "category": "acknowledgment",
+      "targets": [
+        "cache"
+      ],
+      "actions": [
+        "error_after_cache"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "PARTIALLY_FAILED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "verification_crash",
+      "name": "Verification worker is killed during an independently blocked read",
+      "description": "Verification worker is killed during an independently blocked read",
+      "category": "worker",
+      "targets": [
+        "customer"
+      ],
+      "actions": [
+        "crash_verifier"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "capability_gap",
+      "name": "Required search adapter is disabled only in an ephemeral test worker",
+      "description": "Required search adapter is disabled only in an ephemeral test worker",
+      "category": "capability",
+      "targets": [
+        "search"
+      ],
+      "actions": [
+        "omit_search_adapter"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule",
+      "expected_method_outcome": "UNSUPPORTED"
+    },
+    {
+      "id": "database_transaction",
+      "name": "A source order transaction fails without leaving an outbox event",
+      "description": "A source order transaction fails without leaving an outbox event",
+      "category": "database",
+      "targets": [
+        "orders",
+        "event_history"
+      ],
+      "actions": [
+        "sql_rollback"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "concurrent_order_delete",
+      "name": "Supported order writes race with the deletion barrier",
+      "description": "Supported order writes race with the deletion barrier",
+      "category": "race",
+      "targets": [
+        "orders",
+        "analytics"
+      ],
+      "actions": [
+        "race_orders"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "ABSENT",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "VERIFIED_ABSENT",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    },
+    {
+      "id": "multiple_residuals",
+      "name": "Cache and search simultaneously report false success",
+      "description": "Cache and search simultaneously report false success",
+      "category": "multi_fault",
+      "targets": [
+        "cache",
+        "search"
+      ],
+      "actions": [
+        "skip_cache",
+        "skip_search"
+      ],
+      "initial_state": "fresh seeded synthetic profiles and orders; propagation confirmed",
+      "workflow": {
+        "automatic_attempts": 3,
+        "targets": "all six required Phase 2 targets"
+      },
+      "activation": "explicit isolated-project gate; trigger points recorded in trial journal",
+      "expected_data_state": "RESIDUAL",
+      "expected_orchestration": "COMPLETED_REPORTED",
+      "expected_verification": "FALSE_SUCCESS_DETECTED",
+      "recovery": "restore services, remove only owned synthetic fixtures",
+      "trial_timeout_seconds": 150,
+      "settling_seconds": 4,
+      "seed_source": "explicit matrix seed; deterministic random.Random and UUID5 fixture schedule"
+    }
+  ]
+}

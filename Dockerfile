@@ -4,6 +4,7 @@ COPY pyproject.toml requirements.lock ./
 COPY eraseproof ./eraseproof
 COPY migrations ./migrations
 COPY policies ./policies
+COPY research/phase-4/config ./research/phase-4/config
 RUN pip install --no-cache-dir -c requirements.lock . && useradd --uid 10001 --create-home lab
 USER lab
 CMD ["uvicorn", "eraseproof.api:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]

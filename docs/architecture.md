@@ -135,3 +135,7 @@ flowchart LR
 ## Phase 3 independent verification
 
 The separate verifier reads all six actual target stores; it does not call deletion handlers or trust receipts as absence proof. A separate API, coordinator, queue, read-only probe identities and append-only canonical evidence chain implement scoped verification and false-success classification. See [phase3.md](phase3.md) for five diagrams, consistency policy, supported inventory, outcome rules, security boundaries and actual-store test scenarios. Phase 2's `independent_verification:false` remains correct for operational reports; independent results live in distinct verification runs.
+
+## Phase 4 experimental framework
+
+A separately gated local CLI drives labeled Docker test projects. Fixed ephemeral deletion-worker checkpoints and reversible administrative controls introduce real faults without enabling normal-service fault behavior. A separate privileged fixture oracle brackets each method evaluation; it does not import evaluated adapters or consume expected labels/verdicts. Seeded journals, PostgreSQL project leases, watchdog tokens, independent predictions, raw trial exports and measured analysis prepare the read-only Phase 5 research contracts. See [the protocol](../research/phase-4/README.md) for execution diagrams, threat model, ground truth, denominators and limitations.

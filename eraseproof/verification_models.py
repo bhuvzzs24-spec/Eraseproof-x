@@ -18,6 +18,7 @@ class StartVerification(BaseModel):
     model_config = ConfigDict(extra="forbid")
     idempotency_key: str = Field(min_length=8, max_length=128, pattern=r"^[A-Za-z0-9_.:-]+$")
     policy_version: Literal["scope-v1"] = "scope-v1"
+    consistency_profile: Literal["default", "extended"] = "default"
 
 
 class VerificationCommand(BaseModel):

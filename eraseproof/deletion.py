@@ -24,6 +24,7 @@ from eraseproof.deletion_models import (
     validate_transition,
 )
 from eraseproof.deletion_connectors import ConnectorFailure, delete_target
+from eraseproof.research_hooks import checkpoint
 
 BASE_DELAY = max(1, int(os.getenv("DELETION_RETRY_BASE_SECONDS", "2")))
 LEASE_SECONDS = max(10, int(os.getenv("DELETION_LEASE_SECONDS", "30")))
@@ -361,7 +362,9 @@ def execute_command(command: DeletionCommand) -> bool:
             with (
                 db.transaction()
             ):  # SQL connector errors roll back to a savepoint before recording failure
-                delete_target(db, task["target"], command.customer_id)
+                if not checkpoint("deletion.before_connector", task["target"], command.customer_id):
+                    delete_target(db, task["target"], command.customer_id)
+                checkpoint("deletion.after_connector", task["target"], command.customer_id)
         except ConnectorFailure as exc:
             failure = exc
         except psycopg.Error:

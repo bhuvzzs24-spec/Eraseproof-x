@@ -26,8 +26,14 @@ def now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def policy() -> dict:
-    return json.loads(Path("policies/scope-v1.json").read_text())
+def policy(profile: str = "default") -> dict:
+    data = json.loads(Path("policies/scope-v1.json").read_text())
+    if profile not in ("default", "extended"):
+        raise ValueError("unknown consistency profile")
+    data["consistency_profile"] = profile
+    if profile == "extended":
+        data.update(grace_seconds=6, interval_seconds=3, deadline_seconds=120)
+    return data
 
 
 def view(db, run_id: UUID) -> dict:
@@ -52,10 +58,12 @@ def start(request_id: UUID, body: StartVerification, correlation_id: UUID) -> di
     with connection() as db:
         db.execute("SELECT pg_advisory_xact_lock(7654323)")
         old = db.execute(
-            "SELECT id FROM verification.runs WHERE deletion_request_id=%s AND idempotency_hash=%s",
+            "SELECT id,policy FROM verification.runs WHERE deletion_request_id=%s AND idempotency_hash=%s",
             (request_id, hashed),
         ).fetchone()
         if old:
+            if old["policy"].get("consistency_profile", "default") != body.consistency_profile:
+                raise HTTPException(409, "idempotency key has another consistency profile")
             return view(db, old["id"])
         request = db.execute(
             "SELECT customer_id FROM deletion.requests WHERE id=%s", (request_id,)
@@ -72,7 +80,7 @@ def start(request_id: UUID, body: StartVerification, correlation_id: UUID) -> di
             raise HTTPException(
                 429, "bounded verification capacity reached", headers={"Retry-After": "30"}
             )
-        scope = policy()
+        scope = policy(body.consistency_profile)
         # Capture the union, not a user-selected subset. Missing/extra required adapters fail closed.
         actual = [
             r["target"]
