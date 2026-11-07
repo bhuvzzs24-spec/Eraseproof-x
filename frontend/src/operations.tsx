@@ -691,7 +691,7 @@ export function Customers({ session, navigate, params }: WorkspaceProps) {
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    pattern="Synthetic [A-Za-z0-9 -]+"
+                    pattern="Synthetic (?:[A-Za-z0-9 ]|-)+"
                     maxLength={100}
                     required
                   />
@@ -703,7 +703,7 @@ export function Customers({ session, navigate, params }: WorkspaceProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Generated @example.invalid"
-                    pattern="[a-zA-Z0-9._+-]+@example\.invalid"
+                    pattern="(?:[a-zA-Z0-9._+]|-)+@example[.]invalid"
                   />
                 </label>
                 <p className="subtle">

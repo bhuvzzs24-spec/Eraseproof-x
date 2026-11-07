@@ -204,3 +204,30 @@ test("automated accessibility checks on real workspaces in dark and light themes
     })),
   ).toEqual([]);
 });
+
+test("native forms accept valid synthetic values and reject other names/domains", async ({
+  page,
+}) => {
+  await signIn(page, "operator");
+  await workspace(page, "Customer data", "Customer data explorer");
+  const name = page.getByLabel("Fixture name");
+  const email = page.getByLabel("Synthetic email (optional)");
+  await name.fill("Synthetic Valid-Test 101");
+  await email.fill("valid-test+tag@example.invalid");
+  expect(
+    await page
+      .locator("form.form-stack")
+      .evaluate((form) => (form as HTMLFormElement).checkValidity()),
+  ).toBe(true);
+  await name.fill("Real Person");
+  expect(
+    await name.evaluate((input) => (input as HTMLInputElement).checkValidity()),
+  ).toBe(false);
+  await name.fill("Synthetic Valid Test");
+  await email.fill("test@outside.invalid");
+  expect(
+    await email.evaluate((input) =>
+      (input as HTMLInputElement).checkValidity(),
+    ),
+  ).toBe(false);
+});
