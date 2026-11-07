@@ -167,7 +167,15 @@ jobs:
           mkdir -p /tmp/ep-trivy
           gh release download v0.76.2 --repo aquasecurity/trivy --pattern 'trivy_0.76.2_Linux-64bit.tar.gz' --pattern 'trivy_0.76.2_checksums.txt' --dir /tmp/ep-trivy
           cd /tmp/ep-trivy
-          rg 'trivy_0.76.2_Linux-64bit.tar.gz$' trivy_0.76.2_checksums.txt | sha256sum --check
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          name='trivy_0.76.2_Linux-64bit.tar.gz'
+          expected=next(line.split()[0] for line in Path('trivy_0.76.2_checksums.txt').read_text().splitlines() if line.split()[-1].lstrip('*')==name)
+          if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=expected:
+              raise SystemExit('Scanner publisher checksum mismatch')
+          print('Pinned scanner publisher checksum verified')
+          PY
           tar -xzf trivy_0.76.2_Linux-64bit.tar.gz trivy
           sudo install -m 0755 trivy /usr/local/bin/trivy
       - run: docker build -t eraseproof-runtime:ci . && docker build -f deploy/Dockerfile.gateway -t eraseproof-gateway:ci .
@@ -206,6 +214,7 @@ jobs:
         run: |
           python scripts/validate_hosted.py --prepare
           sudo chown 10001:10001 work/hosted-ci/users.json
+          sudo sysctl -w vm.overcommit_memory=1
           echo '127.0.0.1 demo.example.invalid' | sudo tee -a /etc/hosts >/dev/null
           sudo sysctl -w vm.max_map_count=262144
           python scripts/hosted_ops.py validate --env-file work/hosted-ci/hosted.env --project eraseproof-hosted-ci --ci

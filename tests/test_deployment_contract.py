@@ -1,6 +1,7 @@
 """Safety regression checks for deployment boundaries, immutable image pins and publication guard."""
 
 from pathlib import Path
+from ipaddress import ip_address, ip_network
 import pytest
 import yaml
 import importlib.util
@@ -39,6 +40,10 @@ def test_standalone_hosted_stack_has_only_explicit_proxy_ports_and_no_faults():
     assert config["services"]["opensearch"]["networks"] == ["search-private"]
     assert "search-private" not in config["services"]["verification-worker"]["networks"]
     assert "search-reader" in config["services"]
+    addresses = config["networks"]["ingress"]["ipam"]["config"][0]
+    assert ip_address(
+        config["services"]["caddy"]["networks"]["ingress"]["ipv4_address"]
+    ) not in ip_network(addresses["ip_range"])
 
 
 def test_publication_requires_owner_cost_and_exact_origin():

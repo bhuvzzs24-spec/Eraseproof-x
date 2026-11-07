@@ -13,7 +13,7 @@ import time
 from uuid import uuid4
 import httpx
 from eraseproof.hosted_security import password_hash
-from hosted_ops import command
+from hosted_ops import command, values
 
 ROOT = Path(__file__).resolve().parent.parent
 PRIVATE = ROOT / "work/hosted-ci"
@@ -53,6 +53,11 @@ def prepare():
     # The public demo is read-only; all binds remain loopback through the CI override.
     with ENV.open("a") as file:
         file.write("DASHBOARD_PUBLIC_DEMO=1\n")
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        for key, value in values(ENV).items():
+            if key.endswith(("_PASSWORD", "_TOKEN")):
+                print("::add-mask::" + value)
+        print("::add-mask::" + password)
     print("Private CI configuration prepared; no credentials printed")
 
 
