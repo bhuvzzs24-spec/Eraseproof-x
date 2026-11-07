@@ -322,3 +322,24 @@ def test_fault_journal_accepts_admin_action_metadata():
     assert saved == [True]
     assert trial["faults"][0]["action"] == "late_index"
     assert trial["faults"][0]["activated"] == 1
+
+
+def test_summary_validation_allows_only_float_roundoff():
+    import math
+    from eraseproof.research_report import equivalent_summary
+
+    assert equivalent_summary(
+        {"count": 21, "interval": [0.7, 1]},
+        {"count": 21, "interval": [math.nextafter(0.7, 1), math.nextafter(1.0, 0)]},
+    )
+    assert not equivalent_summary({"count": 21}, {"count": 20})
+    assert not equivalent_summary({"interval": [0.7]}, {"interval": [0.70001]})
+    assert not equivalent_summary({"interval": [0.7]}, {"interval": [float("nan")]})
+    assert not equivalent_summary({"interval": [0.7]}, {"interval": [0.7, 1.0]})
+
+
+def test_wilson_roundoff_keeps_observed_endpoint_inside_interval():
+    from eraseproof.research_metrics import wilson
+
+    assert wilson(9, 9)[1] == 1
+    assert wilson(0, 9)[0] == 0

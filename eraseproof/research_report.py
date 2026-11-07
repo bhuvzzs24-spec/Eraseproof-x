@@ -5,10 +5,40 @@ from pathlib import Path
 import argparse
 import csv
 import json
+import math
 import random
 from statistics import mean
 from eraseproof.evidence import digest
 from eraseproof.research_metrics import summarize
+
+
+def equivalent_summary(expected, recorded) -> bool:
+    """Counts/structure stay exact; tolerate only floating roundoff across Python/libm versions."""
+    if isinstance(expected, dict):
+        return (
+            isinstance(recorded, dict)
+            and expected.keys() == recorded.keys()
+            and all(equivalent_summary(value, recorded[key]) for key, value in expected.items())
+        )
+    if isinstance(expected, list):
+        return (
+            isinstance(recorded, list)
+            and len(expected) == len(recorded)
+            and all(equivalent_summary(a, b) for a, b in zip(expected, recorded))
+        )
+    if (
+        isinstance(expected, (int, float))
+        and not isinstance(expected, bool)
+        and isinstance(recorded, (int, float))
+        and not isinstance(recorded, bool)
+    ):
+        if isinstance(expected, float) or isinstance(recorded, float):
+            return (
+                math.isfinite(expected)
+                and math.isfinite(recorded)
+                and math.isclose(expected, recorded, rel_tol=1e-13, abs_tol=1e-14)
+            )
+    return type(expected) is type(recorded) and expected == recorded
 
 
 def load(path: Path) -> dict:
@@ -18,11 +48,14 @@ def load(path: Path) -> dict:
         raise ValueError("dataset digest mismatch")
     if data["format_version"] != "phase4-dataset-v1":
         raise ValueError("unsupported dataset format")
-    if summarize(data["trials"]) != {
-        k: v
-        for k, v in data["summary"].items()
-        if k not in ("planned_logical_trials", "unexecuted_logical_trials")
-    }:
+    if not equivalent_summary(
+        summarize(data["trials"]),
+        {
+            k: v
+            for k, v in data["summary"].items()
+            if k not in ("planned_logical_trials", "unexecuted_logical_trials")
+        },
+    ):
         raise ValueError("stored metrics disagree with raw measured rows")
     return data
 

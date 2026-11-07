@@ -17,7 +17,7 @@ def wilson(successes: int, total: int, confidence: float = 0.95) -> list[float] 
     denominator = 1 + z * z / total
     center = (p + z * z / (2 * total)) / denominator
     radius = z * math.sqrt(p * (1 - p) / total + z * z / (4 * total * total)) / denominator
-    return [max(0, center - radius), min(1, center + radius)]
+    return [min(p, max(0, center - radius)), max(p, min(1, center + radius))]
 
 
 def distribution(values: list[float]) -> dict:
