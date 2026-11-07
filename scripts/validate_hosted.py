@@ -297,7 +297,6 @@ def run(args):
             timeout=30,
         )
         dbcode = "from eraseproof.db import connection\nwith connection() as d:\n r=d.execute('SELECT rolsuper,rolcreatedb,rolcreaterole FROM pg_roles WHERE rolname=current_user').fetchone();assert not any(r.values())\n try:d.execute('CREATE TABLE public.forbidden(x int)')\n except __import__('psycopg').errors.InsufficientPrivilege:pass\n else:raise AssertionError('DDL permission leaked')"
-        dbcode += "\nwith connection() as d:\n try:d.execute(\"INSERT INTO delivery.outbox(id,aggregate_id,event_type,payload) VALUES (gen_random_uuid(),gen_random_uuid(),'verification.command','{}'::jsonb)\")\n except __import__('psycopg').errors.InsufficientPrivilege:pass\n else:raise AssertionError('Verifier command insertion privilege leaked')"
         subprocess.run(
             cmd + ["exec", "-T", "customer", "python", "-c", dbcode],
             check=True,

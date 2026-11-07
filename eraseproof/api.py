@@ -75,11 +75,7 @@ async def trace(request: Request, call_next):
     except ValueError:
         return JSONResponse(status_code=400, content={"detail": "invalid correlation UUID"})
     request.state.correlation_id = correlation
-    try:
-        response = await call_next(request)
-    except Exception:
-        log.error("dependency_failed", extra={"correlation_id": str(correlation)})
-        response = JSONResponse(status_code=503, content={"detail": "dependency unavailable"})
+    response = await call_next(request)
     response.headers["X-Correlation-ID"] = str(correlation)
     log.info(
         "request",

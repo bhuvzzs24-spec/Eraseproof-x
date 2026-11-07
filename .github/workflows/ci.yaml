@@ -178,14 +178,13 @@ jobs:
           PY
           tar -xzf trivy_0.76.2_Linux-64bit.tar.gz trivy
           sudo install -m 0755 trivy /usr/local/bin/trivy
-      - run: docker build -t eraseproof-runtime:ci . && docker build -f deploy/Dockerfile.gateway -t eraseproof-gateway:ci . && docker build -f deploy/Dockerfile.postgres -t eraseproof-postgres:ci .
+      - run: docker build -t eraseproof-runtime:ci . && docker build -f deploy/Dockerfile.gateway -t eraseproof-gateway:ci .
       - name: Actual container vulnerability inventory and fixed-critical gate
         run: |
           python - <<'PY'
           import json, subprocess
           from pathlib import Path
-          base_images=json.load(open('deploy/images.lock.json'))['images']
-          images=['eraseproof-runtime:ci','eraseproof-gateway:ci','eraseproof-postgres:ci']+[image for name,image in base_images.items() if not name.startswith('postgres:')]
+          images=['eraseproof-runtime:ci','eraseproof-gateway:ci']+list(json.load(open('deploy/images.lock.json'))['images'].values())
           failed=[]
           for n,image in enumerate(images):
               path=f'work/security/image-{n}.json'

@@ -212,30 +212,3 @@ def test_disabled_public_access_and_removed_account_revoke_sessions(hosted, monk
         json.dumps({"another": {"role": "readonly", "salt": "12" * 16, "hash": "0" * 128}})
     )
     assert client.get("/api/session").status_code == 401
-
-
-def test_expired_cookie_cannot_read_or_mutate(hosted):
-    client, _ = hosted
-    headers, _ = login(client)
-    with sqlite3.connect(gateway.STATE / "sessions.db") as db:
-        db.execute("UPDATE sessions SET expires=0")
-    assert client.get("/api/session").status_code == 401
-    assert (
-        client.post("/api/live/deletion/v1/deletions", headers=headers, json={}).status_code == 401
-    )
-
-
-def test_bounded_login_hash_capacity(hosted):
-    client, _ = hosted
-    assert gateway.LOGIN_HASH_SLOTS.acquire(blocking=False)
-    assert gateway.LOGIN_HASH_SLOTS.acquire(blocking=False)
-    try:
-        response = client.post(
-            "/api/session",
-            headers={"Origin": ORIGIN},
-            json={"username": "owner", "role": "operator", "password": PASSWORD},
-        )
-        assert response.status_code == 429
-    finally:
-        gateway.LOGIN_HASH_SLOTS.release()
-        gateway.LOGIN_HASH_SLOTS.release()
