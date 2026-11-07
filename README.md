@@ -111,3 +111,5 @@ DASHBOARD_ORIGIN=http://127.0.0.1:8010 python scripts/start_dashboard.py
 ```
 
 Open `http://127.0.0.1:8010` and sign in with a role password from the ignored, mode-0600 `.dashboard.env`. Research execution is disabled by default; the guide documents the additional explicit host gates. For development, run the gateway with Origin `http://127.0.0.1:3000` and `npm --prefix frontend run dev`. Do not expose ordinary trusted-lab backend ports or the Docker executor publicly.
+
+Phase 5 delivery: [implementation and setup](docs/phase5.md) · [actual validation report](docs/phase5-validation.md) · [browser screenshots](docs/phase5-visuals.md).
