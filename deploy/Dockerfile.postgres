@@ -1,0 +1,14 @@
+# Preserve the PostgreSQL 16 engine; replace the vulnerable privilege-drop helper.
+FROM postgres:16-alpine@sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139
+ARG TARGETARCH
+ENV GOSU_VERSION=1.20
+RUN set -eux; \
+    case "$TARGETARCH" in \
+      amd64) checksum=b1892636c281590f34bc63c1118f058cd9de66c4ea463772e3909672d8b302ac ;; \
+      arm64) checksum=c216cb762520edb5ab0acb21cb9bc4bcc5f1544d365e8952a21514f04ea233ee ;; \
+      *) exit 1 ;; \
+    esac; \
+    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.20/gosu-linux-${TARGETARCH}"; \
+    echo "$checksum  /usr/local/bin/gosu" | sha256sum -c -; \
+    chmod 0755 /usr/local/bin/gosu; \
+    gosu nobody true

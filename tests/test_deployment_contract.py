@@ -23,7 +23,11 @@ def test_standalone_hosted_stack_has_only_explicit_proxy_ports_and_no_faults():
         if service.get("ports"):
             assert name == "caddy" and service["profiles"] == ["publish"]
         if "image" in service:
-            assert "@sha256:" in service["image"]
+            if name == "postgres":
+                assert service["build"]["dockerfile"] == "deploy/Dockerfile.postgres"
+                assert "@sha256:" in (ROOT / "deploy/Dockerfile.postgres").read_text()
+            else:
+                assert "@sha256:" in service["image"]
         env = service.get("environment", {})
         assert all(
             env.get(k) != "1"

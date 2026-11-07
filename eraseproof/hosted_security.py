@@ -21,10 +21,15 @@ def accounts():
     if not isinstance(value, dict) or not value:
         raise ValueError("account file must contain accounts")
     for name, user in value.items():
-        if not re.fullmatch(r"[a-zA-Z0-9_.-]{1,64}", name) or user.get("role") not in (
-            "readonly",
-            "operator",
-            "research",
+        if (
+            name == "public-demo"
+            or not re.fullmatch(r"[a-zA-Z0-9_.-]{1,64}", name)
+            or user.get("role")
+            not in (
+                "readonly",
+                "operator",
+                "research",
+            )
         ):
             raise ValueError("invalid account record")
         if not re.fullmatch(r"[a-f0-9]{32}", user.get("salt", "")) or not re.fullmatch(
