@@ -93,9 +93,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   line-height: 1.45;
-  transition:
-    background 0.15s,
-    border-color 0.15s;
+  transition: border-color 0.15s;
 }
 button:hover:not(:disabled) {
   border-color: var(--blue);
