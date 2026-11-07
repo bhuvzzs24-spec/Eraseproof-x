@@ -1,0 +1,12 @@
+{
+  "measurement_commit": "61dd8e83c8a32d480dd7dc85d1a940ee8a879e46",
+  "analysis_commit": "61dd8e83c8a32d480dd7dc85d1a940ee8a879e46",
+  "ci_run": 42345268206,
+  "ci_url": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42345268206",
+  "raw_dataset_sha256": "9c87b20c35b4ce9fdb125d511158d9f53ead1f157f394aa2be5494b683fa958b",
+  "canonical_dataset_digest": "e2b8f7d148ad9d08c4d3857b40a673ae9b2c4e110f818fc298fcfa89769b84f3",
+  "configuration_digest": "3da32f826cbc0d8da3c4ceda18b4c16feb4c45c4a3741b9f6e801f549f68fcb7",
+  "evidence_reports": 43,
+  "all_evidence_chains_validated": true,
+  "all_references_resolve": true
+}

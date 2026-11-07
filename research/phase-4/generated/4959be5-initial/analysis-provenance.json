@@ -1,0 +1,7 @@
+{
+  "measurement_commit": "4959be5d4b249b5feacb7b430a8a42c6569eabfc",
+  "analysis_commit": "61dd8e83c8a32d480dd7dc85d1a940ee8a879e46",
+  "ci_run": 42343185445,
+  "status": "FAILED_HARNESS_ATTEMPT_PRESERVED",
+  "raw_dataset_unchanged": true
+}

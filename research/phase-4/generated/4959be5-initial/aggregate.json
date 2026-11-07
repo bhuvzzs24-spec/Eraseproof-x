@@ -1,0 +1,5754 @@
+{
+  "physical_trials": 21,
+  "completed_trials": 17,
+  "failed_trials": 4,
+  "timed_out_trials": 0,
+  "interrupted_trials": 0,
+  "decision_rows": 32,
+  "scenarios": [
+    "ambiguous_reply",
+    "analytics_residue",
+    "capability_gap",
+    "concurrent_order_delete",
+    "crash_stale_combo",
+    "database_transaction",
+    "duplicate_reordered",
+    "false_ack_cache",
+    "false_ack_search",
+    "multiple_residuals",
+    "normal_retention",
+    "partial_order",
+    "pending_delivery",
+    "resurrection",
+    "verification_crash",
+    "verification_outage"
+  ],
+  "methods": {
+    "api_ack": {
+      "tp": 0,
+      "fp": 1,
+      "tn": 19,
+      "fn": 9,
+      "binary_oracle_rows": 29,
+      "scored_rows": 29,
+      "abstained_on_binary_rows": 0,
+      "positive_oracle_rows": 9,
+      "positive_abstentions": 0,
+      "full_positive_detection_yield": {
+        "numerator": 0,
+        "denominator": 9,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.2991450484195439
+        ]
+      },
+      "precision": {
+        "numerator": 0,
+        "denominator": 1,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.7934506856227624
+        ]
+      },
+      "recall": {
+        "numerator": 0,
+        "denominator": 9,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.2991450484195439
+        ]
+      },
+      "false_positive_rate": {
+        "numerator": 1,
+        "denominator": 20,
+        "value": 0.05,
+        "wilson_95": [
+          0.00888144880079543,
+          0.23613119344674194
+        ]
+      },
+      "false_negative_rate": {
+        "numerator": 9,
+        "denominator": 9,
+        "value": 1.0,
+        "wilson_95": [
+          0.700854951580456,
+          1.0
+        ]
+      },
+      "coverage": {
+        "numerator": 29,
+        "denominator": 29,
+        "value": 1.0,
+        "wilson_95": [
+          0.8830302015002593,
+          1.0
+        ]
+      },
+      "abstention_rate": {
+        "numerator": 0,
+        "denominator": 29,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.11696979849974067
+        ]
+      },
+      "oracle_unknown_rows": 3,
+      "clearance_with_unknown_oracle": 2,
+      "outcomes": {
+        "COMPLETED_REPORTED": 30,
+        "PARTIALLY_FAILED": 1,
+        "IN_PROGRESS": 1
+      },
+      "latency_seconds": {
+        "n": 32,
+        "mean": 0.022618443000016697,
+        "median": 0.02155474599999252,
+        "p95": 0.031084496999937983,
+        "stdev_population": 0.0042902328693941415,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "time_to_detection_seconds": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "stdev_population": null
+      },
+      "time_to_verified_absence_seconds": {
+        "n": 19,
+        "mean": 0.022973113052647643,
+        "median": 0.022222263000003295,
+        "p95": 0.03346058600004653,
+        "stdev_population": 0.004708167623185526,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "recorded_data_queries": 0,
+      "targets_with_reported_checks": [],
+      "storage_category_outcomes": {},
+      "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+    },
+    "workflow": {
+      "tp": 0,
+      "fp": 1,
+      "tn": 19,
+      "fn": 9,
+      "binary_oracle_rows": 29,
+      "scored_rows": 29,
+      "abstained_on_binary_rows": 0,
+      "positive_oracle_rows": 9,
+      "positive_abstentions": 0,
+      "full_positive_detection_yield": {
+        "numerator": 0,
+        "denominator": 9,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.2991450484195439
+        ]
+      },
+      "precision": {
+        "numerator": 0,
+        "denominator": 1,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.7934506856227624
+        ]
+      },
+      "recall": {
+        "numerator": 0,
+        "denominator": 9,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.2991450484195439
+        ]
+      },
+      "false_positive_rate": {
+        "numerator": 1,
+        "denominator": 20,
+        "value": 0.05,
+        "wilson_95": [
+          0.00888144880079543,
+          0.23613119344674194
+        ]
+      },
+      "false_negative_rate": {
+        "numerator": 9,
+        "denominator": 9,
+        "value": 1.0,
+        "wilson_95": [
+          0.700854951580456,
+          1.0
+        ]
+      },
+      "coverage": {
+        "numerator": 29,
+        "denominator": 29,
+        "value": 1.0,
+        "wilson_95": [
+          0.8830302015002593,
+          1.0
+        ]
+      },
+      "abstention_rate": {
+        "numerator": 0,
+        "denominator": 29,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.11696979849974067
+        ]
+      },
+      "oracle_unknown_rows": 3,
+      "clearance_with_unknown_oracle": 2,
+      "outcomes": {
+        "WORKFLOW_COMPLETED": 30,
+        "WORKFLOW_FAILURE_ALARM": 1,
+        "WORKFLOW_PENDING": 1
+      },
+      "latency_seconds": {
+        "n": 32,
+        "mean": 0.022618443000016697,
+        "median": 0.02155474599999252,
+        "p95": 0.031084496999937983,
+        "stdev_population": 0.0042902328693941415,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "time_to_detection_seconds": {
+        "n": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "stdev_population": null
+      },
+      "time_to_verified_absence_seconds": {
+        "n": 19,
+        "mean": 0.022973113052647643,
+        "median": 0.022222263000003295,
+        "p95": 0.03346058600004653,
+        "stdev_population": 0.004708167623185526,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "recorded_data_queries": 0,
+      "targets_with_reported_checks": [],
+      "storage_category_outcomes": {},
+      "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+    },
+    "eraseproof": {
+      "tp": 9,
+      "fp": 0,
+      "tn": 19,
+      "fn": 0,
+      "binary_oracle_rows": 29,
+      "scored_rows": 28,
+      "abstained_on_binary_rows": 1,
+      "positive_oracle_rows": 9,
+      "positive_abstentions": 0,
+      "full_positive_detection_yield": {
+        "numerator": 9,
+        "denominator": 9,
+        "value": 1.0,
+        "wilson_95": [
+          0.700854951580456,
+          1.0
+        ]
+      },
+      "precision": {
+        "numerator": 9,
+        "denominator": 9,
+        "value": 1.0,
+        "wilson_95": [
+          0.700854951580456,
+          1.0
+        ]
+      },
+      "recall": {
+        "numerator": 9,
+        "denominator": 9,
+        "value": 1.0,
+        "wilson_95": [
+          0.700854951580456,
+          1.0
+        ]
+      },
+      "false_positive_rate": {
+        "numerator": 0,
+        "denominator": 19,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.16817922405261618
+        ]
+      },
+      "false_negative_rate": {
+        "numerator": 0,
+        "denominator": 9,
+        "value": 0.0,
+        "wilson_95": [
+          0.0,
+          0.2991450484195439
+        ]
+      },
+      "coverage": {
+        "numerator": 28,
+        "denominator": 29,
+        "value": 0.9655172413793104,
+        "wilson_95": [
+          0.8282447812067971,
+          0.9938867857072372
+        ]
+      },
+      "abstention_rate": {
+        "numerator": 1,
+        "denominator": 29,
+        "value": 0.034482758620689655,
+        "wilson_95": [
+          0.006113214292762653,
+          0.1717552187932028
+        ]
+      },
+      "oracle_unknown_rows": 3,
+      "clearance_with_unknown_oracle": 0,
+      "outcomes": {
+        "FALSE_SUCCESS_DETECTED": 9,
+        "INCONCLUSIVE": 2,
+        "VERIFIED_ABSENT": 19,
+        "UNSUPPORTED": 1,
+        "PENDING_CONSISTENCY": 1
+      },
+      "latency_seconds": {
+        "n": 32,
+        "mean": 6.631169038593757,
+        "median": 7.0734972930000595,
+        "p95": 12.423080086000027,
+        "stdev_population": 2.4292923480736954,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "time_to_detection_seconds": {
+        "n": 9,
+        "mean": 4.709689618222216,
+        "median": 4.590274023999996,
+        "p95": 6.503736419000006,
+        "stdev_population": 0.6765495371049219,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "time_to_verified_absence_seconds": {
+        "n": 19,
+        "mean": 7.465145619210543,
+        "median": 7.132817623000051,
+        "p95": 8.146713424999916,
+        "stdev_population": 0.5115549393603189,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "recorded_data_queries": 976,
+      "targets_with_reported_checks": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "storage_category_outcomes": {
+        "analytics": {
+          "PENDING_CONSISTENCY": 11,
+          "VERIFIED_ABSENT": 21
+        },
+        "cache": {
+          "INCONCLUSIVE": 2,
+          "PENDING_CONSISTENCY": 8,
+          "RESIDUAL_DATA_DETECTED": 3,
+          "VERIFIED_ABSENT": 19
+        },
+        "customer": {
+          "PENDING_CONSISTENCY": 11,
+          "VERIFIED_ABSENT": 21
+        },
+        "event_history": {
+          "PENDING_CONSISTENCY": 11,
+          "VERIFIED_ABSENT": 21
+        },
+        "orders": {
+          "PENDING_CONSISTENCY": 11,
+          "VERIFIED_ABSENT": 21
+        },
+        "search": {
+          "PENDING_CONSISTENCY": 3,
+          "RESIDUAL_DATA_DETECTED": 7,
+          "UNSUPPORTED": 1,
+          "VERIFIED_ABSENT": 21
+        }
+      },
+      "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+    }
+  },
+  "paired": [
+    {
+      "first": "api_ack",
+      "second": "workflow",
+      "jointly_scorable_rows": 29,
+      "first_only_correct": 0,
+      "second_only_correct": 0,
+      "exact_discordant_binomial_p": 1.0,
+      "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+    },
+    {
+      "first": "api_ack",
+      "second": "eraseproof",
+      "jointly_scorable_rows": 28,
+      "first_only_correct": 0,
+      "second_only_correct": 10,
+      "exact_discordant_binomial_p": 0.001953125,
+      "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+    },
+    {
+      "first": "workflow",
+      "second": "eraseproof",
+      "jointly_scorable_rows": 28,
+      "first_only_correct": 0,
+      "second_only_correct": 10,
+      "exact_discordant_binomial_p": 0.001953125,
+      "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+    }
+  ],
+  "trial_failures_are_not_removed": true,
+  "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+  "recovery": {
+    "phases_succeeded": 2,
+    "phases_failed": 0,
+    "reappearance_cases_detected": 0,
+    "false_operational_success_exposed": 9
+  },
+  "deletion_latency_seconds": {
+    "n": 36,
+    "mean": 4.824817769583354,
+    "median": 3.587383700499913,
+    "p95": 8.388277612000138,
+    "stdev_population": 5.127563735878596,
+    "p95_method": "nearest rank; small-sample descriptive only"
+  },
+  "retry_attempts": 3,
+  "provenance": {
+    "code_commit": "4959be5d4b249b5feacb7b430a8a42c6569eabfc",
+    "configuration_digest": "497398c200a222ecbce80a65bb5d0ca96290ce776f407a35ad51e012d8be0ecd",
+    "dataset_digest": "cacdc57127cc804f49d2002d5dd9acc9b7a46248722fc862effcf71dbeafb6ef"
+  },
+  "cluster_comparisons": [
+    {
+      "first": "api_ack",
+      "second": "workflow",
+      "clusters": 19,
+      "mean_difference": 0,
+      "bootstrap_95": [
+        0,
+        0
+      ],
+      "resamples": 2000,
+      "seed": "phase4-bootstrap-v1:api_ack:workflow",
+      "estimand": "equally weighted physical-trial mean correctness difference on jointly conclusive rows; correlated rows remain together",
+      "warning": "fixed selected synthetic scenarios; not a production-population confidence claim"
+    },
+    {
+      "first": "api_ack",
+      "second": "eraseproof",
+      "clusters": 18,
+      "mean_difference": 0.3333333333333333,
+      "bootstrap_95": [
+        0.1111111111111111,
+        0.5555555555555556
+      ],
+      "resamples": 2000,
+      "seed": "phase4-bootstrap-v1:api_ack:eraseproof",
+      "estimand": "equally weighted physical-trial mean correctness difference on jointly conclusive rows; correlated rows remain together",
+      "warning": "fixed selected synthetic scenarios; not a production-population confidence claim"
+    },
+    {
+      "first": "workflow",
+      "second": "eraseproof",
+      "clusters": 18,
+      "mean_difference": 0.3333333333333333,
+      "bootstrap_95": [
+        0.1111111111111111,
+        0.5555555555555556
+      ],
+      "resamples": 2000,
+      "seed": "phase4-bootstrap-v1:workflow:eraseproof",
+      "estimand": "equally weighted physical-trial mean correctness difference on jointly conclusive rows; correlated rows remain together",
+      "warning": "fixed selected synthetic scenarios; not a production-population confidence claim"
+    }
+  ],
+  "strata": {
+    "false_ack_search/medium": {
+      "physical_trials": 2,
+      "completed_trials": 2,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 6,
+      "scenarios": [
+        "false_ack_search"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 0,
+          "fn": 6,
+          "binary_oracle_rows": 6,
+          "scored_rows": 6,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 6,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 6
+          },
+          "latency_seconds": {
+            "n": 6,
+            "mean": 0.025220371999997344,
+            "median": 0.024558225499959008,
+            "p95": 0.02935628000000179,
+            "stdev_population": 0.0028564629327656756,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 0,
+          "fn": 6,
+          "binary_oracle_rows": 6,
+          "scored_rows": 6,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 6,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 6
+          },
+          "latency_seconds": {
+            "n": 6,
+            "mean": 0.025220371999997344,
+            "median": 0.024558225499959008,
+            "p95": 0.02935628000000179,
+            "stdev_population": 0.0028564629327656756,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 6,
+          "fp": 0,
+          "tn": 0,
+          "fn": 0,
+          "binary_oracle_rows": 6,
+          "scored_rows": 6,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 6,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "precision": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "recall": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "coverage": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "FALSE_SUCCESS_DETECTED": 6
+          },
+          "latency_seconds": {
+            "n": 6,
+            "mean": 4.7555750295000125,
+            "median": 4.594216616500034,
+            "p95": 6.503736419000006,
+            "stdev_population": 0.8176180094642951,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 6,
+            "mean": 4.7555750295000125,
+            "median": 4.594216616500034,
+            "p95": 6.503736419000006,
+            "stdev_population": 0.8176180094642951,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 156,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "PENDING_CONSISTENCY": 6
+            },
+            "cache": {
+              "PENDING_CONSISTENCY": 6
+            },
+            "customer": {
+              "PENDING_CONSISTENCY": 6
+            },
+            "event_history": {
+              "PENDING_CONSISTENCY": 6
+            },
+            "orders": {
+              "PENDING_CONSISTENCY": 6
+            },
+            "search": {
+              "RESIDUAL_DATA_DETECTED": 6
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 6,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 6,
+          "first_only_correct": 0,
+          "second_only_correct": 6,
+          "exact_discordant_binomial_p": 0.03125,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 6,
+          "first_only_correct": 0,
+          "second_only_correct": 6,
+          "exact_discordant_binomial_p": 0.03125,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 6
+      },
+      "deletion_latency_seconds": {
+        "n": 6,
+        "mean": 2.1892510301667207,
+        "median": 2.179584608500136,
+        "p95": 2.761387861000003,
+        "stdev_population": 0.515847931580125,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "verification_outage/small": {
+      "physical_trials": 2,
+      "completed_trials": 2,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 4,
+      "scenarios": [
+        "verification_outage"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 2,
+          "fn": 0,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 2,
+          "clearance_with_unknown_oracle": 2,
+          "outcomes": {
+            "COMPLETED_REPORTED": 4
+          },
+          "latency_seconds": {
+            "n": 4,
+            "mean": 0.019070379500021772,
+            "median": 0.019116053499999452,
+            "p95": 0.01952117400003317,
+            "stdev_population": 0.00044921909640419327,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 2,
+            "mean": 0.018626606000054835,
+            "median": 0.018626606000054835,
+            "p95": 0.018724975000054656,
+            "stdev_population": 9.836899999982052e-05,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 2,
+          "fn": 0,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 2,
+          "clearance_with_unknown_oracle": 2,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 4
+          },
+          "latency_seconds": {
+            "n": 4,
+            "mean": 0.019070379500021772,
+            "median": 0.019116053499999452,
+            "p95": 0.01952117400003317,
+            "stdev_population": 0.00044921909640419327,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 2,
+            "mean": 0.018626606000054835,
+            "median": 0.018626606000054835,
+            "p95": 0.018724975000054656,
+            "stdev_population": 9.836899999982052e-05,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 2,
+          "fn": 0,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 2,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "INCONCLUSIVE": 2,
+            "VERIFIED_ABSENT": 2
+          },
+          "latency_seconds": {
+            "n": 4,
+            "mean": 10.135303587500005,
+            "median": 10.216066535000039,
+            "p95": 13.076127767999992,
+            "stdev_population": 2.647068462825507,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 2,
+            "mean": 7.5210032479999995,
+            "median": 7.5210032479999995,
+            "p95": 8.00905298400005,
+            "stdev_population": 0.4880497360000504,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 126,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 4
+            },
+            "cache": {
+              "INCONCLUSIVE": 2,
+              "VERIFIED_ABSENT": 2
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 4
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 4
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 4
+            },
+            "search": {
+              "VERIFIED_ABSENT": 4
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 2,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 2,
+        "mean": 2.9461110359999907,
+        "median": 2.9461110359999907,
+        "p95": 3.3154784500000005,
+        "stdev_population": 0.36936741400000983,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "ambiguous_reply/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 1,
+      "scenarios": [
+        "ambiguous_reply"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 1,
+          "tn": 0,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "PARTIALLY_FAILED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.019441861000018434,
+            "median": 0.019441861000018434,
+            "p95": 0.019441861000018434,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 1,
+          "tn": 0,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_FAILURE_ALARM": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.019441861000018434,
+            "median": 0.019441861000018434,
+            "p95": 0.019441861000018434,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 7.3682526129999815,
+            "median": 7.3682526129999815,
+            "p95": 7.3682526129999815,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 7.3682526129999815,
+            "median": 7.3682526129999815,
+            "p95": 7.3682526129999815,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 36,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 1
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 1
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 1
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 1
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 1
+            },
+            "search": {
+              "VERIFIED_ABSENT": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 1,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 1,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 5.750644697999974,
+        "median": 5.750644697999974,
+        "p95": 5.750644697999974,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 2
+    },
+    "normal_retention/medium": {
+      "physical_trials": 2,
+      "completed_trials": 2,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 6,
+      "scenarios": [
+        "normal_retention"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 6,
+          "fn": 0,
+          "binary_oracle_rows": 6,
+          "scored_rows": 6,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 6
+          },
+          "latency_seconds": {
+            "n": 6,
+            "mean": 0.027576009333358797,
+            "median": 0.026759241000036127,
+            "p95": 0.03346058600004653,
+            "stdev_population": 0.0036785153459350205,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 6,
+            "mean": 0.027576009333358797,
+            "median": 0.026759241000036127,
+            "p95": 0.03346058600004653,
+            "stdev_population": 0.0036785153459350205,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 6,
+          "fn": 0,
+          "binary_oracle_rows": 6,
+          "scored_rows": 6,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 6
+          },
+          "latency_seconds": {
+            "n": 6,
+            "mean": 0.027576009333358797,
+            "median": 0.026759241000036127,
+            "p95": 0.03346058600004653,
+            "stdev_population": 0.0036785153459350205,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 6,
+            "mean": 0.027576009333358797,
+            "median": 0.026759241000036127,
+            "p95": 0.03346058600004653,
+            "stdev_population": 0.0036785153459350205,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 6,
+          "fn": 0,
+          "binary_oracle_rows": 6,
+          "scored_rows": 6,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 6,
+            "denominator": 6,
+            "value": 1.0,
+            "wilson_95": [
+              0.6096657120978348,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 6,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.3903342879021652
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 6
+          },
+          "latency_seconds": {
+            "n": 6,
+            "mean": 7.688918858499979,
+            "median": 7.978540521999946,
+            "p95": 8.146713424999916,
+            "stdev_population": 0.5445135183428221,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 6,
+            "mean": 7.688918858499979,
+            "median": 7.978540521999946,
+            "p95": 8.146713424999916,
+            "stdev_population": 0.5445135183428221,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 216,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 6
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 6
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 6
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 6
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 6
+            },
+            "search": {
+              "VERIFIED_ABSENT": 6
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 6,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 6,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 6,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 6,
+        "mean": 3.994998451833377,
+        "median": 3.8449373810000225,
+        "p95": 4.925535404000129,
+        "stdev_population": 0.43253500654377747,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "duplicate_reordered/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 1,
+      "scenarios": [
+        "duplicate_reordered"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.018269328999963363,
+            "median": 0.018269328999963363,
+            "p95": 0.018269328999963363,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.018269328999963363,
+            "median": 0.018269328999963363,
+            "p95": 0.018269328999963363,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.018269328999963363,
+            "median": 0.018269328999963363,
+            "p95": 0.018269328999963363,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.018269328999963363,
+            "median": 0.018269328999963363,
+            "p95": 0.018269328999963363,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 6.730755402999989,
+            "median": 6.730755402999989,
+            "p95": 6.730755402999989,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 6.730755402999989,
+            "median": 6.730755402999989,
+            "p95": 6.730755402999989,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 36,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 1
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 1
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 1
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 1
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 1
+            },
+            "search": {
+              "VERIFIED_ABSENT": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 3.006399500000043,
+        "median": 3.006399500000043,
+        "p95": 3.006399500000043,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "crash_stale_combo/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 1,
+      "scenarios": [
+        "crash_stale_combo"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.018299665000085952,
+            "median": 0.018299665000085952,
+            "p95": 0.018299665000085952,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.018299665000085952,
+            "median": 0.018299665000085952,
+            "p95": 0.018299665000085952,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.018299665000085952,
+            "median": 0.018299665000085952,
+            "p95": 0.018299665000085952,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.018299665000085952,
+            "median": 0.018299665000085952,
+            "p95": 0.018299665000085952,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 7.014021135999997,
+            "median": 7.014021135999997,
+            "p95": 7.014021135999997,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 7.014021135999997,
+            "median": 7.014021135999997,
+            "p95": 7.014021135999997,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 36,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 1
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 1
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 1
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 1
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 1
+            },
+            "search": {
+              "VERIFIED_ABSENT": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 32.99384269699999,
+        "median": 32.99384269699999,
+        "p95": 32.99384269699999,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 1
+    },
+    "false_ack_cache/small": {
+      "physical_trials": 2,
+      "completed_trials": 2,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 2,
+      "scenarios": [
+        "false_ack_cache"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 0,
+          "fn": 2,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 2,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 2
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 0.01902667349997955,
+            "median": 0.01902667349997955,
+            "p95": 0.019411903999980495,
+            "stdev_population": 0.0003852305000009437,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 0,
+          "fn": 2,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 2,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 2
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 0.01902667349997955,
+            "median": 0.01902667349997955,
+            "p95": 0.019411903999980495,
+            "stdev_population": 0.0003852305000009437,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 2,
+          "fp": 0,
+          "tn": 0,
+          "fn": 0,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 2,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "precision": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "recall": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "FALSE_SUCCESS_DETECTED": 2
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 4.668578754499947,
+            "median": 4.668578754499947,
+            "p95": 4.834682882999914,
+            "stdev_population": 0.16610412849996692,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 2,
+            "mean": 4.668578754499947,
+            "median": 4.668578754499947,
+            "p95": 4.834682882999914,
+            "stdev_population": 0.16610412849996692,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 48,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "PENDING_CONSISTENCY": 2
+            },
+            "cache": {
+              "RESIDUAL_DATA_DETECTED": 2
+            },
+            "customer": {
+              "PENDING_CONSISTENCY": 2
+            },
+            "event_history": {
+              "PENDING_CONSISTENCY": 2
+            },
+            "orders": {
+              "PENDING_CONSISTENCY": 2
+            },
+            "search": {
+              "PENDING_CONSISTENCY": 2
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 2,
+          "exact_discordant_binomial_p": 0.5,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 2,
+          "exact_discordant_binomial_p": 0.5,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 2
+      },
+      "deletion_latency_seconds": {
+        "n": 2,
+        "mean": 2.784109166500002,
+        "median": 2.784109166500002,
+        "p95": 3.3827898209999603,
+        "stdev_population": 0.5986806544999581,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "concurrent_order_delete/medium": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 3,
+      "scenarios": [
+        "concurrent_order_delete"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 3,
+          "fn": 0,
+          "binary_oracle_rows": 3,
+          "scored_rows": 3,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 3,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 3,
+            "denominator": 3,
+            "value": 1.0,
+            "wilson_95": [
+              0.4385029682449546,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 3,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 3
+          },
+          "latency_seconds": {
+            "n": 3,
+            "mean": 0.02437135200004074,
+            "median": 0.023223318000077597,
+            "p95": 0.027668475000041326,
+            "stdev_population": 0.0023669661082129432,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 3,
+            "mean": 0.02437135200004074,
+            "median": 0.023223318000077597,
+            "p95": 0.027668475000041326,
+            "stdev_population": 0.0023669661082129432,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 3,
+          "fn": 0,
+          "binary_oracle_rows": 3,
+          "scored_rows": 3,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 3,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 3,
+            "denominator": 3,
+            "value": 1.0,
+            "wilson_95": [
+              0.4385029682449546,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 3,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 3
+          },
+          "latency_seconds": {
+            "n": 3,
+            "mean": 0.02437135200004074,
+            "median": 0.023223318000077597,
+            "p95": 0.027668475000041326,
+            "stdev_population": 0.0023669661082129432,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 3,
+            "mean": 0.02437135200004074,
+            "median": 0.023223318000077597,
+            "p95": 0.027668475000041326,
+            "stdev_population": 0.0023669661082129432,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 3,
+          "fn": 0,
+          "binary_oracle_rows": 3,
+          "scored_rows": 3,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 3,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 3,
+            "denominator": 3,
+            "value": 1.0,
+            "wilson_95": [
+              0.4385029682449546,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 3,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 3
+          },
+          "latency_seconds": {
+            "n": 3,
+            "mean": 7.440468547333391,
+            "median": 7.132817623000051,
+            "p95": 8.09885234300009,
+            "stdev_population": 0.4658797629837518,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 3,
+            "mean": 7.440468547333391,
+            "median": 7.132817623000051,
+            "p95": 8.09885234300009,
+            "stdev_population": 0.4658797629837518,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 108,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 3
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 3
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 3
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 3
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 3
+            },
+            "search": {
+              "VERIFIED_ABSENT": 3
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 3,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 3,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 3,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 3,
+        "mean": 4.778669189000008,
+        "median": 4.885462740999969,
+        "p95": 4.923372259000075,
+        "stdev_population": 0.1785071353323054,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "capability_gap/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 1,
+      "scenarios": [
+        "capability_gap"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.01918093599988424,
+            "median": 0.01918093599988424,
+            "p95": 0.01918093599988424,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.01918093599988424,
+            "median": 0.01918093599988424,
+            "p95": 0.01918093599988424,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.01918093599988424,
+            "median": 0.01918093599988424,
+            "p95": 0.01918093599988424,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.01918093599988424,
+            "median": 0.01918093599988424,
+            "p95": 0.01918093599988424,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 0,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 0,
+          "abstained_on_binary_rows": 1,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "UNSUPPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 1.1237791779999498,
+            "median": 1.1237791779999498,
+            "p95": 1.1237791779999498,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 10,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "cache": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "customer": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "event_history": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "orders": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "search": {
+              "UNSUPPORTED": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 0,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 0,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 3.5337203299998237,
+        "median": 3.5337203299998237,
+        "p95": 3.5337203299998237,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "resurrection/small": {
+      "physical_trials": 2,
+      "completed_trials": 0,
+      "failed_trials": 2,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 2,
+      "scenarios": [
+        "resurrection"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 2,
+          "fn": 0,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 2
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 0.023257412499901875,
+            "median": 0.023257412499901875,
+            "p95": 0.028390336000029492,
+            "stdev_population": 0.0051329235001276174,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 2,
+            "mean": 0.023257412499901875,
+            "median": 0.023257412499901875,
+            "p95": 0.028390336000029492,
+            "stdev_population": 0.0051329235001276174,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 2,
+          "fn": 0,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 2
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 0.023257412499901875,
+            "median": 0.023257412499901875,
+            "p95": 0.028390336000029492,
+            "stdev_population": 0.0051329235001276174,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 2,
+            "mean": 0.023257412499901875,
+            "median": 0.023257412499901875,
+            "p95": 0.028390336000029492,
+            "stdev_population": 0.0051329235001276174,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 2,
+          "fn": 0,
+          "binary_oracle_rows": 2,
+          "scored_rows": 2,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 2,
+            "denominator": 2,
+            "value": 1.0,
+            "wilson_95": [
+              0.3423802275066532,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 2,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 2
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 7.555339854500062,
+            "median": 7.555339854500062,
+            "p95": 8.03100981800003,
+            "stdev_population": 0.4756699634999677,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 2,
+            "mean": 7.555339854500062,
+            "median": 7.555339854500062,
+            "p95": 8.03100981800003,
+            "stdev_population": 0.4756699634999677,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 72,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 2
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 2
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 2
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 2
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 2
+            },
+            "search": {
+              "VERIFIED_ABSENT": 2
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 2,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 2,
+        "mean": 2.282800790500005,
+        "median": 2.282800790500005,
+        "p95": 2.302918711000075,
+        "stdev_population": 0.020117920500069886,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "verification_crash/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 1,
+      "scenarios": [
+        "verification_crash"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.021138568999958807,
+            "median": 0.021138568999958807,
+            "p95": 0.021138568999958807,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.021138568999958807,
+            "median": 0.021138568999958807,
+            "p95": 0.021138568999958807,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.021138568999958807,
+            "median": 0.021138568999958807,
+            "p95": 0.021138568999958807,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.021138568999958807,
+            "median": 0.021138568999958807,
+            "p95": 0.021138568999958807,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 7.9554665719999775,
+            "median": 7.9554665719999775,
+            "p95": 7.9554665719999775,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 7.9554665719999775,
+            "median": 7.9554665719999775,
+            "p95": 7.9554665719999775,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 24,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 1
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 1
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 1
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 1
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 1
+            },
+            "search": {
+              "VERIFIED_ABSENT": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 2.484206231999906,
+        "median": 2.484206231999906,
+        "p95": 2.484206231999906,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "partial_order/large": {
+      "physical_trials": 1,
+      "completed_trials": 0,
+      "failed_trials": 1,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 0,
+      "scenarios": [
+        "partial_order"
+      ],
+      "methods": {},
+      "paired": [],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 6,
+        "mean": 7.141841476333336,
+        "median": 7.050400689500066,
+        "p95": 7.576713863999885,
+        "stdev_population": 0.2147160848407569,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "multiple_residuals/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 1,
+      "scenarios": [
+        "multiple_residuals"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 0,
+          "fn": 1,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 1,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.02108460800013745,
+            "median": 0.02108460800013745,
+            "p95": 0.02108460800013745,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 0,
+          "fn": 1,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 1,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.02108460800013745,
+            "median": 0.02108460800013745,
+            "p95": 0.02108460800013745,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 1,
+          "fp": 0,
+          "tn": 0,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 1,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "precision": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "recall": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "FALSE_SUCCESS_DETECTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 4.516598877999968,
+            "median": 4.516598877999968,
+            "p95": 4.516598877999968,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 1,
+            "mean": 4.516598877999968,
+            "median": 4.516598877999968,
+            "p95": 4.516598877999968,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "recorded_data_queries": 24,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "cache": {
+              "RESIDUAL_DATA_DETECTED": 1
+            },
+            "customer": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "event_history": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "orders": {
+              "PENDING_CONSISTENCY": 1
+            },
+            "search": {
+              "RESIDUAL_DATA_DETECTED": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 1,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 1,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 1
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 1.699613619000047,
+        "median": 1.699613619000047,
+        "p95": 1.699613619000047,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "pending_delivery/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 2,
+      "scenarios": [
+        "pending_delivery"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 1,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "IN_PROGRESS": 1,
+            "COMPLETED_REPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 0.018619788500132017,
+            "median": 0.018619788500132017,
+            "p95": 0.01886890300011146,
+            "stdev_population": 0.00024911449997944146,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.01886890300011146,
+            "median": 0.01886890300011146,
+            "p95": 0.01886890300011146,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 1,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_PENDING": 1,
+            "WORKFLOW_COMPLETED": 1
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 0.018619788500132017,
+            "median": 0.018619788500132017,
+            "p95": 0.01886890300011146,
+            "stdev_population": 0.00024911449997944146,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.01886890300011146,
+            "median": 0.01886890300011146,
+            "p95": 0.01886890300011146,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 1,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "PENDING_CONSISTENCY": 1,
+            "VERIFIED_ABSENT": 1
+          },
+          "latency_seconds": {
+            "n": 2,
+            "mean": 4.220716903500033,
+            "median": 4.220716903500033,
+            "p95": 7.091984933000049,
+            "stdev_population": 2.8712680295000155,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 7.091984933000049,
+            "median": 7.091984933000049,
+            "p95": 7.091984933000049,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 48,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "PENDING_CONSISTENCY": 1,
+              "VERIFIED_ABSENT": 1
+            },
+            "cache": {
+              "PENDING_CONSISTENCY": 1,
+              "VERIFIED_ABSENT": 1
+            },
+            "customer": {
+              "PENDING_CONSISTENCY": 1,
+              "VERIFIED_ABSENT": 1
+            },
+            "event_history": {
+              "PENDING_CONSISTENCY": 1,
+              "VERIFIED_ABSENT": 1
+            },
+            "orders": {
+              "PENDING_CONSISTENCY": 1,
+              "VERIFIED_ABSENT": 1
+            },
+            "search": {
+              "PENDING_CONSISTENCY": 1,
+              "VERIFIED_ABSENT": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 8.388277612000138,
+        "median": 8.388277612000138,
+        "p95": 8.388277612000138,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "analytics_residue/small": {
+      "physical_trials": 1,
+      "completed_trials": 0,
+      "failed_trials": 1,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 0,
+      "scenarios": [
+        "analytics_residue"
+      ],
+      "methods": {},
+      "paired": [],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 2.3813369140000304,
+        "median": 2.3813369140000304,
+        "p95": 2.3813369140000304,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    },
+    "database_transaction/small": {
+      "physical_trials": 1,
+      "completed_trials": 1,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 1,
+      "scenarios": [
+        "database_transaction"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "COMPLETED_REPORTED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.018393597000113004,
+            "median": 0.018393597000113004,
+            "p95": 0.018393597000113004,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.018393597000113004,
+            "median": 0.018393597000113004,
+            "p95": 0.018393597000113004,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 0.018393597000113004,
+            "median": 0.018393597000113004,
+            "p95": 0.018393597000113004,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 0.018393597000113004,
+            "median": 0.018393597000113004,
+            "p95": 0.018393597000113004,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 1,
+          "fn": 0,
+          "binary_oracle_rows": 1,
+          "scored_rows": 1,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 0,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null,
+            "wilson_95": null
+          },
+          "coverage": {
+            "numerator": 1,
+            "denominator": 1,
+            "value": 1.0,
+            "wilson_95": [
+              0.2065493143772375,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "oracle_unknown_rows": 0,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "VERIFIED_ABSENT": 1
+          },
+          "latency_seconds": {
+            "n": 1,
+            "mean": 7.069681110000147,
+            "median": 7.069681110000147,
+            "p95": 7.069681110000147,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 1,
+            "mean": 7.069681110000147,
+            "median": 7.069681110000147,
+            "p95": 7.069681110000147,
+            "stdev_population": 0.0,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 36,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "VERIFIED_ABSENT": 1
+            },
+            "cache": {
+              "VERIFIED_ABSENT": 1
+            },
+            "customer": {
+              "VERIFIED_ABSENT": 1
+            },
+            "event_history": {
+              "VERIFIED_ABSENT": 1
+            },
+            "orders": {
+              "VERIFIED_ABSENT": 1
+            },
+            "search": {
+              "VERIFIED_ABSENT": 1
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 1,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 0,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 0,
+        "false_operational_success_exposed": 0
+      },
+      "deletion_latency_seconds": {
+        "n": 1,
+        "mean": 3.1368028000001686,
+        "median": 3.1368028000001686,
+        "p95": 3.1368028000001686,
+        "stdev_population": 0.0,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 0
+    }
+  }
+}

@@ -88,3 +88,7 @@ python -m eraseproof.research_report work/phase4-one/dataset.json --output work/
 ```
 
 Research APIs on port 8006 are read-only and require a separate RESEARCH_TOKEN. No HTTP endpoint triggers faults. The extended matrix is provided for manual execution and must be labeled unexecuted until actual result artifacts exist. These are internal architectural baselines, not commercial platform benchmarks or compliance guarantees.
+
+The [measured Phase 4 evaluation](docs/phase-4-evaluation.md) records a successful 16-scenario, 21-trial Docker batch with 43 customer/phase observations. EraseProof X detected 18 residual cases (0 observed FP/FN); both internal baselines missed those 18 and raised one operational false alarm. The verifier retained two inconclusive, one unsupported and one pending outcome. Conclusive coverage was 39/40 known-truth cases; precision/recall Wilson intervals were 82.4–100%, not a population guarantee. Mean verifier call latency was 5.846s versus 0.017s for the metadata baselines.
+
+[Final raw trials and evidence](research/phase-4/results/61dd8e8-final/) · [Statistics and measured charts](research/phase-4/generated/61dd8e8-final/) · [Preserved initial failed batch](research/phase-4/results/4959be5-initial/) · [Phase 5 read-only contracts](docs/research-contracts.md). The final runtime [CI run](https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42345268206) passed 64 unit and 26 Docker integration tests, the existing demo and the full CI matrix. The earlier harness error and its partial measurements remain inspectable.
