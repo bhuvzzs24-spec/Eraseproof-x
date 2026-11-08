@@ -1,0 +1,14 @@
+{
+  "historical-quality-and-coverage.png": {
+    "source": "research/phase-4/generated/61dd8e8-final/quality-and-coverage.png",
+    "source_runtime": "61dd8e83c8a32d480dd7dc85d1a940ee8a879e46",
+    "sha256": "7cb76aa614366e102c0a4fa4c208560adf1d5f766dd9da2a0c28cd0aead046ee",
+    "scope": "Retained actual historical measurements, not current cloud telemetry"
+  },
+  "historical-latency-distribution.png": {
+    "source": "research/phase-4/generated/61dd8e8-final/latency-distribution.png",
+    "source_runtime": "61dd8e83c8a32d480dd7dc85d1a940ee8a879e46",
+    "sha256": "7ae111453117cbecbcf0b6a9240522553f134b2373e25e062930c1eaf7ea992c",
+    "scope": "Retained actual historical measurements, not current cloud telemetry"
+  }
+}

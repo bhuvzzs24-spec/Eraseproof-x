@@ -1,0 +1,684 @@
+{
+  "config": {
+    "argv": [
+      "/opt/hostedtoolcache/node/24.22.2/x64/bin/node",
+      "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/playwright.config.ts",
+    "rootDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/commit/0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "commitHash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "buildHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42396389635"
+      },
+      "gitCommit": {
+        "shortHash": "0e11529",
+        "hash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "subject": "fix: rebuild gosu with patched Go and await browser deletion navigation",
+        "body": "fix: rebuild gosu with patched Go and await browser deletion navigation\n",
+        "author": {
+          "name": "Bhuvana",
+          "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+          "time": 1794072387000
+        },
+        "committer": {
+          "name": "Bhuvana",
+          "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+          "time": 1794072387000
+        },
+        "branch": "main"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/commit/0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "commitHash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "buildHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42396389635"
+          },
+          "gitCommit": {
+            "shortHash": "0e11529",
+            "hash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "subject": "fix: rebuild gosu with patched Go and await browser deletion navigation",
+            "body": "fix: rebuild gosu with patched Go and await browser deletion navigation\n",
+            "author": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "committer": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/.*\\.spec\\.ts/"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/commit/0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "commitHash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "buildHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42396389635"
+          },
+          "gitCommit": {
+            "shortHash": "0e11529",
+            "hash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "subject": "fix: rebuild gosu with patched Go and await browser deletion navigation",
+            "body": "fix: rebuild gosu with patched Go and await browser deletion navigation\n",
+            "author": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "committer": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/e2e",
+        "snapshotDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8010",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "trace": "off",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "python3 scripts/start_dashboard.py",
+      "cwd": "/home/runner/work/Eraseproof-x/Eraseproof-x",
+      "url": "http://127.0.0.1:8010",
+      "timeout": 120000,
+      "reuseExistingServer": false,
+      "env": {
+        "GITHUB_STATE": "/home/runner/work/_temp/_runner_file_commands/save_state_5914ef55-ca0a-4a92-a037-ce855eb74ede",
+        "COMPOSE_FILE": "compose.yaml:compose.research.yaml",
+        "DOTNET_NOLOGO": "1",
+        "USER": "runner",
+        "npm_config_user_agent": "npm/11.19.1 node/v24.22.2 linux x64 workspaces/false ci/github-actions/dotcom-hosted",
+        "CI": "true",
+        "USE_BAZEL_FALLBACK_VERSION": "silent:",
+        "RUNNER_ENVIRONMENT": "github-hosted",
+        "GITHUB_ENV": "/home/runner/work/_temp/_runner_file_commands/set_env_5914ef55-ca0a-4a92-a037-ce855eb74ede",
+        "PIPX_HOME": "/opt/pipx",
+        "npm_node_execpath": "/opt/hostedtoolcache/node/24.22.2/x64/bin/node",
+        "JAVA_HOME_8_X64": "/usr/lib/jvm/temurin-8-jdk-amd64",
+        "SHLVL": "1",
+        "LD_LIBRARY_PATH": "/opt/hostedtoolcache/Python/3.12.16/x64/lib",
+        "HCA_CLOUD_PROVIDER": "azure",
+        "npm_config_noproxy": "",
+        "HOME": "/home/runner",
+        "Python_ROOT_DIR": "/opt/hostedtoolcache/Python/3.12.16/x64",
+        "COMPOSE_PROJECT_NAME": "eraseproof-research-ci",
+        "RUNNER_TEMP": "/home/runner/work/_temp",
+        "GITHUB_EVENT_PATH": "/home/runner/work/_temp/_github_workflow/event.json",
+        "npm_package_json": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/package.json",
+        "JAVA_HOME_11_X64": "/usr/lib/jvm/temurin-11-jdk-amd64",
+        "PIPX_BIN_DIR": "/opt/pipx_bin",
+        "GITHUB_REPOSITORY_OWNER": "bhuvzzs24-spec",
+        "GRADLE_HOME": "/usr/share/gradle-9.8.2",
+        "ANDROID_NDK_LATEST_HOME": "/usr/local/lib/android/sdk/ndk/30.0.16248370",
+        "JAVA_HOME_21_X64": "/usr/lib/jvm/temurin-21-jdk-amd64",
+        "GITHUB_RETENTION_DAYS": "90",
+        "GITHUB_REPOSITORY_OWNER_ID": "228474568",
+        "POWERSHELL_DISTRIBUTION_CHANNEL": "GitHub-Actions-Linux",
+        "AZURE_EXTENSION_DIR": "/opt/az/azcliextensions",
+        "GITHUB_HEAD_REF": "",
+        "npm_config_userconfig": "/home/runner/.npmrc",
+        "npm_config_local_prefix": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend",
+        "SYSTEMD_EXEC_PID": "2055",
+        "ACTIONS_ORCHESTRATION_ID": "c785e1da-9e2a-8bfe-bc24-156d9af99de8.integration.__default",
+        "GITHUB_GRAPHQL_URL": "https://api.github.com/graphql",
+        "COLOR": "0",
+        "JAVA_HOME_25_X64": "/usr/lib/jvm/temurin-25-jdk-amd64",
+        "NVM_DIR": "/home/runner/.nvm",
+        "DOTNET_SKIP_FIRST_TIME_EXPERIENCE": "1",
+        "JAVA_HOME_17_X64": "/usr/lib/jvm/temurin-17-jdk-amd64",
+        "ImageVersion": "20261101.360.1",
+        "pythonLocation": "/opt/hostedtoolcache/Python/3.12.16/x64",
+        "LOGNAME": "runner",
+        "RUNNER_OS": "Linux",
+        "GITHUB_API_URL": "https://api.github.com",
+        "GITHUB_ARTIFACTS": "/home/runner/work/_temp/_runner_file_commands/artifacts_5914ef55-ca0a-4a92-a037-ce855eb74ede",
+        "SWIFT_PATH": "/usr/share/swift/usr/bin",
+        "CHROMEWEBDRIVER": "/usr/local/share/chromedriver-linux64",
+        "JOURNAL_STREAM": "10:12784",
+        "GITHUB_WORKFLOW": "distributed-backend",
+        "_": "/opt/hostedtoolcache/node/24.22.2/x64/bin/npm",
+        "npm_config_prefix": "/opt/hostedtoolcache/node/24.22.2/x64",
+        "npm_config_npm_version": "11.19.1",
+        "PKG_CONFIG_PATH": "/opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig",
+        "MEMORY_PRESSURE_WATCH": "/sys/fs/cgroup/system.slice/hosted-compute-agent.service/memory.pressure",
+        "GOROOT_1_24_X64": "/opt/hostedtoolcache/go/1.24.13/x64",
+        "ACTIONS_RUNNER_ACTION_ARCHIVE_CACHE": "/opt/actionarchivecache",
+        "GOROOT_1_25_X64": "/opt/hostedtoolcache/go/1.25.14/x64",
+        "GITHUB_RUN_ID": "42396389635",
+        "Python2_ROOT_DIR": "/opt/hostedtoolcache/Python/3.12.16/x64",
+        "npm_config_cache": "/home/runner/.npm",
+        "GITHUB_REF_TYPE": "branch",
+        "BOOTSTRAP_HASKELL_NONINTERACTIVE": "1",
+        "Python3_ROOT_DIR": "/opt/hostedtoolcache/Python/3.12.16/x64",
+        "GITHUB_WORKFLOW_SHA": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "GOROOT_1_26_X64": "/opt/hostedtoolcache/go/1.26.10/x64",
+        "GITHUB_BASE_REF": "",
+        "ImageOS": "ubuntu24",
+        "GITHUB_WORKFLOW_REF": "bhuvzzs24-spec/Eraseproof-x/.github/workflows/ci.yaml@refs/heads/main",
+        "GITHUB_ACTION_REPOSITORY": "",
+        "ENABLE_RUNNER_TRACING": "true",
+        "npm_config_node_gyp": "/opt/hostedtoolcache/node/24.22.2/x64/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js",
+        "PATH": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/node_modules/.bin:/home/runner/work/Eraseproof-x/Eraseproof-x/node_modules/.bin:/home/runner/work/Eraseproof-x/node_modules/.bin:/home/runner/work/node_modules/.bin:/home/runner/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/opt/hostedtoolcache/node/24.22.2/x64/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/opt/hostedtoolcache/node/24.22.2/x64/bin:/opt/hostedtoolcache/Python/3.12.16/x64/bin:/opt/hostedtoolcache/Python/3.12.16/x64:/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+        "ANT_HOME": "/usr/share/ant",
+        "DOTNET_MULTILEVEL_LOOKUP": "0",
+        "RUNNER_TRACKING_ID": "github_4985789b-b367-4aef-8655-3cbfa9d09642",
+        "INVOCATION_ID": "6a6cbb5216ee4a758dd6e047dae87b18",
+        "RUNNER_TOOL_CACHE": "/opt/hostedtoolcache",
+        "NODE": "/opt/hostedtoolcache/node/24.22.2/x64/bin/node",
+        "npm_package_name": "eraseproof-dashboard",
+        "GITHUB_ACTION": "__run_13",
+        "GITHUB_RUN_NUMBER": "21",
+        "GITHUB_TRIGGERING_ACTOR": "bhuvzzs24-spec",
+        "RUNNER_ARCH": "X64",
+        "XDG_RUNTIME_DIR": "/run/user/1001",
+        "AGENT_TOOLSDIRECTORY": "/opt/hostedtoolcache",
+        "LANG": "C.UTF-8",
+        "VCPKG_INSTALLATION_ROOT": "/usr/local/share/vcpkg",
+        "CONDA": "/usr/share/miniconda",
+        "RUNNER_NAME": "GitHub Actions 1000000184",
+        "XDG_CONFIG_HOME": "/home/runner/.config",
+        "GITHUB_REF_NAME": "main",
+        "GITHUB_REPOSITORY": "bhuvzzs24-spec/Eraseproof-x",
+        "npm_lifecycle_script": "playwright test",
+        "ANDROID_NDK_ROOT": "/usr/local/lib/android/sdk/ndk/27.3.13750724",
+        "GITHUB_ACTION_REF": "",
+        "DEBIAN_FRONTEND": "noninteractive",
+        "SHELL": "/bin/bash",
+        "GITHUB_REPOSITORY_ID": "1448521359",
+        "GITHUB_ACTIONS": "true",
+        "npm_package_version": "0.5.0",
+        "npm_lifecycle_event": "test:e2e",
+        "GITHUB_REF_PROTECTED": "false",
+        "GITHUB_WORKSPACE": "/home/runner/work/Eraseproof-x/Eraseproof-x",
+        "ACCEPT_EULA": "Y",
+        "GITHUB_JOB": "integration",
+        "GITHUB_SHA": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "ACTIONS_RUNNER_RETURN_JOB_RESULT_FOR_HOSTED": "1",
+        "GITHUB_REF": "refs/heads/main",
+        "GITHUB_ACTOR": "bhuvzzs24-spec",
+        "ANDROID_SDK_ROOT": "/usr/local/lib/android/sdk",
+        "RUN_FULLSTACK": "1",
+        "npm_config_globalconfig": "/opt/hostedtoolcache/node/24.22.2/x64/etc/npmrc",
+        "npm_config_init_module": "/home/runner/.npm-init.js",
+        "GITHUB_PATH": "/home/runner/work/_temp/_runner_file_commands/add_path_5914ef55-ca0a-4a92-a037-ce855eb74ede",
+        "JAVA_HOME": "/usr/lib/jvm/temurin-17-jdk-amd64",
+        "PWD": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend",
+        "GITHUB_ACTOR_ID": "228474568",
+        "RUNNER_WORKSPACE": "/home/runner/work/Eraseproof-x",
+        "npm_execpath": "/opt/hostedtoolcache/node/24.22.2/x64/lib/node_modules/npm/bin/npm-cli.js",
+        "HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS": "3650",
+        "GITHUB_EVENT_NAME": "push",
+        "HOMEBREW_NO_AUTO_UPDATE": "1",
+        "ANDROID_HOME": "/usr/local/lib/android/sdk",
+        "GITHUB_SERVER_URL": "https://github.com",
+        "GECKOWEBDRIVER": "/usr/local/share/gecko_driver",
+        "GHCUP_INSTALL_BASE_PREFIX": "/usr/local",
+        "GITHUB_OUTPUT": "/home/runner/work/_temp/_runner_file_commands/set_output_5914ef55-ca0a-4a92-a037-ce855eb74ede",
+        "npm_config_global_prefix": "/opt/hostedtoolcache/node/24.22.2/x64",
+        "EDGEWEBDRIVER": "/usr/local/share/edge_driver",
+        "npm_config_allow_scripts": "",
+        "npm_command": "run",
+        "ANDROID_NDK": "/usr/local/lib/android/sdk/ndk/27.3.13750724",
+        "GITHUB_ARTIFACTS_LIST": "/home/runner/work/_temp/_runner_file_commands/artifacts_list_5914ef55-ca0a-4a92-a037-ce855eb74ede",
+        "SGX_AESM_ADDR": "1",
+        "PSModulePath": "/root/.local/share/powershell/Modules:/usr/local/share/powershell/Modules:/opt/microsoft/powershell/7/Modules:/usr/share/az_15.6.1",
+        "CHROME_BIN": "/usr/bin/google-chrome",
+        "SELENIUM_JAR_PATH": "/usr/share/java/selenium-server.jar",
+        "MEMORY_PRESSURE_WRITE": "c29tZSAyMDAwMDAgMjAwMDAwMAA=",
+        "ANDROID_NDK_HOME": "/usr/local/lib/android/sdk/ndk/27.3.13750724",
+        "GITHUB_STEP_SUMMARY": "/home/runner/work/_temp/_runner_file_commands/step_summary_5914ef55-ca0a-4a92-a037-ce855eb74ede",
+        "INIT_CWD": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend",
+        "EDITOR": "vi",
+        "BROWSERSLIST_IGNORE_OLD_DATA": "true",
+        "POSTGRES_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "RABBITMQ_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "INSPECTION_TOKEN": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "DELETION_TOKEN": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "VERIFICATION_TOKEN": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "RESEARCH_TOKEN": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "VERIFIER_DB_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "VERIFIER_CONTROL_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "VERIFIER_REDIS_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "DASHBOARD_READONLY_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "DASHBOARD_OPERATOR_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "DASHBOARD_RESEARCH_PASSWORD": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "OPERATOR_TOKEN": "[REDACTED EPHEMERAL TEST CREDENTIAL]",
+        "DASHBOARD_ORIGIN": "http://127.0.0.1:8010",
+        "DASHBOARD_ENABLE_RESEARCH": "1",
+        "DASHBOARD_RESEARCH_PROJECT": "eraseproof-research-ci",
+        "APP_ENV": "demo",
+        "ERASEPROOF_RESEARCH_FAULTS": "1"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "fullstack.spec.ts",
+      "file": "fullstack.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real customer propagation, deletion, independent verification and evidence export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18654,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:52:42.777Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "59f0dfcbcd928559d023-b3a8ca67819b765d5bfd",
+          "file": "fullstack.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "authorized isolated false success uses the actual Phase 4 runner and independent stores",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 50815,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:53:01.832Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "59f0dfcbcd928559d023-00e05e09f7c18aa8ca75",
+          "file": "fullstack.spec.ts",
+          "line": 98,
+          "column": 1
+        },
+        {
+          "title": "direct synthetic write APIs reject missing operator credentials",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:53:52.661Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "59f0dfcbcd928559d023-98e77237b573b1ad5f26",
+          "file": "fullstack.spec.ts",
+          "line": 162,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "offline.spec.ts",
+      "file": "offline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "historical actual results, evidence filtering and sanitized JSON export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1327,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:53:52.753Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-a9434eddf8c3703c7eff",
+          "file": "offline.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "read-only role is enforced by the server, not just disabled buttons",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 819,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:53:54.094Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-4d17c4f36fd8e33b0519",
+          "file": "offline.spec.ts",
+          "line": 55,
+          "column": 1
+        },
+        {
+          "title": "explicit transport failure and timeout states never render successful live metrics",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10252,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:53:54.926Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-cda545971062cb7e43d4",
+          "file": "offline.spec.ts",
+          "line": 90,
+          "column": 1
+        },
+        {
+          "title": "all workspaces at desktop and tablet sizes with real rendered screenshots",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14448,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:54:05.194Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-b0befe3c1d2f6172f9a3",
+          "file": "offline.spec.ts",
+          "line": 115,
+          "column": 1
+        },
+        {
+          "title": "automated accessibility checks on real workspaces in dark and light themes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5932,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:54:19.657Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-2b1a294531374e8852a1",
+          "file": "offline.spec.ts",
+          "line": 173,
+          "column": 1
+        },
+        {
+          "title": "native forms accept valid synthetic values and reject other names/domains",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 679,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:54:25.599Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "586fc5283fd8ec7c7982-c56782ba2ac8fcca9638",
+          "file": "offline.spec.ts",
+          "line": 208,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-07T17:52:41.280Z",
+    "duration": 105097.996,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

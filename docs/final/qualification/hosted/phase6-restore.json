@@ -1,0 +1,6 @@
+{
+  "restored": true,
+  "schema_versions": 4,
+  "expected_fixture_found": true,
+  "scope": "scratch PostgreSQL database, removed after validation"
+}

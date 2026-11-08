@@ -1,0 +1,15 @@
+{
+  "reviewed_at": "2026-11-08",
+  "pdf": "EraseProof-X-Complete-Technical-Report.pdf",
+  "pages": 43,
+  "sha256": "a46c140fea37fa9c9e684c033debd855ebf530a1d711242469da3eedcdfd4f94",
+  "renderer": "Poppler pdftoppm; every page rendered and inspected in four contact sheets, with detailed cover/contents/diagram/screenshot inspection",
+  "checks": [
+    "No clipping or overlaps observed",
+    "Readable tables, code, six diagrams, historical scientific figures and actual screenshot",
+    "Public deployment pending approval shown on cover and page headers",
+    "Historical and final CI measurements distinguishable",
+    "Full source/runtime SHA and validation references retained"
+  ],
+  "runtime_commit": "0e115298774c4b79ad4b7ec3aa343dd037700ae1"
+}

@@ -1,3 +1,7 @@
+> **Phase 6 — hosted synthetic deployment preparation.** Public cloud publication is **BLOCKED / PENDING OWNER APPROVAL**; no public HTTPS service or billable resources have been created. The standalone persistent stack, per-account authentication, private store networks, recovery tooling and owner-gated release workflow are implemented. Current qualification outcomes and limitations are recorded in the [validation record](docs/final/Phase-6-Validation.md).
+>
+> [Complete technical report](docs/final/EraseProof-X-Complete-Technical-Report.md) · [PDF](docs/final/EraseProof-X-Complete-Technical-Report.pdf) · [Architecture](docs/final/EraseProof-X-Architecture.md) · [Deployment and costs](docs/final/EraseProof-X-Deployment-Guide.md) · [User guide](docs/final/EraseProof-X-User-Guide.md) · [Research results](docs/final/EraseProof-X-Research-Results.md) · [Security and limitations](docs/final/EraseProof-X-Security-and-Limitations.md) · [Interview preparation](docs/final/EraseProof-X-Interview-Preparation.md) · [Resume and portfolio](docs/final/Resume-and-Portfolio.md)
+
 # EraseProof X — Phases 1–3
 
 A synthetic distributed e-commerce lab for studying false deletion success. Phase 1 creates and propagates records. Phase 2 performs durable deletion orchestration across six configured targets. Phase 3 independently probes all six supported targets and exports scoped evidence; it does not claim universal or irreversible erasure. Operational presence observations are not deletion proofs.

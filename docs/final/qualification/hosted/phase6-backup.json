@@ -1,0 +1,7 @@
+{
+  "format": "PostgreSQL custom dump",
+  "bytes": 75356,
+  "sha256": "dd59cd68f20f14fe886050d6a5310e04ff007a8c367a5b6a685f838cc6ec2c7e",
+  "created_at_unix": 1794072587.9172206,
+  "scope": "PostgreSQL only; no backup-deletion verification or cross-store snapshot guarantee"
+}

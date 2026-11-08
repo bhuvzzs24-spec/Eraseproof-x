@@ -1,0 +1,54 @@
+{
+  "renderer": "mermaid@12.3.0 + actual Chromium",
+  "layout": "flowchart LR rendered TB for readable portrait PDF; edges and labels unchanged",
+  "figures": [
+    {
+      "index": 1,
+      "source_sha256": "7566a0c6ad739cd88413caa1c2ad0a2621a69053279030ae1eae3536fd269ab8",
+      "png": "figure-01.png",
+      "svg": "figure-01.svg",
+      "width_css": 1283.0625,
+      "height_css": 1253.140625
+    },
+    {
+      "index": 2,
+      "source_sha256": "6ae3c1eeab3dd8098d1a138bd1f1e441ed63e909f429e89809148a35d1fcb396",
+      "png": "figure-02.png",
+      "svg": "figure-02.svg",
+      "width_css": 1365.5,
+      "height_css": 804
+    },
+    {
+      "index": 3,
+      "source_sha256": "0ac77af22349a8dacc8da26aebc3950c93467768b737b35ec319a4339e23e9bb",
+      "png": "figure-03.png",
+      "svg": "figure-03.svg",
+      "width_css": 1084.046875,
+      "height_css": 666.796875
+    },
+    {
+      "index": 4,
+      "source_sha256": "4705ab5f133b0f17be92ab4244bc9a0cb5f6af867af3599705dd371ea71c6aea",
+      "png": "figure-04.png",
+      "svg": "figure-04.svg",
+      "width_css": 1130.625,
+      "height_css": 1692
+    },
+    {
+      "index": 5,
+      "source_sha256": "cc8ec84a508a2f2d8b5a99e5cc724a8c7174c142fe721b8bb285b4db545a90f8",
+      "png": "figure-05.png",
+      "svg": "figure-05.svg",
+      "width_css": 685.828125,
+      "height_css": 445.796875
+    },
+    {
+      "index": 6,
+      "source_sha256": "d2481bebb345c6cd44f76f2a7b0ac9f2737dfb28cb1e46db340652bae7350146",
+      "png": "figure-06.png",
+      "svg": "figure-06.svg",
+      "width_css": 266,
+      "height_css": 1243
+    }
+  ]
+}

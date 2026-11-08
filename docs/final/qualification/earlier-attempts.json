@@ -1,0 +1,58 @@
+[
+  {
+    "attempt": 1,
+    "ci_run": 42385834829,
+    "source_commit": "7312b10534255b232765ca9d951263189b023b5e",
+    "file": "attempt-1/dataset.json",
+    "sha256": "2d45f61647ff856c200e5cf965c3e297db1d4b4c2aac69248308cacf925c4083",
+    "dataset_digest": "c41d1f4485ab486d5ca06285937939a3a02067befa4cf7b344627ee27e2bad7a",
+    "physical_trials": 21,
+    "completed_trials": 21,
+    "failed_trials": 0,
+    "timed_out_trials": 0,
+    "decision_rows": 43,
+    "pooled_with_final": false
+  },
+  {
+    "attempt": 2,
+    "ci_run": 42390197998,
+    "source_commit": "04a822001b10a9772cd9c5d0aeb607c372a497a1",
+    "file": "attempt-2/dataset.json",
+    "sha256": "205989fdb395da93501bab302dbb6402d5740c44c8e75947519cb2a4f66f6c2f",
+    "dataset_digest": "bb355afa2ab6c271a9b1422f74ea617c23c8d91f9134ccfe6f0a20fa848d1278",
+    "physical_trials": 21,
+    "completed_trials": 21,
+    "failed_trials": 0,
+    "timed_out_trials": 0,
+    "decision_rows": 43,
+    "pooled_with_final": false
+  },
+  {
+    "attempt": 3,
+    "ci_run": 42394277561,
+    "source_commit": "076216dad3f0a5d8c9a2094eeaaed218b6bac702",
+    "file": "attempt-3/dataset.json",
+    "sha256": "31e0b3609699db5a574868497095082b817b0c26179712e253071583657c9982",
+    "dataset_digest": "90f000637629f489a2c0f51232cec57df49ef13bd2571c90342cdd3d6fbf230e",
+    "physical_trials": 21,
+    "completed_trials": 21,
+    "failed_trials": 0,
+    "timed_out_trials": 0,
+    "decision_rows": 43,
+    "pooled_with_final": false
+  },
+  {
+    "attempt": 4,
+    "ci_run": 42395771877,
+    "source_commit": "e4c6478456bebdae8d49322b17ecf30209c09080",
+    "file": "attempt-4/dataset.json",
+    "sha256": "221ab01d20dd515b77501b8fa499e42fcf56924d1656252ff5a88bf2fa9d1536",
+    "dataset_digest": "4728d11ed1b6aa44f8fe6925ba8b94e3445296229d860ae7733bbc3209cc368f",
+    "physical_trials": 21,
+    "completed_trials": 21,
+    "failed_trials": 0,
+    "timed_out_trials": 0,
+    "decision_rows": 43,
+    "pooled_with_final": false
+  }
+]

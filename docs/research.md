@@ -1,3 +1,5 @@
+> Historical phase record. Current integrated architecture, measured results and deployment status are in [the final report](final/EraseProof-X-Complete-Technical-Report.md). Statements about later planned phases describe the status at this document's original phase.
+
 # Research foundation
 
 ## Problem and motivation

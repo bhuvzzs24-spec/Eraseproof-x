@@ -1,0 +1,252 @@
+{
+  "config": {
+    "argv": [
+      "/opt/hostedtoolcache/node/24.22.2/x64/bin/node",
+      "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "playwright.hosted.config.ts"
+    ],
+    "configFile": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/playwright.hosted.config.ts",
+    "rootDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/hosted",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/commit/0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "commitHash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "buildHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42396389635"
+      },
+      "gitCommit": {
+        "shortHash": "0e11529",
+        "hash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+        "subject": "fix: rebuild gosu with patched Go and await browser deletion navigation",
+        "body": "fix: rebuild gosu with patched Go and await browser deletion navigation\n",
+        "author": {
+          "name": "Bhuvana",
+          "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+          "time": 1794072387000
+        },
+        "committer": {
+          "name": "Bhuvana",
+          "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+          "time": 1794072387000
+        },
+        "branch": "main"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/test-results-hosted",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/commit/0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "commitHash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "buildHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42396389635"
+          },
+          "gitCommit": {
+            "shortHash": "0e11529",
+            "hash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "subject": "fix: rebuild gosu with patched Go and await browser deletion navigation",
+            "body": "fix: rebuild gosu with patched Go and await browser deletion navigation\n",
+            "author": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "committer": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/hosted",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/test-results-hosted",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/commit/0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "commitHash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "buildHref": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42396389635"
+          },
+          "gitCommit": {
+            "shortHash": "0e11529",
+            "hash": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+            "subject": "fix: rebuild gosu with patched Go and await browser deletion navigation",
+            "body": "fix: rebuild gosu with patched Go and await browser deletion navigation\n",
+            "author": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "committer": {
+              "name": "Bhuvana",
+              "email": "228474568+bhuvzzs24-spec@users.noreply.github.com",
+              "time": 1794072387000
+            },
+            "branch": "main"
+          },
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/hosted",
+        "snapshotDir": "/home/runner/work/Eraseproof-x/Eraseproof-x/frontend/tests/hosted",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "https://demo.example.invalid",
+          "ignoreHTTPSErrors": true,
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          },
+          "screenshot": "only-on-failure",
+          "trace": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results-hosted/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "hosted.spec.ts",
+      "file": "hosted.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "public read-only demo uses actual hosted APIs and cannot mutate",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 779,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:30:38.538Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66afe6f656386ac7b094-68072dd037f355eb31f7",
+          "file": "hosted.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "per-account operator performs real hosted deletion and sanitized export",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15774,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-07T17:30:39.618Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66afe6f656386ac7b094-130d71356c7447b365d1",
+          "file": "hosted.spec.ts",
+          "line": 55,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-07T17:30:38.077Z",
+    "duration": 17370.475,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

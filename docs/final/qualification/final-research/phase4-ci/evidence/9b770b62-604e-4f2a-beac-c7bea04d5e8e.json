@@ -1,0 +1,1306 @@
+{
+  "verification": {
+    "id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+    "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb",
+    "customer_id": "6839c903-a43b-4ad8-87e2-f31a0468e551",
+    "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+    "state": "FINISHED",
+    "result": "VERIFIED_ABSENT",
+    "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+    "policy": {
+      "claim": "observable logical absence within the declared checked scope; no irreversible or universal erasure claim",
+      "targets": {
+        "cache": {
+          "category": "cached_profile",
+          "location": "Redis database 0",
+          "patterns": [
+            "customer:{uuid}*",
+            "deletion:customer:{uuid}*"
+          ],
+          "required": true,
+          "strategy": "bounded SCAN customer:{uuid}* and deletion:customer:{uuid}*; TYPE/GET",
+          "retention": "profile/derived values absent; exact erasure marker permitted",
+          "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+          "limitations": [
+            "fixed lab namespace only",
+            "no backup or physical media inspection"
+          ],
+          "eligible_fields": [
+            "all customer profile/derived key values"
+          ],
+          "required_status": "VERIFIED_ABSENT",
+          "identifier_types": [
+            "customer_uuid"
+          ],
+          "permitted_metadata": [
+            "deletion:customer:{uuid}=1"
+          ]
+        },
+        "orders": {
+          "category": "customer_link_and_personal_order_fields",
+          "location": "orders.orders + deletion.order_manifest",
+          "required": true,
+          "strategy": "direct customer linkage OR captured order UUIDs; inspect complete JSON row",
+          "retention": "facts permitted only under explicit schema policy; not anonymous",
+          "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+          "limitations": [
+            "fixed lab namespace only",
+            "no backup or physical media inspection"
+          ],
+          "eligible_fields": [
+            "non-null customer_id",
+            "all non-null fields outside the permitted fact whitelist"
+          ],
+          "required_status": "VERIFIED_ABSENT",
+          "identifier_types": [
+            "customer_uuid"
+          ],
+          "permitted_metadata": [
+            "order UUID",
+            "amount_cents",
+            "currency",
+            "created_at",
+            "manifest UUID linkage"
+          ],
+          "allowed_fact_fields": [
+            "id",
+            "customer_id",
+            "amount_cents",
+            "currency",
+            "created_at"
+          ]
+        },
+        "search": {
+          "category": "indexed_profile",
+          "location": "OpenSearch customers index",
+          "required": true,
+          "strategy": "direct real-time GET plus _search over IDs and id/customer_id/data.id/data.customer_id",
+          "retention": "only exact erased=true sentinel at subject document ID, version >=2 permitted",
+          "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+          "limitations": [
+            "fixed lab namespace only",
+            "no backup or physical media inspection"
+          ],
+          "eligible_fields": [
+            "customer-linked documents except exact permitted erasure sentinel"
+          ],
+          "required_status": "VERIFIED_ABSENT",
+          "identifier_types": [
+            "customer_uuid"
+          ],
+          "identifier_fields": [
+            "id",
+            "customer_id",
+            "data.id",
+            "data.customer_id"
+          ],
+          "permitted_metadata": [
+            "document ID UUID",
+            "erased=true",
+            "external version >=2"
+          ]
+        },
+        "customer": {
+          "category": "customer_profile",
+          "location": "customer.customers",
+          "required": true,
+          "strategy": "parameterized primary-key SELECT count",
+          "retention": "profile row absent; deletion.tombstones excluded",
+          "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+          "limitations": [
+            "fixed lab namespace only",
+            "no backup or physical media inspection"
+          ],
+          "eligible_fields": [
+            "id",
+            "name",
+            "email"
+          ],
+          "required_status": "VERIFIED_ABSENT",
+          "identifier_types": [
+            "customer_uuid"
+          ],
+          "permitted_metadata": [
+            "deletion tombstone UUIDs outside profile table"
+          ]
+        },
+        "analytics": {
+          "category": "customer_linked_analytics",
+          "location": "analytics.events",
+          "required": true,
+          "strategy": "direct UUID linkage OR exact recursive JSON UUID match",
+          "retention": "matching rows absent; no aggregate table exists in current schema",
+          "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+          "limitations": [
+            "fixed lab namespace only",
+            "no backup or physical media inspection"
+          ],
+          "eligible_fields": [
+            "customer_id",
+            "any nested payload value equal to customer UUID"
+          ],
+          "required_status": "VERIFIED_ABSENT",
+          "identifier_types": [
+            "customer_uuid"
+          ],
+          "permitted_metadata": []
+        },
+        "event_history": {
+          "category": "source_event_payload",
+          "location": "delivery.outbox + delivery.processed",
+          "required": true,
+          "strategy": "UUID/aggregate linkage and strict envelope/receipt key classification",
+          "retention": "source payload absent; typed identifier-only control messages and receipt metadata permitted",
+          "consistency": "grace after terminal orchestration plus two spaced eligible absence observations",
+          "limitations": [
+            "fixed lab namespace only",
+            "no backup or physical media inspection"
+          ],
+          "eligible_fields": [
+            "source creation payloads",
+            "unexpected payload/receipt fields"
+          ],
+          "required_status": "VERIFIED_ABSENT",
+          "identifier_types": [
+            "customer_uuid"
+          ],
+          "permitted_metadata": [
+            "deletion.command fields",
+            "verification.command fields",
+            "consumer/event/customer UUID receipt metadata"
+          ]
+        }
+      },
+      "version": "scope-v1",
+      "excluded": [
+        "legacy RabbitMQ payloads and dead letters",
+        "backups",
+        "snapshots",
+        "replicas not configured here",
+        "arbitrary indices or key namespaces",
+        "external exports",
+        "physical media",
+        "privacy/legal compliance"
+      ],
+      "max_rounds": 8,
+      "grace_seconds": 3,
+      "lease_seconds": 30,
+      "absence_samples": 2,
+      "deadline_seconds": 90,
+      "interval_seconds": 2,
+      "max_probe_retries": 3,
+      "consistency_profile": "default",
+      "policy_schema_version": 1
+    },
+    "round_no": 3,
+    "created_at": "2026-11-07T17:39:49.227137Z",
+    "deadline_at": "2026-11-07T17:41:19.234032Z",
+    "finished_at": "2026-11-07T17:39:56.167052Z",
+    "targets": [
+      {
+        "target": "analytics",
+        "result": "VERIFIED_ABSENT",
+        "absent_streak": 2,
+        "probe_failures": 0,
+        "last_observed_at": "2026-11-07T17:39:56.143643Z"
+      },
+      {
+        "target": "cache",
+        "result": "VERIFIED_ABSENT",
+        "absent_streak": 2,
+        "probe_failures": 0,
+        "last_observed_at": "2026-11-07T17:39:56.094825Z"
+      },
+      {
+        "target": "customer",
+        "result": "VERIFIED_ABSENT",
+        "absent_streak": 2,
+        "probe_failures": 0,
+        "last_observed_at": "2026-11-07T17:39:56.130500Z"
+      },
+      {
+        "target": "event_history",
+        "result": "VERIFIED_ABSENT",
+        "absent_streak": 2,
+        "probe_failures": 0,
+        "last_observed_at": "2026-11-07T17:39:56.162326Z"
+      },
+      {
+        "target": "orders",
+        "result": "VERIFIED_ABSENT",
+        "absent_streak": 2,
+        "probe_failures": 0,
+        "last_observed_at": "2026-11-07T17:39:56.105303Z"
+      },
+      {
+        "target": "search",
+        "result": "VERIFIED_ABSENT",
+        "absent_streak": 2,
+        "probe_failures": 0,
+        "last_observed_at": "2026-11-07T17:39:56.120059Z"
+      }
+    ],
+    "claim": "observable logical absence within the declared checked scope; no irreversible or universal erasure claim"
+  },
+  "evidence": [
+    {
+      "id": "658cb70b-a95b-4c8f-b39a-a98de98ba0da",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 1,
+      "target": "cache",
+      "round_no": 1,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "cache",
+        "adapter": "independent.cache",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_markers": 1
+        },
+        "round_no": 1,
+        "sequence": 1,
+        "error_code": null,
+        "consistency": {
+          "eligible": false,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 0
+        },
+        "duration_ms": 1,
+        "observed_at": "2026-11-07T17:39:49.641702+00:00",
+        "query_count": 4,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:49.714630+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "a0595a22-0508-49cb-af85-8b78c2235aa2",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "cache",
+          "attempt_count": 1,
+          "active_attempt": "bdc09f69-a678-49fb-9a4f-17020a6df54e"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "bounded SCAN customer:{uuid}* and deletion:customer:{uuid}*; TYPE/GET",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "",
+        "probe_started_at": "2026-11-07T17:39:49.639991+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "f70e48add1aab6de5d430305b774bad0891d4a5660d57fcf584e049c6c1098cd",
+      "previous_digest": "",
+      "created_at": "2026-11-07T17:39:49.713937Z"
+    },
+    {
+      "id": "f0898ff9-fe15-41e4-8f50-3ecfc1ff23d9",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 2,
+      "target": "orders",
+      "round_no": 1,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "orders",
+        "adapter": "independent.orders",
+        "summary": {
+          "eligible_rows": 0,
+          "manifest_captured": true,
+          "permitted_fact_rows": 4
+        },
+        "round_no": 1,
+        "sequence": 2,
+        "error_code": null,
+        "consistency": {
+          "eligible": false,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 0
+        },
+        "duration_ms": 10,
+        "observed_at": "2026-11-07T17:39:49.652443+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:49.714630+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "c20801fc-e9df-4308-8a48-1cb27cc848a5",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "orders",
+          "attempt_count": 1,
+          "active_attempt": "dadba0bc-65c8-416d-affc-dcb77b743685"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct customer linkage OR captured order UUIDs; inspect complete JSON row",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "f70e48add1aab6de5d430305b774bad0891d4a5660d57fcf584e049c6c1098cd",
+        "probe_started_at": "2026-11-07T17:39:49.641718+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "44b24b17f0853f0c69087511ca9ab211a30399d18d0a242ab668170c9339dd20",
+      "previous_digest": "f70e48add1aab6de5d430305b774bad0891d4a5660d57fcf584e049c6c1098cd",
+      "created_at": "2026-11-07T17:39:49.713937Z"
+    },
+    {
+      "id": "891afe43-f130-41a8-ab76-78ca20f6d698",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 3,
+      "target": "search",
+      "round_no": 1,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "search",
+        "adapter": "independent.search",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_markers": 1
+        },
+        "round_no": 1,
+        "sequence": 3,
+        "error_code": null,
+        "consistency": {
+          "eligible": false,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 0
+        },
+        "duration_ms": 18,
+        "observed_at": "2026-11-07T17:39:49.670860+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:49.714630+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "911a6e23-233e-415c-92d3-de2233afeed7",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "search",
+          "attempt_count": 1,
+          "active_attempt": "5d3d6cfc-97a2-4c0d-977b-81ba7725c692"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct real-time GET plus _search over IDs and id/customer_id/data.id/data.customer_id",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "44b24b17f0853f0c69087511ca9ab211a30399d18d0a242ab668170c9339dd20",
+        "probe_started_at": "2026-11-07T17:39:49.652459+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "439433a138244ee8a31b5d53c62e067669dd06ac6a15cc193198c11fd04c2885",
+      "previous_digest": "44b24b17f0853f0c69087511ca9ab211a30399d18d0a242ab668170c9339dd20",
+      "created_at": "2026-11-07T17:39:49.713937Z"
+    },
+    {
+      "id": "539bdf6d-e07b-4953-be29-68920ca0e236",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 4,
+      "target": "customer",
+      "round_no": 1,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "customer",
+        "adapter": "independent.customer",
+        "summary": {
+          "eligible_rows": 0
+        },
+        "round_no": 1,
+        "sequence": 4,
+        "error_code": null,
+        "consistency": {
+          "eligible": false,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 0
+        },
+        "duration_ms": 12,
+        "observed_at": "2026-11-07T17:39:49.683088+00:00",
+        "query_count": 1,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:49.714630+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "7a8fd8da-777c-4465-9866-952615822bc7",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "customer",
+          "attempt_count": 1,
+          "active_attempt": "d189182e-132c-4669-8612-5abf0c8a8529"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "parameterized primary-key SELECT count",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "439433a138244ee8a31b5d53c62e067669dd06ac6a15cc193198c11fd04c2885",
+        "probe_started_at": "2026-11-07T17:39:49.670886+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "4eb6827798903caac6296b273e635b49175bb69e45feacf842f8e7803958e824",
+      "previous_digest": "439433a138244ee8a31b5d53c62e067669dd06ac6a15cc193198c11fd04c2885",
+      "created_at": "2026-11-07T17:39:49.713937Z"
+    },
+    {
+      "id": "8bf9b6a2-f113-4467-a827-4e8cd8c9a48b",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 5,
+      "target": "analytics",
+      "round_no": 1,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "analytics",
+        "adapter": "independent.analytics",
+        "summary": {
+          "eligible_rows": 0
+        },
+        "round_no": 1,
+        "sequence": 5,
+        "error_code": null,
+        "consistency": {
+          "eligible": false,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 0
+        },
+        "duration_ms": 13,
+        "observed_at": "2026-11-07T17:39:49.696234+00:00",
+        "query_count": 1,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:49.714630+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "285e85b3-f1de-4b21-8d8f-3ad67c4f8e69",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "analytics",
+          "attempt_count": 1,
+          "active_attempt": "14c819b4-1d35-48c0-8875-8e2f6ef97ae7"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct UUID linkage OR exact recursive JSON UUID match",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "4eb6827798903caac6296b273e635b49175bb69e45feacf842f8e7803958e824",
+        "probe_started_at": "2026-11-07T17:39:49.683111+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "2053572962eec939366fe7f5199d5ddb585ceb60738c7075b89a2b972fb8a9c1",
+      "previous_digest": "4eb6827798903caac6296b273e635b49175bb69e45feacf842f8e7803958e824",
+      "created_at": "2026-11-07T17:39:49.713937Z"
+    },
+    {
+      "id": "15b0c2e9-1ace-48bf-9ef1-efd4b071f5b4",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 6,
+      "target": "event_history",
+      "round_no": 1,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "event_history",
+        "adapter": "independent.event_history",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_metadata_rows": 7
+        },
+        "round_no": 1,
+        "sequence": 6,
+        "error_code": null,
+        "consistency": {
+          "eligible": false,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 0
+        },
+        "duration_ms": 14,
+        "observed_at": "2026-11-07T17:39:49.710963+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:49.714630+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "2731438b-9d45-477e-b00c-9218502bcba8",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "event_history",
+          "attempt_count": 1,
+          "active_attempt": "f4f86ecf-076d-41ed-af10-429f0e8dca7b"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "UUID/aggregate linkage and strict envelope/receipt key classification",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "2053572962eec939366fe7f5199d5ddb585ceb60738c7075b89a2b972fb8a9c1",
+        "probe_started_at": "2026-11-07T17:39:49.696297+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "6e019ccba912ec572d498aea9cfcb1c1f329865b15afc6a640bc1edda5c46632",
+      "previous_digest": "2053572962eec939366fe7f5199d5ddb585ceb60738c7075b89a2b972fb8a9c1",
+      "created_at": "2026-11-07T17:39:49.713937Z"
+    },
+    {
+      "id": "0c4809df-8b93-4d8c-ae20-df94950370c6",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 7,
+      "target": "cache",
+      "round_no": 2,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "cache",
+        "adapter": "independent.cache",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_markers": 1
+        },
+        "round_no": 2,
+        "sequence": 7,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 1
+        },
+        "duration_ms": 2,
+        "observed_at": "2026-11-07T17:39:52.893860+00:00",
+        "query_count": 4,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:52.974886+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "a0595a22-0508-49cb-af85-8b78c2235aa2",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "cache",
+          "attempt_count": 1,
+          "active_attempt": "bdc09f69-a678-49fb-9a4f-17020a6df54e"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "bounded SCAN customer:{uuid}* and deletion:customer:{uuid}*; TYPE/GET",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "6e019ccba912ec572d498aea9cfcb1c1f329865b15afc6a640bc1edda5c46632",
+        "probe_started_at": "2026-11-07T17:39:52.891768+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "ebe0d953ac9463a648e77b9c9c398ccc49304bc56f64d58dff1c7c065a316a4d",
+      "previous_digest": "6e019ccba912ec572d498aea9cfcb1c1f329865b15afc6a640bc1edda5c46632",
+      "created_at": "2026-11-07T17:39:52.974169Z"
+    },
+    {
+      "id": "979aff45-a15e-4f1b-8a03-4bda6ce52377",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 8,
+      "target": "orders",
+      "round_no": 2,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "orders",
+        "adapter": "independent.orders",
+        "summary": {
+          "eligible_rows": 0,
+          "manifest_captured": true,
+          "permitted_fact_rows": 4
+        },
+        "round_no": 2,
+        "sequence": 8,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 1
+        },
+        "duration_ms": 13,
+        "observed_at": "2026-11-07T17:39:52.907723+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:52.974886+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "c20801fc-e9df-4308-8a48-1cb27cc848a5",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "orders",
+          "attempt_count": 1,
+          "active_attempt": "dadba0bc-65c8-416d-affc-dcb77b743685"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct customer linkage OR captured order UUIDs; inspect complete JSON row",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "ebe0d953ac9463a648e77b9c9c398ccc49304bc56f64d58dff1c7c065a316a4d",
+        "probe_started_at": "2026-11-07T17:39:52.893881+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "5ceb08ced591ee691eddaf273300eee35d1f0da2ffbad5ef6933a1d1bec67c92",
+      "previous_digest": "ebe0d953ac9463a648e77b9c9c398ccc49304bc56f64d58dff1c7c065a316a4d",
+      "created_at": "2026-11-07T17:39:52.974169Z"
+    },
+    {
+      "id": "35123abd-8a6c-43c5-8669-b5b2c8941ec5",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 9,
+      "target": "search",
+      "round_no": 2,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "search",
+        "adapter": "independent.search",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_markers": 1
+        },
+        "round_no": 2,
+        "sequence": 9,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 1
+        },
+        "duration_ms": 19,
+        "observed_at": "2026-11-07T17:39:52.927749+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:52.974886+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "911a6e23-233e-415c-92d3-de2233afeed7",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "search",
+          "attempt_count": 1,
+          "active_attempt": "5d3d6cfc-97a2-4c0d-977b-81ba7725c692"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct real-time GET plus _search over IDs and id/customer_id/data.id/data.customer_id",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "5ceb08ced591ee691eddaf273300eee35d1f0da2ffbad5ef6933a1d1bec67c92",
+        "probe_started_at": "2026-11-07T17:39:52.907743+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "00b706319e137727ca0b0daa988c920644680da3f3252780db1fcb2f68cc418a",
+      "previous_digest": "5ceb08ced591ee691eddaf273300eee35d1f0da2ffbad5ef6933a1d1bec67c92",
+      "created_at": "2026-11-07T17:39:52.974169Z"
+    },
+    {
+      "id": "1e30563d-c86c-4bcc-9e38-83d79ce36d3c",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 10,
+      "target": "customer",
+      "round_no": 2,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "customer",
+        "adapter": "independent.customer",
+        "summary": {
+          "eligible_rows": 0
+        },
+        "round_no": 2,
+        "sequence": 10,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 1
+        },
+        "duration_ms": 12,
+        "observed_at": "2026-11-07T17:39:52.940376+00:00",
+        "query_count": 1,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:52.974886+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "7a8fd8da-777c-4465-9866-952615822bc7",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "customer",
+          "attempt_count": 1,
+          "active_attempt": "d189182e-132c-4669-8612-5abf0c8a8529"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "parameterized primary-key SELECT count",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "00b706319e137727ca0b0daa988c920644680da3f3252780db1fcb2f68cc418a",
+        "probe_started_at": "2026-11-07T17:39:52.927769+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "c491ecfc096a7d3bca8f1490d19a128cf1c5f392bf4c608732b8ea230a8fc09c",
+      "previous_digest": "00b706319e137727ca0b0daa988c920644680da3f3252780db1fcb2f68cc418a",
+      "created_at": "2026-11-07T17:39:52.974169Z"
+    },
+    {
+      "id": "a5f809ca-4bfc-436e-9185-4946ec615f5e",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 11,
+      "target": "analytics",
+      "round_no": 2,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "analytics",
+        "adapter": "independent.analytics",
+        "summary": {
+          "eligible_rows": 0
+        },
+        "round_no": 2,
+        "sequence": 11,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 1
+        },
+        "duration_ms": 13,
+        "observed_at": "2026-11-07T17:39:52.954170+00:00",
+        "query_count": 1,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:52.974886+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "285e85b3-f1de-4b21-8d8f-3ad67c4f8e69",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "analytics",
+          "attempt_count": 1,
+          "active_attempt": "14c819b4-1d35-48c0-8875-8e2f6ef97ae7"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct UUID linkage OR exact recursive JSON UUID match",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "c491ecfc096a7d3bca8f1490d19a128cf1c5f392bf4c608732b8ea230a8fc09c",
+        "probe_started_at": "2026-11-07T17:39:52.940395+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "73db4efc47219eadb1f83c6241b51f64a4f01c985d7c06501bce59dbdd2b512c",
+      "previous_digest": "c491ecfc096a7d3bca8f1490d19a128cf1c5f392bf4c608732b8ea230a8fc09c",
+      "created_at": "2026-11-07T17:39:52.974169Z"
+    },
+    {
+      "id": "02dac1f1-e2ac-4e97-8cc8-827965a77dd9",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 12,
+      "target": "event_history",
+      "round_no": 2,
+      "body": {
+        "result": "PENDING_CONSISTENCY",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "event_history",
+        "adapter": "independent.event_history",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_metadata_rows": 8
+        },
+        "round_no": 2,
+        "sequence": 12,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 1
+        },
+        "duration_ms": 16,
+        "observed_at": "2026-11-07T17:39:52.971152+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:52.974886+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "2731438b-9d45-477e-b00c-9218502bcba8",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "event_history",
+          "attempt_count": 1,
+          "active_attempt": "f4f86ecf-076d-41ed-af10-429f0e8dca7b"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "UUID/aggregate linkage and strict envelope/receipt key classification",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "73db4efc47219eadb1f83c6241b51f64a4f01c985d7c06501bce59dbdd2b512c",
+        "probe_started_at": "2026-11-07T17:39:52.954187+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "cb83e904599f8f41b1d7bd82963466ceb9c25b2f1e428584b45f8480d3d8cbfa",
+      "previous_digest": "73db4efc47219eadb1f83c6241b51f64a4f01c985d7c06501bce59dbdd2b512c",
+      "created_at": "2026-11-07T17:39:52.974169Z"
+    },
+    {
+      "id": "35d5c574-d387-4dbb-a5e4-bd3bbdef8e07",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 13,
+      "target": "cache",
+      "round_no": 3,
+      "body": {
+        "result": "VERIFIED_ABSENT",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "cache",
+        "adapter": "independent.cache",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_markers": 1
+        },
+        "round_no": 3,
+        "sequence": 13,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 2
+        },
+        "duration_ms": 1,
+        "observed_at": "2026-11-07T17:39:56.094825+00:00",
+        "query_count": 4,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:56.167052+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "a0595a22-0508-49cb-af85-8b78c2235aa2",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "cache",
+          "attempt_count": 1,
+          "active_attempt": "bdc09f69-a678-49fb-9a4f-17020a6df54e"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "bounded SCAN customer:{uuid}* and deletion:customer:{uuid}*; TYPE/GET",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "cb83e904599f8f41b1d7bd82963466ceb9c25b2f1e428584b45f8480d3d8cbfa",
+        "probe_started_at": "2026-11-07T17:39:56.093197+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "d9ea137a637ad02281336c3354288ac6265b3564a9c16bdae38263efe2a4720b",
+      "previous_digest": "cb83e904599f8f41b1d7bd82963466ceb9c25b2f1e428584b45f8480d3d8cbfa",
+      "created_at": "2026-11-07T17:39:56.166427Z"
+    },
+    {
+      "id": "70e5d55d-e631-43a2-ac4d-489085cc549d",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 14,
+      "target": "orders",
+      "round_no": 3,
+      "body": {
+        "result": "VERIFIED_ABSENT",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "orders",
+        "adapter": "independent.orders",
+        "summary": {
+          "eligible_rows": 0,
+          "manifest_captured": true,
+          "permitted_fact_rows": 4
+        },
+        "round_no": 3,
+        "sequence": 14,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 2
+        },
+        "duration_ms": 10,
+        "observed_at": "2026-11-07T17:39:56.105303+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:56.167052+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "c20801fc-e9df-4308-8a48-1cb27cc848a5",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "orders",
+          "attempt_count": 1,
+          "active_attempt": "dadba0bc-65c8-416d-affc-dcb77b743685"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct customer linkage OR captured order UUIDs; inspect complete JSON row",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "d9ea137a637ad02281336c3354288ac6265b3564a9c16bdae38263efe2a4720b",
+        "probe_started_at": "2026-11-07T17:39:56.094842+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "edea92909b4ffaecb696530aea41423f9380dbe9325febb57a0796d61e86631c",
+      "previous_digest": "d9ea137a637ad02281336c3354288ac6265b3564a9c16bdae38263efe2a4720b",
+      "created_at": "2026-11-07T17:39:56.166427Z"
+    },
+    {
+      "id": "bf289ac0-6acf-4f9c-a149-9b242c5c0a6b",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 15,
+      "target": "search",
+      "round_no": 3,
+      "body": {
+        "result": "VERIFIED_ABSENT",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "search",
+        "adapter": "independent.search",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_markers": 1
+        },
+        "round_no": 3,
+        "sequence": 15,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 2
+        },
+        "duration_ms": 14,
+        "observed_at": "2026-11-07T17:39:56.120059+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:56.167052+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "911a6e23-233e-415c-92d3-de2233afeed7",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "search",
+          "attempt_count": 1,
+          "active_attempt": "5d3d6cfc-97a2-4c0d-977b-81ba7725c692"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct real-time GET plus _search over IDs and id/customer_id/data.id/data.customer_id",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "edea92909b4ffaecb696530aea41423f9380dbe9325febb57a0796d61e86631c",
+        "probe_started_at": "2026-11-07T17:39:56.105325+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "1d1b6b8d07826969b797174c5217fcafb970da8a665d942d4c0906be53ffd755",
+      "previous_digest": "edea92909b4ffaecb696530aea41423f9380dbe9325febb57a0796d61e86631c",
+      "created_at": "2026-11-07T17:39:56.166427Z"
+    },
+    {
+      "id": "4b79a340-01eb-46e4-9735-943461e4e6f0",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 16,
+      "target": "customer",
+      "round_no": 3,
+      "body": {
+        "result": "VERIFIED_ABSENT",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "customer",
+        "adapter": "independent.customer",
+        "summary": {
+          "eligible_rows": 0
+        },
+        "round_no": 3,
+        "sequence": 16,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 2
+        },
+        "duration_ms": 10,
+        "observed_at": "2026-11-07T17:39:56.130500+00:00",
+        "query_count": 1,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:56.167052+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "7a8fd8da-777c-4465-9866-952615822bc7",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "customer",
+          "attempt_count": 1,
+          "active_attempt": "d189182e-132c-4669-8612-5abf0c8a8529"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "parameterized primary-key SELECT count",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "1d1b6b8d07826969b797174c5217fcafb970da8a665d942d4c0906be53ffd755",
+        "probe_started_at": "2026-11-07T17:39:56.120081+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "5970879448a625c07a869d776dad541d9ebaf88640a8594d12fe17116717ea46",
+      "previous_digest": "1d1b6b8d07826969b797174c5217fcafb970da8a665d942d4c0906be53ffd755",
+      "created_at": "2026-11-07T17:39:56.166427Z"
+    },
+    {
+      "id": "8077c8c5-6692-4b50-94f3-701bec05b265",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 17,
+      "target": "analytics",
+      "round_no": 3,
+      "body": {
+        "result": "VERIFIED_ABSENT",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "analytics",
+        "adapter": "independent.analytics",
+        "summary": {
+          "eligible_rows": 0
+        },
+        "round_no": 3,
+        "sequence": 17,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 2
+        },
+        "duration_ms": 13,
+        "observed_at": "2026-11-07T17:39:56.143643+00:00",
+        "query_count": 1,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:56.167052+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "285e85b3-f1de-4b21-8d8f-3ad67c4f8e69",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "analytics",
+          "attempt_count": 1,
+          "active_attempt": "14c819b4-1d35-48c0-8875-8e2f6ef97ae7"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "direct UUID linkage OR exact recursive JSON UUID match",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "5970879448a625c07a869d776dad541d9ebaf88640a8594d12fe17116717ea46",
+        "probe_started_at": "2026-11-07T17:39:56.130523+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "c9ec0ac6e63bc62f4e33d0a0937013f14d243f901e4f04100e9430750a92dc48",
+      "previous_digest": "5970879448a625c07a869d776dad541d9ebaf88640a8594d12fe17116717ea46",
+      "created_at": "2026-11-07T17:39:56.166427Z"
+    },
+    {
+      "id": "31e5db05-acf5-4248-b520-acea7f5cc461",
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "sequence": 18,
+      "target": "event_history",
+      "round_no": 3,
+      "body": {
+        "result": "VERIFIED_ABSENT",
+        "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+        "target": "event_history",
+        "adapter": "independent.event_history",
+        "summary": {
+          "eligible_rows": 0,
+          "permitted_metadata_rows": 9
+        },
+        "round_no": 3,
+        "sequence": 18,
+        "error_code": null,
+        "consistency": {
+          "eligible": true,
+          "anchor_at": "2026-11-07T17:39:44.317837+00:00",
+          "deadline_at": "2026-11-07T17:41:19.234032+00:00",
+          "grace_seconds": 3,
+          "absence_streak": 2
+        },
+        "duration_ms": 18,
+        "observed_at": "2026-11-07T17:39:56.162326+00:00",
+        "query_count": 2,
+        "raw_outcome": "VERIFIED_ABSENT",
+        "orchestration": {
+          "state": "COMPLETED_REPORTED",
+          "sampled_at": "2026-11-07T17:39:56.167052+00:00"
+        },
+        "policy_digest": "b3cd5360535429e621fd15888923469823e65b6373be11b372664ec868fda56f",
+        "task_metadata": {
+          "id": "2731438b-9d45-477e-b00c-9218502bcba8",
+          "state": "SUCCEEDED_REPORTED",
+          "target": "event_history",
+          "attempt_count": 1,
+          "active_attempt": "f4f86ecf-076d-41ed-af10-429f0e8dca7b"
+        },
+        "correlation_id": "e5e213c8-3ef4-42e2-a432-1792dedbbaa8",
+        "policy_version": "scope-v1",
+        "query_category": "UUID/aggregate linkage and strict envelope/receipt key classification",
+        "scope_complete": true,
+        "adapter_version": "1",
+        "previous_digest": "c9ec0ac6e63bc62f4e33d0a0937013f14d243f901e4f04100e9430750a92dc48",
+        "probe_started_at": "2026-11-07T17:39:56.143677+00:00",
+        "deletion_request_id": "867e8539-cf6c-442b-b4ae-a9dc394282cb"
+      },
+      "digest": "2c37c164f0c6aea4702c4446365d4ac1195a3bbe5fe7b7172a8cf201a2ccf466",
+      "previous_digest": "c9ec0ac6e63bc62f4e33d0a0937013f14d243f901e4f04100e9430750a92dc48",
+      "created_at": "2026-11-07T17:39:56.166427Z"
+    }
+  ],
+  "evidence_integrity": {
+    "valid": true,
+    "scheme": "sha256-canonical-json-per-run-chain",
+    "administrator_rewrite_protection": false
+  },
+  "findings": [],
+  "excluded_targets": [
+    "legacy RabbitMQ payloads and dead letters",
+    "backups",
+    "snapshots",
+    "replicas not configured here",
+    "arbitrary indices or key namespaces",
+    "external exports",
+    "physical media",
+    "privacy/legal compliance"
+  ],
+  "incomplete_targets": [],
+  "timeline": [
+    {
+      "sequence": 260,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.accepted",
+      "code": "demo-verifier",
+      "occurred_at": "2026-11-07T17:39:49.227137Z"
+    },
+    {
+      "sequence": 263,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.dispatched",
+      "code": null,
+      "occurred_at": "2026-11-07T17:39:49.450833Z"
+    },
+    {
+      "sequence": 267,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.probing",
+      "code": null,
+      "occurred_at": "2026-11-07T17:39:49.635411Z"
+    },
+    {
+      "sequence": 268,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.observed",
+      "code": "PENDING_CONSISTENCY",
+      "occurred_at": "2026-11-07T17:39:49.713937Z"
+    },
+    {
+      "sequence": 272,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.dispatched",
+      "code": null,
+      "occurred_at": "2026-11-07T17:39:52.038662Z"
+    },
+    {
+      "sequence": 276,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.probing",
+      "code": null,
+      "occurred_at": "2026-11-07T17:39:52.886726Z"
+    },
+    {
+      "sequence": 277,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.observed",
+      "code": "PENDING_CONSISTENCY",
+      "occurred_at": "2026-11-07T17:39:52.974169Z"
+    },
+    {
+      "sequence": 281,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.dispatched",
+      "code": null,
+      "occurred_at": "2026-11-07T17:39:55.135558Z"
+    },
+    {
+      "sequence": 285,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.probing",
+      "code": null,
+      "occurred_at": "2026-11-07T17:39:56.088532Z"
+    },
+    {
+      "sequence": 286,
+      "run_id": "9b770b62-604e-4f2a-beac-c7bea04d5e8e",
+      "kind": "verification.finished",
+      "code": "VERIFIED_ABSENT",
+      "occurred_at": "2026-11-07T17:39:56.166427Z"
+    }
+  ],
+  "freshness": "Historical observations only. Rerun to detect subsequent reappearance."
+}

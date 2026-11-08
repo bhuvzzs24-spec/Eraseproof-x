@@ -1,0 +1,5 @@
+{
+  "initial_scan_ci_run": 42390197998,
+  "unsuccessful_upstream_binary_scan_ci_run": 42395771877,
+  "status": "Historical failing scans; not the final deployed image inventory"
+}

@@ -1,0 +1,582 @@
+{
+  "generated_at": "2026-11-08T02:42:32.275620+00:00",
+  "runtime_commit": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+  "ci_run": 42396389635,
+  "ci_url": "https://github.com/bhuvzzs24-spec/Eraseproof-x/actions/runs/42396389635",
+  "jobs": {
+    "frontend": "success",
+    "unit": "success",
+    "changes": "success",
+    "integration": "success",
+    "hosted": "success",
+    "security": "success"
+  },
+  "backend_unit_tests": 89,
+  "frontend_unit_tests": 16,
+  "standalone_browser_tests": 6,
+  "docker_integration_tests": {
+    "count": 29,
+    "status": "success"
+  },
+  "docker_browser_tests": {
+    "count": 9,
+    "status": "success"
+  },
+  "hosted_browser_tests": {
+    "count": 2,
+    "status": "success"
+  },
+  "hosted_check_groups": [
+    "anonymous cannot read protected data; explicit guest session cannot delete or inject faults",
+    "real customer/order propagation, deletion, six-target independent absence and sanitized export",
+    "real PostgreSQL custom backup restored into a separate scratch database; four migrations and expected synthetic fixture verified; scratch removed",
+    "API, worker, PostgreSQL, Redis, broker and gateway restart/reconnect; persisted session and fresh six-target verification passed",
+    "runtime database role has no superuser/role/database/DDL privilege; OpenSearch read credential cannot delete an index",
+    "logout revokes session server-side"
+  ],
+  "security": [
+    {
+      "artifact": "image-0.json",
+      "image": "eraseproof-runtime:ci",
+      "counts": {
+        "LOW": 63,
+        "HIGH": 49,
+        "MEDIUM": 80
+      },
+      "high_with_published_fix": 2,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-1.json",
+      "image": "eraseproof-gateway:ci",
+      "counts": {
+        "LOW": 63,
+        "HIGH": 49,
+        "MEDIUM": 80
+      },
+      "high_with_published_fix": 2,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-2.json",
+      "image": "eraseproof-postgres:ci",
+      "counts": {
+        "MEDIUM": 1,
+        "UNKNOWN": 1
+      },
+      "high_with_published_fix": 0,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-3.json",
+      "image": "redis:7.4-alpine@sha256:c5d34a98396a4775e223c74e929162c35c5a2182901ba26b50ade939941ce14b",
+      "counts": {
+        "MEDIUM": 1
+      },
+      "high_with_published_fix": 0,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-4.json",
+      "image": "rabbitmq:4.1-alpine@sha256:425307007e5a54b20fe6b6da718c2e385999eddda28d44d329b7e7bfabe45610",
+      "counts": {
+        "MEDIUM": 1
+      },
+      "high_with_published_fix": 0,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-5.json",
+      "image": "caddy:2-alpine@sha256:78bd35025c7ba85961dd149ae670315129954e77abe2383ac47c89106b35ade9",
+      "counts": {
+        "MEDIUM": 4,
+        "HIGH": 2,
+        "UNKNOWN": 1
+      },
+      "high_with_published_fix": 1,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-6.json",
+      "image": "python:3.12-slim@sha256:4840d514c583a4d3d8cad3940e68dee6f0f6f3635c12fcd0a3d74c21a5b93a54",
+      "counts": {
+        "LOW": 63,
+        "HIGH": 49,
+        "MEDIUM": 80
+      },
+      "high_with_published_fix": 2,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-7.json",
+      "image": "node:24-alpine@sha256:a34ab6d7f6f4813f4d0c5469d74685604b962fbdbf5793a7bc7b4998ecb867c8",
+      "counts": {
+        "MEDIUM": 13,
+        "HIGH": 6,
+        "LOW": 1
+      },
+      "high_with_published_fix": 6,
+      "fixed_critical": 0
+    },
+    {
+      "artifact": "image-8.json",
+      "image": "opensearchproject/opensearch:latest@sha256:3b55f6b6249cfdb92b52ee59adc8a266203ba9ef9f5d82544fad6f1af2f3609e",
+      "counts": {
+        "MEDIUM": 6,
+        "HIGH": 82,
+        "LOW": 1
+      },
+      "high_with_published_fix": 82,
+      "fixed_critical": 0
+    }
+  ],
+  "current_research": {
+    "source_revision": "0e115298774c4b79ad4b7ec3aa343dd037700ae1",
+    "recomputed_summary": {
+      "physical_trials": 21,
+      "completed_trials": 21,
+      "failed_trials": 0,
+      "timed_out_trials": 0,
+      "interrupted_trials": 0,
+      "decision_rows": 43,
+      "scenarios": [
+        "ambiguous_reply",
+        "analytics_residue",
+        "capability_gap",
+        "concurrent_order_delete",
+        "crash_stale_combo",
+        "database_transaction",
+        "duplicate_reordered",
+        "false_ack_cache",
+        "false_ack_search",
+        "multiple_residuals",
+        "normal_retention",
+        "partial_order",
+        "pending_delivery",
+        "resurrection",
+        "verification_crash",
+        "verification_outage"
+      ],
+      "methods": {
+        "api_ack": {
+          "tp": 0,
+          "fp": 1,
+          "tn": 21,
+          "fn": 18,
+          "binary_oracle_rows": 40,
+          "scored_rows": 40,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 18,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 18,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.17587922364665756
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 18,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.17587922364665756
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 1,
+            "denominator": 22,
+            "value": 0.045454545454545456,
+            "wilson_95": [
+              0.008069427621263836,
+              0.21798045838657326
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1.0,
+            "wilson_95": [
+              0.8241207763533426,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 40,
+            "denominator": 40,
+            "value": 1.0,
+            "wilson_95": [
+              0.9123783988027133,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 40,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.0876216011972866
+            ]
+          },
+          "oracle_unknown_rows": 3,
+          "clearance_with_unknown_oracle": 2,
+          "outcomes": {
+            "COMPLETED_REPORTED": 41,
+            "PARTIALLY_FAILED": 1,
+            "IN_PROGRESS": 1
+          },
+          "latency_seconds": {
+            "n": 43,
+            "mean": 0.025356193534881895,
+            "median": 0.023805984999967222,
+            "p95": 0.0375922300000866,
+            "stdev_population": 0.006724340489590825,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 21,
+            "mean": 0.022772827523805887,
+            "median": 0.02250638100008473,
+            "p95": 0.03031747499994708,
+            "stdev_population": 0.003621952200694916,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "workflow": {
+          "tp": 0,
+          "fp": 1,
+          "tn": 21,
+          "fn": 18,
+          "binary_oracle_rows": 40,
+          "scored_rows": 40,
+          "abstained_on_binary_rows": 0,
+          "positive_oracle_rows": 18,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 0,
+            "denominator": 18,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.17587922364665756
+            ]
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 1,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.7934506856227624
+            ]
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 18,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.17587922364665756
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 1,
+            "denominator": 22,
+            "value": 0.045454545454545456,
+            "wilson_95": [
+              0.008069427621263836,
+              0.21798045838657326
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1.0,
+            "wilson_95": [
+              0.8241207763533426,
+              1.0
+            ]
+          },
+          "coverage": {
+            "numerator": 40,
+            "denominator": 40,
+            "value": 1.0,
+            "wilson_95": [
+              0.9123783988027133,
+              1.0
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 0,
+            "denominator": 40,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.0876216011972866
+            ]
+          },
+          "oracle_unknown_rows": 3,
+          "clearance_with_unknown_oracle": 2,
+          "outcomes": {
+            "WORKFLOW_COMPLETED": 41,
+            "WORKFLOW_FAILURE_ALARM": 1,
+            "WORKFLOW_PENDING": 1
+          },
+          "latency_seconds": {
+            "n": 43,
+            "mean": 0.025356193534881895,
+            "median": 0.023805984999967222,
+            "p95": 0.0375922300000866,
+            "stdev_population": 0.006724340489590825,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 0,
+            "mean": null,
+            "median": null,
+            "p95": null,
+            "stdev_population": null
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 21,
+            "mean": 0.022772827523805887,
+            "median": 0.02250638100008473,
+            "p95": 0.03031747499994708,
+            "stdev_population": 0.003621952200694916,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 0,
+          "targets_with_reported_checks": [],
+          "storage_category_outcomes": {},
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        },
+        "eraseproof": {
+          "tp": 18,
+          "fp": 0,
+          "tn": 21,
+          "fn": 0,
+          "binary_oracle_rows": 40,
+          "scored_rows": 39,
+          "abstained_on_binary_rows": 1,
+          "positive_oracle_rows": 18,
+          "positive_abstentions": 0,
+          "full_positive_detection_yield": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1.0,
+            "wilson_95": [
+              0.8241207763533426,
+              1.0
+            ]
+          },
+          "precision": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1.0,
+            "wilson_95": [
+              0.8241207763533426,
+              1.0
+            ]
+          },
+          "recall": {
+            "numerator": 18,
+            "denominator": 18,
+            "value": 1.0,
+            "wilson_95": [
+              0.8241207763533426,
+              1.0
+            ]
+          },
+          "false_positive_rate": {
+            "numerator": 0,
+            "denominator": 21,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.15463901892484688
+            ]
+          },
+          "false_negative_rate": {
+            "numerator": 0,
+            "denominator": 18,
+            "value": 0.0,
+            "wilson_95": [
+              0.0,
+              0.17587922364665756
+            ]
+          },
+          "coverage": {
+            "numerator": 39,
+            "denominator": 40,
+            "value": 0.975,
+            "wilson_95": [
+              0.8711863103652591,
+              0.9955731684973186
+            ]
+          },
+          "abstention_rate": {
+            "numerator": 1,
+            "denominator": 40,
+            "value": 0.025,
+            "wilson_95": [
+              0.0044268315026814165,
+              0.12881368963474085
+            ]
+          },
+          "oracle_unknown_rows": 3,
+          "clearance_with_unknown_oracle": 0,
+          "outcomes": {
+            "FALSE_SUCCESS_DETECTED": 18,
+            "INCONCLUSIVE": 2,
+            "VERIFIED_ABSENT": 21,
+            "UNSUPPORTED": 1,
+            "PENDING_CONSISTENCY": 1
+          },
+          "latency_seconds": {
+            "n": 43,
+            "mean": 6.166308967976745,
+            "median": 6.77872365799999,
+            "p95": 9.314720240000042,
+            "stdev_population": 2.416042903865181,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_detection_seconds": {
+            "n": 18,
+            "mean": 4.393041504222229,
+            "median": 4.290005750999967,
+            "p95": 6.2146697239999185,
+            "stdev_population": 0.5889268156428561,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "time_to_verified_absence_seconds": {
+            "n": 21,
+            "mean": 7.488646823476188,
+            "median": 7.2398603359999925,
+            "p95": 8.043146122000053,
+            "stdev_population": 0.5908529619128439,
+            "p95_method": "nearest rank; small-sample descriptive only"
+          },
+          "recorded_data_queries": 1276,
+          "targets_with_reported_checks": [
+            "analytics",
+            "cache",
+            "customer",
+            "event_history",
+            "orders",
+            "search"
+          ],
+          "storage_category_outcomes": {
+            "analytics": {
+              "PENDING_CONSISTENCY": 19,
+              "RESIDUAL_DATA_DETECTED": 1,
+              "VERIFIED_ABSENT": 23
+            },
+            "cache": {
+              "INCONCLUSIVE": 2,
+              "PENDING_CONSISTENCY": 17,
+              "RESIDUAL_DATA_DETECTED": 3,
+              "VERIFIED_ABSENT": 21
+            },
+            "customer": {
+              "PENDING_CONSISTENCY": 20,
+              "VERIFIED_ABSENT": 23
+            },
+            "event_history": {
+              "PENDING_CONSISTENCY": 20,
+              "VERIFIED_ABSENT": 23
+            },
+            "orders": {
+              "PENDING_CONSISTENCY": 14,
+              "RESIDUAL_DATA_DETECTED": 6,
+              "VERIFIED_ABSENT": 23
+            },
+            "search": {
+              "PENDING_CONSISTENCY": 10,
+              "RESIDUAL_DATA_DETECTED": 9,
+              "UNSUPPORTED": 1,
+              "VERIFIED_ABSENT": 23
+            }
+          },
+          "quality_denominator": "binary oracle AND conclusive method prediction; abstentions separate"
+        }
+      },
+      "paired": [
+        {
+          "first": "api_ack",
+          "second": "workflow",
+          "jointly_scorable_rows": 40,
+          "first_only_correct": 0,
+          "second_only_correct": 0,
+          "exact_discordant_binomial_p": 1.0,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "api_ack",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 39,
+          "first_only_correct": 0,
+          "second_only_correct": 19,
+          "exact_discordant_binomial_p": 3.814697265625e-06,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        },
+        {
+          "first": "workflow",
+          "second": "eraseproof",
+          "jointly_scorable_rows": 39,
+          "first_only_correct": 0,
+          "second_only_correct": 19,
+          "exact_discordant_binomial_p": 3.814697265625e-06,
+          "interpretation": "Exploratory paired sign/McNemar-style exact calculation; correlated fixtures and selected scenarios preclude population significance claims."
+        }
+      ],
+      "trial_failures_are_not_removed": true,
+      "latency_warning": "CPU/memory snapshots and nearest-rank p95 are descriptive; customers/phases in a trial are correlated.",
+      "recovery": {
+        "phases_succeeded": 4,
+        "phases_failed": 0,
+        "reappearance_cases_detected": 2,
+        "false_operational_success_exposed": 18
+      },
+      "deletion_latency_seconds": {
+        "n": 36,
+        "mean": 4.948069639027791,
+        "median": 3.5694764125000233,
+        "p95": 9.09705460300006,
+        "stdev_population": 4.946416128560474,
+        "p95_method": "nearest rank; small-sample descriptive only"
+      },
+      "retry_attempts": 3
+    }
+  },
+  "public_deployment": {
+    "status": "BLOCKED / PENDING OWNER APPROVAL",
+    "resources_created": false,
+    "public_https_url": null,
+    "remote_release_executed": false,
+    "real_customer_data_readiness": false
+  }
+}

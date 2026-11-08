@@ -1,0 +1,80 @@
+{
+  "basis": "Five paired CI PostgreSQL measurements of legacy full-view-per-row and bounded list summary; same visible metadata; warm shared host, not production throughput",
+  "observations": [
+    {
+      "legacy": {
+        "rows": 2,
+        "total": 2,
+        "queries": 7,
+        "elapsed_seconds": 0.01977925600002095
+      },
+      "summary": {
+        "rows": 2,
+        "total": 2,
+        "queries": 3,
+        "elapsed_seconds": 0.0113554840000063
+      }
+    },
+    {
+      "summary": {
+        "rows": 2,
+        "total": 2,
+        "queries": 3,
+        "elapsed_seconds": 0.012778634000000011
+      },
+      "legacy": {
+        "rows": 2,
+        "total": 2,
+        "queries": 7,
+        "elapsed_seconds": 0.011887369000021408
+      }
+    },
+    {
+      "legacy": {
+        "rows": 2,
+        "total": 2,
+        "queries": 7,
+        "elapsed_seconds": 0.013603297999992492
+      },
+      "summary": {
+        "rows": 2,
+        "total": 2,
+        "queries": 3,
+        "elapsed_seconds": 0.011989239999991241
+      }
+    },
+    {
+      "summary": {
+        "rows": 2,
+        "total": 2,
+        "queries": 3,
+        "elapsed_seconds": 0.013528715999996166
+      },
+      "legacy": {
+        "rows": 2,
+        "total": 2,
+        "queries": 7,
+        "elapsed_seconds": 0.016448035999985677
+      }
+    },
+    {
+      "legacy": {
+        "rows": 2,
+        "total": 2,
+        "queries": 7,
+        "elapsed_seconds": 0.014620992000004662
+      },
+      "summary": {
+        "rows": 2,
+        "total": 2,
+        "queries": 3,
+        "elapsed_seconds": 0.012301378000017849
+      }
+    }
+  ],
+  "median_seconds": {
+    "legacy": 0.014620992000004662,
+    "summary": 0.012301378000017849
+  },
+  "verification_data_plane_checks_changed": false
+}

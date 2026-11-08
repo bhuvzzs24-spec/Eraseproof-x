@@ -1,0 +1,339 @@
+{
+  "configuration": {
+    "scope_policy": "policies/scope-v1.json",
+    "faults": "administrative synthetic fixtures explicitly enabled",
+    "infrastructure": "Docker Compose actual PostgreSQL Redis OpenSearch RabbitMQ",
+    "random_fixture_seed": "UUIDs recorded per run; fault schedule is deterministic"
+  },
+  "summary": {
+    "scenarios_executed": 17,
+    "true_residual_cases": 8,
+    "residual_cases_detected": 8,
+    "false_positives": 0,
+    "inconclusive_outcomes": 1,
+    "unsupported_outcomes": 1,
+    "total_independent_probe_queries": 513,
+    "independently_checked_targets": [
+      "analytics",
+      "cache",
+      "customer",
+      "event_history",
+      "orders",
+      "search"
+    ],
+    "internal_completion_trusting_baseline": {
+      "definition": "COMPLETED_REPORTED is treated as success without data queries; not a commercial comparison",
+      "success_claims": 16,
+      "missed_residual_cases": 7,
+      "independent_probe_queries": 0
+    },
+    "limitations": "Small synthetic controlled-fault cases; measured wall time includes scheduling/consistency delays. Probe commands exclude coordination, transport and evidence queries. Not an accuracy or throughput benchmark."
+  },
+  "cases": [
+    {
+      "scenario": "normal-and-permitted-markers",
+      "run_id": "58ef1508-48e1-45f5-acd1-17636315e53d",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "VERIFIED_ABSENT",
+      "time_to_verification_seconds": 7.104579,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 36,
+      "probe_duration_ms": 260
+    },
+    {
+      "scenario": "residual-search",
+      "run_id": "7cb89ce6-10d2-4335-9463-8cad1b42b8a1",
+      "ground_truth_residual": true,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "FALSE_SUCCESS_DETECTED",
+      "time_to_verification_seconds": 3.601416,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 24,
+      "probe_duration_ms": 142
+    },
+    {
+      "scenario": "residual-cache",
+      "run_id": "9e9e20ad-f2ea-439f-bc11-cedc7ffeb1df",
+      "ground_truth_residual": true,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "FALSE_SUCCESS_DETECTED",
+      "time_to_verification_seconds": 3.654162,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 28,
+      "probe_duration_ms": 121
+    },
+    {
+      "scenario": "residual-analytics",
+      "run_id": "2c0d50f8-e21a-4240-8665-6937977adbff",
+      "ground_truth_residual": true,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "FALSE_SUCCESS_DETECTED",
+      "time_to_verification_seconds": 4.57847,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 24,
+      "probe_duration_ms": 138
+    },
+    {
+      "scenario": "residual-orders",
+      "run_id": "37ebb8dc-6cf2-4b33-8507-d59cca21b4d6",
+      "ground_truth_residual": true,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "FALSE_SUCCESS_DETECTED",
+      "time_to_verification_seconds": 4.687536,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 24,
+      "probe_duration_ms": 147
+    },
+    {
+      "scenario": "residual-customer",
+      "run_id": "8e00a3fd-e314-471c-9505-cb59422842c2",
+      "ground_truth_residual": true,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "FALSE_SUCCESS_DETECTED",
+      "time_to_verification_seconds": 4.455372,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 24,
+      "probe_duration_ms": 139
+    },
+    {
+      "scenario": "residual-event_history",
+      "run_id": "cb2dc071-ec0b-4aab-b0f1-98a42e56f1b7",
+      "ground_truth_residual": true,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "FALSE_SUCCESS_DETECTED",
+      "time_to_verification_seconds": 3.559985,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 24,
+      "probe_duration_ms": 146
+    },
+    {
+      "scenario": "verification-outage",
+      "run_id": "8acb365d-607d-4a33-9fc0-82e68f2fd868",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "INCONCLUSIVE",
+      "time_to_verification_seconds": 13.354626,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 27,
+      "probe_duration_ms": 6268
+    },
+    {
+      "scenario": "verification-outage-recovered",
+      "run_id": "c7c5dadc-c73f-4d65-b659-3093adcc5966",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "VERIFIED_ABSENT",
+      "time_to_verification_seconds": 6.865589,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 36,
+      "probe_duration_ms": 206
+    },
+    {
+      "scenario": "pending-then-converged",
+      "run_id": "b0329f76-0b22-45a4-bf77-4f915923e81e",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "VERIFIED_ABSENT",
+      "time_to_verification_seconds": 13.337843,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 60,
+      "probe_duration_ms": 342
+    },
+    {
+      "scenario": "before-reappearance",
+      "run_id": "0522cdbd-fb1b-4d50-b351-970f8710eb16",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "VERIFIED_ABSENT",
+      "time_to_verification_seconds": 7.292939,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 36,
+      "probe_duration_ms": 211
+    },
+    {
+      "scenario": "late-reappearance",
+      "run_id": "342e200a-0c65-4cd5-a2f0-9d4d9a113971",
+      "ground_truth_residual": true,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "FALSE_SUCCESS_DETECTED",
+      "time_to_verification_seconds": 4.60678,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 28,
+      "probe_duration_ms": 144
+    },
+    {
+      "scenario": "after-separate-remediation",
+      "run_id": "e14284c5-13fb-4861-b632-b15579e1c853",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "VERIFIED_ABSENT",
+      "time_to_verification_seconds": 7.745403,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 36,
+      "probe_duration_ms": 202
+    },
+    {
+      "scenario": "missing-required-adapter",
+      "run_id": "673aa0bf-93ba-419e-91b6-bd1262645324",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "UNSUPPORTED",
+      "time_to_verification_seconds": 0.974679,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders"
+      ],
+      "probe_queries": 10,
+      "probe_duration_ms": 46
+    },
+    {
+      "scenario": "concurrent-idempotent-runs",
+      "run_id": "759314b2-5356-4adb-8947-7de09c5ee1b0",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "VERIFIED_ABSENT",
+      "time_to_verification_seconds": 7.058449,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 36,
+      "probe_duration_ms": 239
+    },
+    {
+      "scenario": "verification-worker-crash",
+      "run_id": "e7191e47-6cba-4ae9-a037-aa4ff1aba9ad",
+      "ground_truth_residual": false,
+      "reported_state": "COMPLETED_REPORTED",
+      "result": "VERIFIED_ABSENT",
+      "time_to_verification_seconds": 9.615288,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 36,
+      "probe_duration_ms": 234
+    },
+    {
+      "scenario": "partial-failure-residue",
+      "run_id": "5a90b19e-2b7f-4e9d-b26c-3c9d658d2990",
+      "ground_truth_residual": true,
+      "reported_state": "PARTIALLY_FAILED",
+      "result": "RESIDUAL_DATA_DETECTED",
+      "time_to_verification_seconds": 4.198122,
+      "checked_targets": [
+        "analytics",
+        "cache",
+        "customer",
+        "event_history",
+        "orders",
+        "search"
+      ],
+      "probe_queries": 24,
+      "probe_duration_ms": 154
+    }
+  ]
+}
